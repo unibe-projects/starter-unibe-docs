@@ -24,7 +24,8 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "prepare": "husky",
-        "lint-staged": "lint-staged"
+        "lint-staged": "lint-staged",
+        "lint": "eslint . --fix"
     },
     "eslintConfig": {
         "extends": [
