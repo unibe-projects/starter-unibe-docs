@@ -4,11 +4,11 @@ on:
     push:
       branches:
         - main
-        - tesis/main
+        - unibe/main
     pull_request:
       branches:
         - main
-        - tesis/main
+        - unibe/main
 
 jobs:
   test:
