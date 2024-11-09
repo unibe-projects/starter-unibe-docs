@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomeScreen from '../pages/modules/home/HomeScreen';
+import LoginScreen from '../pages/modules/auth/login/LoginScreen';
 
 const MainRoutes: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const MainRoutes: React.FC = () => {
       <div>
         <main>
           <Routes>
-            <Route path="/" element={<HomeScreen />} />
+            <Route path="/" element={<LoginScreen />} />
           </Routes>
         </main>
       </div>
