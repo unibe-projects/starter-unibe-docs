@@ -3,7 +3,7 @@ import AuthRoutes from './AuthRoutes';
 import MainRoutes from './MainRoutes';
 
 const AppRouter: React.FC = () => {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   if (isAuthenticated) {
     return <AuthRoutes />;
