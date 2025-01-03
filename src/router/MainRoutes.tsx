@@ -1,18 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import LoginScreen from '../pages/auth/login/LoginScreen';
+import PasswordRequiredScreen from '../pages/auth/login/PasswordRequiredScreen';
+import NotFoundScreen from '../error/404/NotFoundScreen';
 
 const MainRoutes: React.FC = () => {
   return (
-    <Router>
-      <div>
-        <main>
-          <Routes>
-            <Route path="/" element={<LoginScreen />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <Routes>
+      <Route path="/" element={<LoginScreen />} />
+      <Route path="/password-required" element={<PasswordRequiredScreen />} />
+      <Route path="*" element={<NotFoundScreen />} />
+    </Routes>
   );
 };
 
