@@ -9,7 +9,8 @@ export default {
         dark: {
           DEFAULT: '#16191D',
           text: '#ffffff',
-          primary: '#15202B',
+          primary: '#01498E',
+          textPrimary: '#01498E',
           primaryContent: '#000416',
           secondary: '#00c6e4',
           secondaryContent: '#000e12',
@@ -33,7 +34,7 @@ export default {
         light: {
           DEFAULT: '#FFF7FF',
           text: '#333333',
-          textPrimary: '#366A82',
+          textPrimary: '#01498E',
           textSecondary: '#C7B10E',
           primary: '#01498E',
           primaryContent: '#cde0ff',

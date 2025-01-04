@@ -7,6 +7,7 @@ export function mapErrorsTranslated(error: unknown): Error {
     'User does not exist.': 'Usuario no encontrado.',
     'Incorrect username or password.': 'Correo electrónico o contraseña incorrectos.',
     'User already exists': 'El usuario ya existe.',
+    'There is already a signed in user.': 'Ya hay un usuario que ha iniciado sesión.'
   };
   const translatedMessage: string | undefined = Object.keys(cognitoErrorMessages).find((key) =>
     error.message.includes(key),

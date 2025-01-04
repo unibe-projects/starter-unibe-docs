@@ -10,7 +10,7 @@ function App() {
     <AuthProvider>
       <div className="App">
         <main role="main">
-          <AppRouter data-testid="app-router" />
+            <AppRouter data-testid="app-router" />
         </main>
       </div>
     </AuthProvider>

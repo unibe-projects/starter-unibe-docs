@@ -8,3 +8,10 @@ export const validationSchemaLogin = Yup.object().shape({
     .min(6, 'La contraseña debe tener al menos 6 caracteres.')
     .required('La contraseña es obligatoria.'),
 });
+
+
+export const validationSchemaPassword = Yup.object().shape({
+  password: Yup.string()
+    .min(6, 'La contraseña debe tener al menos 6 caracteres.')
+    .required('La contraseña es obligatoria.'),
+});

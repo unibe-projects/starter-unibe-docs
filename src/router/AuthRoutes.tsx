@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import HomeScreen from '../pages/modules/home/HomeScreen';
 import Header from '../components/common/header/Header';
 import PageWrapper from '../components/common/page/PageWrapper';
@@ -16,7 +16,8 @@ const AuthRoutes: React.FC = () => {
           <div className="flex-1 flex items-center justify-center">
             <main className="w-full">
               <Routes>
-                <Route path="/" element={<HomeScreen />} />
+              <Route path="/" element={<Navigate to="/home" />} />
+                <Route path="/home" element={<HomeScreen />} />
                 <Route path="*" element={<NotFoundScreen />} />
               </Routes>
             </main>

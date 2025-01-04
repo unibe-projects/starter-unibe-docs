@@ -1,68 +1,81 @@
-import { AuthUser, getCurrentUser, signIn, SignInInput } from 'aws-amplify/auth';
+import { AuthUser, confirmSignIn, getCurrentUser, signIn, SignInInput, signOut } from 'aws-amplify/auth';
+import { AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
 import { useMemo, createContext, useState, useEffect, useCallback } from 'react';
 import { AuthInterface, AuthProviderInterface } from '../../interface/auth/auth.interface';
-import { getSessionService } from '../../services/auth/authSessionService';
 import { signInService } from '../../services/auth/authSingInService';
+import { errorToString } from '../../error/messages/errorToString';
 
 export const AuthContext = createContext<AuthInterface | undefined>(undefined);
 
 export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [authStatus, setAuthStatus] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const setCurrentUser = async (): Promise<void> => {
     try {
+      setIsLoading(true);
       const currentUser: AuthUser = await getCurrentUser();
       setUser(currentUser);
-      setAuthStatus(!!currentUser);
     } catch (error) {
-      setAuthStatus(false);
-    }
-  };
-
-  const fetchSession = async () => {
-    try {
-      const sessions = await getSessionService();
-      const { isAuthenticated } = sessions;
-      setAuthStatus(isAuthenticated);
-    } catch (error) {
-      setAuthStatus(false);
-      console.error('Failed to fetch session:', error);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    const initializeAuth = async () => {
+    try {
       setIsLoading(true);
-      await Promise.all([setCurrentUser(), fetchSession()]);
+      const initializeAuth = async () => {
+        await setCurrentUser();
+      };
+      initializeAuth();
+    } finally {
       setIsLoading(false);
-    };
-    initializeAuth();
+    }
   }, []);
 
   const handleSignIn = useCallback(
-    async (credentials: SignInInput): Promise<void> => {
+    async (credentials: SignInInput): Promise<AuthSignInOutput> => {
       try {
-        await signInService(credentials);
+        const response = await signInService(credentials);
         await setCurrentUser();
-      } finally {
-        setIsLoading(false);
+        return response;
+      } catch (error) {
+        throw new Error(errorToString(error));
       }
     },
-    [signIn, getCurrentUser, setUser],
+    [setUser],
   );
+
+  const handleConfirmSignIn = useCallback(
+    async (newPassword: string, attributes: any) => {
+      const response = await confirmSignIn({ challengeResponse: newPassword, options: { userAttributes: attributes } });
+      await setCurrentUser();
+      return response;
+    },
+    [],
+  );
+
+  const handleSignOut = async (): Promise<void> => {
+    try {
+      await signOut();
+      await setCurrentUser();
+    } catch (error) {
+      throw new Error(errorToString(error));
+    }
+  };
 
   const providerValue = useMemo(
     () => ({
       user,
-      isAuthenticated: authStatus,
+      isAuthenticated: !!user,
       handleSignIn,
+      handleConfirmSignIn,
+      handleSignOut,
       isLoading,
     }),
-    [user, isLoading, handleSignIn],
+    [user, isLoading, handleSignIn, handleSignOut, handleConfirmSignIn],
   );
 
   return <AuthContext.Provider value={providerValue}>{children}</AuthContext.Provider>;

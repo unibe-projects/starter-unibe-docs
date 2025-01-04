@@ -1,11 +1,13 @@
-import { AuthUser } from 'aws-amplify/auth';
+import { AuthUser, ConfirmSignInOutput } from 'aws-amplify/auth';
 import { ReactNode } from 'react';
-import { AuthSignInInput } from '@aws-amplify/auth/dist/esm/types';
+import { AuthSignInInput, AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
 
 export interface AuthInterface {
   user: AuthUser | null;
   isAuthenticated: boolean;
-  handleSignIn: (_credentials: AuthSignInInput) => Promise<void>;
+  handleSignIn: (_credentials: AuthSignInInput) => Promise<AuthSignInOutput>;
+  handleConfirmSignIn: (newPassword: string, attributes: any) => Promise<ConfirmSignInOutput>;
+  handleSignOut: () => Promise<void>;
   isLoading: boolean;
 }
 
