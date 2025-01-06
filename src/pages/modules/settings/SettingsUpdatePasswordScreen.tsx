@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { Formik, Form } from "formik";
-import SidebarSettings from "../../../components/settings/SidebarSettings";
-import { validationSchemaUpdatePassword } from "../../auth/login/validationSchemaLogin";
-import { useAuth } from "../../../hooks/auth/useUser";
-import { ChangePasswordInput } from "../../../interface/auth/auth.interface";
-import PasswordPolicy from "../../../components/settings/PasswordPolicy";
-import Message from "../../../error/messages/Message";
-import PasswordInput from "../../../components/common/form/PasswordInput";
-import useErrorHandler from "../../../hooks/errors/useErrorHandler";
-import LoadingButton from "../../../components/loadings/buttons/LoadingButton";
+import { useState } from 'react';
+import { Formik, Form } from 'formik';
+import SidebarSettings from '../../../components/settings/SidebarSettings';
+import { validationSchemaUpdatePassword } from '../../auth/login/validationSchemaLogin';
+import { useAuth } from '../../../hooks/auth/useUser';
+import { ChangePasswordInput } from '../../../interface/auth/auth.interface';
+import PasswordPolicy from '../../../components/settings/PasswordPolicy';
+import Message from '../../../error/messages/Message';
+import PasswordInput from '../../../components/common/form/PasswordInput';
+import useErrorHandler from '../../../hooks/errors/useErrorHandler';
+import LoadingButton from '../../../components/loadings/buttons/LoadingButton';
 
 type FormValues = {
   [key: string]: string;
@@ -20,13 +20,14 @@ const SettingsUpdatePasswordScreen = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const { handleChangePassword } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { handleError, handleSuccess, errorMessage, successMessage, clearError, clearSuccess } = useErrorHandler();
-  
+  const { handleError, handleSuccess, errorMessage, successMessage, clearError, clearSuccess } =
+    useErrorHandler();
+
   const handleChangePasswordSumit = async (value: ChangePasswordInput) => {
     try {
       setIsLoading(true);
       await handleChangePassword(value);
-      handleSuccess("Contraseña actualizada exitosamente!");
+      handleSuccess('Contraseña actualizada exitosamente!');
       clearError();
     } catch (error) {
       console.error(error);
@@ -63,9 +64,9 @@ const SettingsUpdatePasswordScreen = () => {
               {successMessage && <Message text={successMessage} type="success" />}
               <Formik
                 initialValues={{
-                  currentPassword: "",
-                  newPassword: "",
-                  confirmPassword: "",
+                  currentPassword: '',
+                  newPassword: '',
+                  confirmPassword: '',
                 }}
                 validationSchema={validationSchemaUpdatePassword}
                 onSubmit={handleFormSubmitChangePassword}
@@ -105,7 +106,7 @@ const SettingsUpdatePasswordScreen = () => {
                         {isLoading ? (
                           <LoadingButton text="Cargando ...." />
                         ) : (
-                          "Actualizar Contraseña"
+                          'Actualizar Contraseña'
                         )}
                       </button>
                     </div>

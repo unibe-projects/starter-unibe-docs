@@ -1,8 +1,4 @@
-const ResetPasswordScreen = () =>{
-    return(
-        <div>
-            hola
-        </div>
-    )
+const ResetPasswordScreen = () => {
+  return <div>hola</div>;
 };
 export default ResetPasswordScreen;

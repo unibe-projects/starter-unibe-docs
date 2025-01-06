@@ -1,10 +1,20 @@
 import { AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
-import { ResetPasswordOutput, SignInInput, resendSignUpCode, resetPassword, signIn, updatePassword } from 'aws-amplify/auth';
+import {
+  ResetPasswordOutput,
+  SignInInput,
+  resendSignUpCode,
+  resetPassword,
+  signIn,
+  updatePassword,
+} from 'aws-amplify/auth';
 import { errorToString } from '../../error/messages/errorToString';
-import { ChangePasswordInput, ResendSignUpCodeResponseInterface } from '../../interface/auth/auth.interface';
+import {
+  ChangePasswordInput,
+  ResendSignUpCodeResponseInterface,
+} from '../../interface/auth/auth.interface';
 
 export const resendCodeService = async (
-  username: string
+  username: string,
 ): Promise<ResendSignUpCodeResponseInterface> => {
   try {
     const { destination, deliveryMedium, attributeName } = await resendSignUpCode({ username });
@@ -15,11 +25,10 @@ export const resendCodeService = async (
 };
 
 export const signInService = async (credentials: SignInInput): Promise<AuthSignInOutput> => {
-  return  signIn(credentials);
+  return signIn(credentials);
 };
 
-
-export const resendPasswordService = async ( username: string ): Promise<ResetPasswordOutput> => {
+export const resendPasswordService = async (username: string): Promise<ResetPasswordOutput> => {
   try {
     const response = await resetPassword({ username });
     return response;

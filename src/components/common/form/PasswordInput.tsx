@@ -1,6 +1,6 @@
-import React from "react";
-import { Field, ErrorMessage } from "formik";
-import { FaEyeSlash, FaEye } from "react-icons/fa";
+import React from 'react';
+import { Field, ErrorMessage } from 'formik';
+import { FaEyeSlash, FaEye } from 'react-icons/fa';
 
 interface PasswordInputProps {
   name: string;
@@ -18,7 +18,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   return (
     <div className="relative">
       <Field
-        type={showPassword ? "text" : "password"}
+        type={showPassword ? 'text' : 'password'}
         name={name}
         placeholder={placeholder}
         className="w-full px-4 py-3 text-gray-700 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
@@ -30,11 +30,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
       >
         {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
       </button>
-      <ErrorMessage
-        name={name}
-        component="div"
-        className="text-sm text-red-600"
-      />
+      <ErrorMessage name={name} component="div" className="text-sm text-red-600" />
     </div>
   );
 };
