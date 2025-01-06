@@ -1,8 +1,8 @@
-import { AuthUser, confirmSignIn, getCurrentUser, signIn, SignInInput, signOut } from 'aws-amplify/auth';
+import { AuthUser, confirmSignIn, getCurrentUser, ResetPasswordOutput, signIn, SignInInput, signOut } from 'aws-amplify/auth';
 import { AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
 import { useMemo, createContext, useState, useEffect, useCallback } from 'react';
-import { AuthInterface, AuthProviderInterface } from '../../interface/auth/auth.interface';
-import { signInService } from '../../services/auth/authSingInService';
+import { AuthInterface, AuthProviderInterface, ChangePasswordInput } from '../../interface/auth/auth.interface';
+import { changePasswordService, resendPasswordService, signInService } from '../../services/auth/authSingInService';
 import { errorToString } from '../../error/messages/errorToString';
 
 export const AuthContext = createContext<AuthInterface | undefined>(undefined);
@@ -15,6 +15,7 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
     try {
       setIsLoading(true);
       const currentUser: AuthUser = await getCurrentUser();
+      console.log(currentUser)
       setUser(currentUser);
     } catch (error) {
       setUser(null);
@@ -49,7 +50,7 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
   );
 
   const handleConfirmSignIn = useCallback(
-    async (newPassword: string, attributes: any) => {
+    async (newPassword: string, attributes: { username: string }) => {
       const response = await confirmSignIn({ challengeResponse: newPassword, options: { userAttributes: attributes } });
       await setCurrentUser();
       return response;
@@ -66,6 +67,17 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
     }
   };
 
+  const handleResendPassword = async ( username: string ): Promise<ResetPasswordOutput> => {
+    return resendPasswordService(username);
+  };
+
+  const handleChangePassword = async ({
+    oldPassword,
+    newPassword,
+  }: ChangePasswordInput): Promise<void> => {
+    return changePasswordService({ oldPassword, newPassword });
+  };
+
   const providerValue = useMemo(
     () => ({
       user,
@@ -73,6 +85,8 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
       handleSignIn,
       handleConfirmSignIn,
       handleSignOut,
+      handleResendPassword,
+      handleChangePassword,
       isLoading,
     }),
     [user, isLoading, handleSignIn, handleSignOut, handleConfirmSignIn],
