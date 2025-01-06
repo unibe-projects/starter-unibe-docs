@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LogoUnibe from '../../../assets/header/LogoUnibe.png';
 import { useAuth } from '../../../hooks/auth/useUser';
 import { useNavigate } from 'react-router-dom';
@@ -7,11 +7,16 @@ import LoadingButton from '../../loadings/buttons/LoadingButton';
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const { handleSignOut } = useAuth();
   const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen((prevState) => !prevState);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
   };
 
   const handleLogout = async () => {
@@ -21,12 +26,32 @@ const Header: React.FC = () => {
       navigate('/login');
     } finally {
       setIsLoading(false);
+      closeMenu();
     }
   };
 
   const navigateSettings = () => {
     navigate('/settings/change-password');
+    closeMenu();
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        closeMenu();
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   return (
     <header className="flex items-center justify-between px-8 py-4 h-24 w-full bg-light-primary">
@@ -39,7 +64,10 @@ const Header: React.FC = () => {
 
       {/* Menú de opciones */}
       {isMenuOpen && (
-        <div className="absolute top-24 right-8 bg-white shadow-lg rounded-lg p-4 w-48">
+        <div
+          ref={menuRef}
+          className="absolute top-24 right-8 bg-white shadow-lg rounded-lg p-4 w-48"
+        >
           <ul className="space-y-2">
             <li>
               <button onClick={navigateSettings} className="text-black">
@@ -48,7 +76,6 @@ const Header: React.FC = () => {
             </li>
             <li>
               <button onClick={handleLogout} disabled={isLoading} className="text-red-600">
-                {' '}
                 {isLoading ? <LoadingButton text="Cargando ...." /> : 'Cerrar Sesión'}
               </button>
             </li>
@@ -60,7 +87,12 @@ const Header: React.FC = () => {
         <h1 className="text-light-textSecondary text-small font-bold">
           Hector Steveen Ordoñez Chamba
         </h1>
-        <img src="logo_url_derecha" alt="Logo Derecha" className="h-10 w-10" onClick={toggleMenu} />
+        <img
+          src="logo_url_derecha"
+          alt="Logo Derecha"
+          className="h-10 w-10 cursor-pointer"
+          onClick={toggleMenu}
+        />
       </div>
     </header>
   );
