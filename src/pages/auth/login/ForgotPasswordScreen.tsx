@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { useAuth } from "../../../hooks/auth/useUser";
-import { useNavigate } from "react-router-dom";
-import { ConfirmSignInOutput } from "aws-amplify/auth";
-import useErrorHandler from "../../../hooks/errors/useErrorHandler";
-import { Form, Formik } from "formik";
-import { validationSchemaEmail } from "./validationSchemaLogin";
+import { useState } from 'react';
+import { useAuth } from '../../../hooks/auth/useUser';
+import { useNavigate } from 'react-router-dom';
+import { ConfirmSignInOutput } from 'aws-amplify/auth';
+import useErrorHandler from '../../../hooks/errors/useErrorHandler';
+import { Form, Formik } from 'formik';
+import { validationSchemaEmail } from './validationSchemaLogin';
 import UnibeBackgraund from '../../../assets/auth/UnibeBackgraund.jpg';
 import UnibeLogo from '../../../assets/header/LogoUnibe.png';
-import { SignUpStepEnum } from "../../../enums/auth/signUpStepEnum";
-import { useFormValues } from "../../../hooks/formValues/formValues";
-import CustomInput from "../../../components/common/form/CustomInput";
-import LoadingButton from "../../../components/loadings/buttons/LoadingButton";
-import Message from "../../../error/messages/Message";
+import { SignUpStepEnum } from '../../../enums/auth/signUpStepEnum';
+import { useFormValues } from '../../../hooks/formValues/formValues';
+import CustomInput from '../../../components/common/form/CustomInput';
+import LoadingButton from '../../../components/loadings/buttons/LoadingButton';
+import Message from '../../../error/messages/Message';
 
 const ForgotPasswordScreen = () => {
   const { handleResendPassword } = useAuth();
-  const { handleError, errorMessage, clearError } = useErrorHandler();
+  const { handleError, errorMessage } = useErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { formValues } = useFormValues();
   const navigate = useNavigate();
@@ -23,8 +23,8 @@ const ForgotPasswordScreen = () => {
   const handleSubmit = async (values: { email: string }) => {
     try {
       setIsLoading(true);
-     const response = await handleResendPassword(values.email)
-      navigate("/reset-password", { state: { email: values.email } });
+      await handleResendPassword(values.email);
+      navigate('/reset-password', { state: { email: values.email } });
     } catch (error) {
       handleError({ error });
     } finally {
@@ -42,11 +42,11 @@ const ForgotPasswordScreen = () => {
           <img src={UnibeLogo} alt="Logo" className="h-32 w-32" />
         </div>
         <h2 className="text-lg font-semibold text-center text-gray-700">
-        Ingresa tu email para recibir un código y cambiar tu contraseña.
+          Ingresa tu email para recibir un código y cambiar tu contraseña.
         </h2>
         {errorMessage && <Message text={errorMessage} type="error" />}
         <Formik
-          initialValues={{ email: formValues.email || "" }}
+          initialValues={{ email: formValues.email || '' }}
           validationSchema={validationSchemaEmail}
           onSubmit={handleSubmit}
         >
