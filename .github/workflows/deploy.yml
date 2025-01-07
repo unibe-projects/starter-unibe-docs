@@ -25,7 +25,8 @@ jobs:
 
       - name: Create aws-exports.js
         run: |
-          echo "$UNIBE_EXPORTS_AWS" > ./src/aws-exports.js
+          echo "const awsmobile = $UNIBE_EXPORTS_AWS;" > ./src/aws-exports.js
+          echo "export default awsmobile;" >> ./src/aws-exports.js
         env:
           UNIBE_EXPORTS_AWS: ${{ secrets.UNIBE_EXPORTS_AWS }}
 
