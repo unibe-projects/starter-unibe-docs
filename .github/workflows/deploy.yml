@@ -28,7 +28,7 @@ jobs:
 
       - name: Configurar aws-exports.js
         run: |
-          echo "${{ secrets.UNIBE_EXPORTS_AWS }}" > ./src/aws-exports.js
+          echo "${{ secrets.AWS_EXPORTS }}" > ./src/aws-exports.js
 
       - name: Verificar contenido de aws-exports.js
         run: |
