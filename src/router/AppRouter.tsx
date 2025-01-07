@@ -24,7 +24,7 @@ const AppRouter: React.FC = () => {
         v7_startTransition: true,
         v7_relativeSplatPath: true,
       },
-    }
+    },
   );
 
   return <RouterProvider router={router} />;

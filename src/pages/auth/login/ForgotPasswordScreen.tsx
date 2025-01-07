@@ -1,42 +1,42 @@
 import { useState } from 'react';
 import { useAuth } from '../../../hooks/auth/useUser';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ConfirmSignInOutput } from 'aws-amplify/auth';
+import { useNavigate } from 'react-router-dom';
+import { ResetPasswordOutput } from 'aws-amplify/auth';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import { Form, Formik } from 'formik';
-import { validationSchemaPassword } from './validationSchemaLogin';
+import { validationSchemaEmail } from './validationSchemaLogin';
 import UnibeBackgraund from '../../../assets/auth/UnibeBackgraund.jpg';
 import UnibeLogo from '../../../assets/header/LogoUnibe.png';
 import { SignUpStepEnum } from '../../../enums/auth/signUpStepEnum';
-import PasswordInput from '../../../components/common/form/PasswordInput';
+import { useFormValues } from '../../../hooks/formValues/formValues';
+import CustomInput from '../../../components/common/form/CustomInput';
 import LoadingButton from '../../../components/loadings/buttons/LoadingButton';
 import Message from '../../../error/messages/Message';
 
-const PasswordRequiredScreen = () => {
-  const { handleConfirmSignIn } = useAuth();
+const ForgotPasswordScreen = () => {
+  const { handleResendPassword } = useAuth();
   const { handleError, errorMessage, clearError } = useErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const location = useLocation();
-  const { attributes } = location.state || {};
+  const { formValues, setFormValues } = useFormValues();
   const navigate = useNavigate();
 
-  const navigateHome = (res: ConfirmSignInOutput) => {
-    if (res.nextStep.signInStep === SignUpStepEnum.DONE) {
-      navigate('/home');
+  const navigateResetPassword = (res: ResetPasswordOutput) => {
+    if (res.nextStep.resetPasswordStep === SignUpStepEnum.CONFIRM_RESET_PASSWORD_WITH_CODE) {
+      navigate('/reset-password');
       clearError();
     }
   };
 
-  const handleSubmit = async (values: { password: string }) => {
+  const handleSubmit = async (values: { email: string }) => {
     try {
       setIsLoading(true);
-      const response = await handleConfirmSignIn(values.password, attributes);
-      navigateHome(response);
-      setIsLoading(false);
+      const response = await handleResendPassword(values.email);
+      setFormValues({ email: values.email });
+      navigateResetPassword(response);
     } catch (error) {
-      setIsLoading(false);
       handleError({ error });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -50,21 +50,21 @@ const PasswordRequiredScreen = () => {
           <img src={UnibeLogo} alt="Logo" className="h-32 w-32" />
         </div>
         <h2 className="text-lg font-semibold text-center text-gray-700">
-          Cambia tu contraseña, por favor
+          Ingresa tu email para recibir un código y cambiar tu contraseña.
         </h2>
         {errorMessage && <Message text={errorMessage} type="error" />}
         <Formik
-          initialValues={{ password: '' }}
-          validationSchema={validationSchemaPassword}
+          initialValues={{ email: formValues.email || '' }}
+          validationSchema={validationSchemaEmail}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, values }) => (
             <Form className="space-y-6">
-              <PasswordInput
-                name="password"
-                placeholder="Contraseña"
-                showPassword={showPassword}
-                togglePassword={() => setShowPassword(!showPassword)}
+              <CustomInput
+                name="email"
+                type="email"
+                values={values.email}
+                placeholder="Correo electrónico"
               />
               <div className="mt-6">
                 <button
@@ -83,4 +83,4 @@ const PasswordRequiredScreen = () => {
   );
 };
 
-export default PasswordRequiredScreen;
+export default ForgotPasswordScreen;

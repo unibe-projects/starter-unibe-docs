@@ -1,14 +1,14 @@
 name: Lint
 
 on:
-    push:
-      branches:
-        - main
-        - unibe/main
-    pull_request:
-      branches:
-        - main
-        - unibe/main
+  push:
+    branches:
+      - main
+      - unibe/main
+  pull_request:
+    branches:
+      - main
+      - unibe/main
 
 jobs:
   lint:
@@ -21,10 +21,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.20.4'  # Cambia esto a tu versión de Node.js
+          node-version: '18.20.4'
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
 
       - name: Run ESLint
         run: npm run lint

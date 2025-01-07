@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Formik, Form } from 'formik';
 import UnibeBackgraund from '../../../assets/auth/UnibeBackgraund.jpg';
 import UnibeLogo from '../../../assets/header/LogoUnibe.png';
 import { useAuth } from '../../../hooks/auth/useUser';
@@ -8,12 +7,19 @@ import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import { validationSchemaLogin } from './validationSchemaLogin';
 import { useNavigate } from 'react-router-dom';
 import { signInNextStep } from '../../../utils/auth/singInNextStep';
+import { SignUpStepEnum } from '../../../enums/auth/signUpStepEnum';
+import { useFormValues } from '../../../hooks/formValues/formValues';
+import PasswordInput from '../../../components/common/form/PasswordInput';
+import LoadingButton from '../../../components/loadings/buttons/LoadingButton';
+import CustomInput from '../../../components/common/form/CustomInput';
+import Message from '../../../error/messages/Message';
 
 const LoginScreen = () => {
   const { handleSignIn, isAuthenticated } = useAuth();
   const { handleError, errorMessage, clearError } = useErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { setFormValues } = useFormValues();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,11 +30,10 @@ const LoginScreen = () => {
     }
   }, [isAuthenticated, navigate]);
 
-
   const handleFormSubmit = async (values: { email: string; password: string }) => {
     try {
       setIsLoading(true);
-      const authFlowType = 'USER_PASSWORD_AUTH';
+      const authFlowType = SignUpStepEnum.USER_PASSWORD_AUTH;
       const parameters = {
         username: values.email,
         password: values.password,
@@ -36,11 +41,16 @@ const LoginScreen = () => {
       };
       const response = await handleSignIn(parameters);
       signInNextStep(response, navigate, parameters, { username: values.email }, clearError);
-    } catch (error: unknown) { 
+    } catch (error: unknown) {
       handleError({ error });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const navigateForgotPassword = (email: string) => {
+    setFormValues({ email });
+    navigate('/forgot-password');
   };
 
   return (
@@ -54,52 +64,39 @@ const LoginScreen = () => {
         </div>
         <h2 className="text-lg font-semibold text-center text-gray-700">Iniciar Sesión</h2>
 
-        {errorMessage && (
-          <div className="p-4 text-red-600 bg-red-100 rounded-lg">{errorMessage}</div>
-        )}
+        {errorMessage && <Message text={errorMessage} type="error" />}
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={validationSchemaLogin}
           onSubmit={handleFormSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, values }) => (
             <Form className="space-y-4">
-              <div>
-                <Field
-                  type="email"
-                  name="email"
-                  placeholder="Correo electrónico"
-                  className="w-full px-5 py-3 text-gray-700 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
-                />
-                <ErrorMessage name="email" component="div" className="text-sm text-red-600" />
+              <CustomInput name="email" type="email" placeholder="Correo electrónico" />
+              <PasswordInput
+                name="password"
+                placeholder="Contraseña"
+                showPassword={showPassword}
+                togglePassword={() => setShowPassword(!showPassword)}
+              />
+              <div className="mt-6">
+                <button
+                  type="submit"
+                  disabled={isSubmitting || isLoading}
+                  className="w-full px-5 py-3 font-semibold text-white bg-dark-primary rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                >
+                  {isLoading ? <LoadingButton text="Cargando ...." /> : 'Iniciar Sesión'}
+                </button>
               </div>
-              <div className="relative">
-                <Field
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  placeholder="Contraseña"
-                  className="w-full px-5 py-3 text-gray-700 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
-                />
+              <div className="flex justify-center mt-4">
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-4 flex items-center text-gray-500"
+                  className="text-gray-600 underline hover:text-blue-500 focus:outline-none"
+                  onClick={() => navigateForgotPassword(values.email)}
                 >
-                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                  ¿Olvidaste tu Contraseña?
                 </button>
-                <ErrorMessage name="password" component="div" className="text-sm text-red-600" />
               </div>
-              <button
-                type="submit"
-                disabled={isLoading || isSubmitting}
-                className={`w-full px-5 py-3 font-semibold text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ${
-                  isLoading || isSubmitting
-                    ? 'bg-blue-300 cursor-not-allowed'
-                    : 'bg-dark-primary bg-light-primary hover:bg-blue-600'
-                }`}
-              >
-                {isLoading || isSubmitting ? 'Cargando...' : 'Iniciar Sesión'}
-              </button>
             </Form>
           )}
         </Formik>
