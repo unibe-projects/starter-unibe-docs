@@ -24,7 +24,8 @@ jobs:
           node-version: '18.20.4'
 
       - name: Create aws-exports.js
-        run: echo '${{ secrets.UNIBE_EXPORTS_AWS }}' > ./src/aws-exports.js
+        run: |
+          echo "${{ secrets.UNIBE_EXPORTS_AWS }}" > ./src/aws-exports.js
 
       - name: Install dependencies
         run: npm install
