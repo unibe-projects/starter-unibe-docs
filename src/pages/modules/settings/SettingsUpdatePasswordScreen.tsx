@@ -23,15 +23,15 @@ const SettingsUpdatePasswordScreen = () => {
   const { handleError, handleSuccess, errorMessage, successMessage, clearError, clearSuccess } =
     useErrorHandler();
 
-    const handleFormSubmitChangePassword = async (values: FormValues): Promise<void> => {
-      const changePassword = {
-        oldPassword: values.currentPassword,
-        newPassword: values.confirmPassword,
-      };
-  
-      await handleChangePasswordSumit(changePassword);
+  const handleFormSubmitChangePassword = async (values: FormValues): Promise<void> => {
+    const changePassword = {
+      oldPassword: values.currentPassword,
+      newPassword: values.confirmPassword,
     };
-    
+
+    await handleChangePasswordSumit(changePassword);
+  };
+
   const handleChangePasswordSumit = async (value: ChangePasswordInput) => {
     try {
       setIsLoading(true);

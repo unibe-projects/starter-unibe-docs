@@ -20,18 +20,18 @@ const ForgotPasswordScreen = () => {
   const { formValues, setFormValues } = useFormValues();
   const navigate = useNavigate();
 
-  const navigateResetPassword = (res: ResetPasswordOutput) =>{
+  const navigateResetPassword = (res: ResetPasswordOutput) => {
     if (res.nextStep.resetPasswordStep === SignUpStepEnum.CONFIRM_RESET_PASSWORD_WITH_CODE) {
       navigate('/reset-password');
       clearError();
     }
-  }
+  };
 
   const handleSubmit = async (values: { email: string }) => {
     try {
       setIsLoading(true);
       const response = await handleResendPassword(values.email);
-      setFormValues({ email: values.email })
+      setFormValues({ email: values.email });
       navigateResetPassword(response);
     } catch (error) {
       handleError({ error });
@@ -60,7 +60,12 @@ const ForgotPasswordScreen = () => {
         >
           {({ isSubmitting, values }) => (
             <Form className="space-y-6">
-              <CustomInput name="email" type="email" values={values.email} placeholder="Correo electrónico" />
+              <CustomInput
+                name="email"
+                type="email"
+                values={values.email}
+                placeholder="Correo electrónico"
+              />
               <div className="mt-6">
                 <button
                   type="submit"
