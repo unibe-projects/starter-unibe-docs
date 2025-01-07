@@ -1,6 +1,7 @@
-import { AuthUser, ConfirmSignInOutput, ResetPasswordOutput } from 'aws-amplify/auth';
+import { AuthUser, ConfirmResetPasswordInput, ConfirmSignInOutput, ResetPasswordOutput } from 'aws-amplify/auth';
 import { ReactNode } from 'react';
 import { AuthSignInInput, AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
+import { string } from 'yup';
 
 export interface AuthInterface {
   user: AuthUser | null;
@@ -10,6 +11,11 @@ export interface AuthInterface {
   handleSignOut: () => Promise<void>;
   handleResendPassword: ( username: string ) => Promise<ResetPasswordOutput>;
   handleChangePassword: (input: ChangePasswordInput) => Promise<void>;
+  handleConfirmResetPassword: ({
+    username,
+    confirmationCode,
+    newPassword,
+  }: ConfirmResetPasswordInput) => Promise<void>;
   isLoading: boolean;
 }
 
@@ -19,6 +25,12 @@ export interface AuthProviderInterface {
 
 export interface BasePasswordInput {
   oldPassword: string;
+  newPassword: string;
+}
+
+export interface ChangePassword {
+  username: string;
+  confirmationCode: string;
   newPassword: string;
 }
 

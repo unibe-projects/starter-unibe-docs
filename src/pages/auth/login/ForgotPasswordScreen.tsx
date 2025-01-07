@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../../hooks/auth/useUser';
 import { useNavigate } from 'react-router-dom';
-import { ConfirmSignInOutput } from 'aws-amplify/auth';
+import { ResetPasswordOutput } from 'aws-amplify/auth';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import { Form, Formik } from 'formik';
 import { validationSchemaEmail } from './validationSchemaLogin';
@@ -15,16 +15,24 @@ import Message from '../../../error/messages/Message';
 
 const ForgotPasswordScreen = () => {
   const { handleResendPassword } = useAuth();
-  const { handleError, errorMessage } = useErrorHandler();
+  const { handleError, errorMessage, clearError } = useErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { formValues } = useFormValues();
+  const { formValues, setFormValues } = useFormValues();
   const navigate = useNavigate();
+
+  const navigateResetPassword = (res: ResetPasswordOutput) =>{
+    if (res.nextStep.resetPasswordStep === SignUpStepEnum.CONFIRM_RESET_PASSWORD_WITH_CODE) {
+      navigate('/reset-password');
+      clearError();
+    }
+  }
 
   const handleSubmit = async (values: { email: string }) => {
     try {
       setIsLoading(true);
-      await handleResendPassword(values.email);
-      navigate('/reset-password', { state: { email: values.email } });
+      const response = await handleResendPassword(values.email);
+      setFormValues({ email: values.email })
+      navigateResetPassword(response);
     } catch (error) {
       handleError({ error });
     } finally {
@@ -50,9 +58,9 @@ const ForgotPasswordScreen = () => {
           validationSchema={validationSchemaEmail}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, values }) => (
             <Form className="space-y-6">
-              <CustomInput name="email" type="email" placeholder="Correo electrónico" />
+              <CustomInput name="email" type="email" values={values.email} placeholder="Correo electrónico" />
               <div className="mt-6">
                 <button
                   type="submit"

@@ -1,5 +1,7 @@
 import {
   AuthUser,
+  confirmResetPassword,
+  ConfirmResetPasswordInput,
   confirmSignIn,
   getCurrentUser,
   ResetPasswordOutput,
@@ -95,6 +97,23 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
     return changePasswordService({ oldPassword, newPassword });
   };
 
+
+  const handleConfirmResetPassword = async ({
+    username,
+    confirmationCode,
+    newPassword,
+  }: ConfirmResetPasswordInput): Promise<void> => {
+    try {
+      await confirmResetPassword({
+        username,
+        confirmationCode,
+        newPassword,
+      });
+    } catch (error) {
+      throw new Error(errorToString(error));
+    }
+  };
+
   const providerValue = useMemo(
     () => ({
       user,
@@ -104,6 +123,7 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
       handleSignOut,
       handleResendPassword,
       handleChangePassword,
+      handleConfirmResetPassword,
       isLoading,
     }),
     [user, isLoading, handleSignIn, handleSignOut, handleConfirmSignIn],

@@ -56,3 +56,25 @@ export const validationSchemaUpdatePassword = Yup.object({
     .oneOf([Yup.ref('newPassword')], 'Las contraseñas no coinciden')
     .required('Confirmar la nueva contraseña es obligatoria'),
 });
+
+export const validationSchemaResetPassword = Yup.object({
+  email: Yup.string()
+    .email('Correo electrónico inválido')
+    .required('El correo es obligatorio'),
+  newPassword: Yup.string()
+    .required('La nueva contraseña es obligatoria')
+    .min(PASSWORD_MIN_LENGTH, `Debe tener al menos ${PASSWORD_MIN_LENGTH} caracteres`)
+    .matches(/[0-9]/, 'Debe contener al menos un número')
+    .matches(/[A-Z]/, 'Debe contener al menos una letra mayúscula')
+    .matches(/[a-z]/, 'Debe contener al menos una letra minúscula')
+    .matches(/[^A-Za-z0-9]/, 'Debe contener al menos un carácter especial'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('newPassword')], 'Las contraseñas no coinciden')
+    .required('Confirmar la nueva contraseña es obligatoria'),
+  confirmationCode: Yup.string()
+    .required('El código de confirmación es obligatorio.')
+    .matches(/^[^\s]{6}$/, 'El código debe tener exactamente 6 caracteres y no debe contener espacios'),
+});
+
+
+
