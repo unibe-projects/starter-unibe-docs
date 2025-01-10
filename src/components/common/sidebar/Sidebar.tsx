@@ -1,10 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import { FaHome, FaUser } from 'react-icons/fa';
 import ProfileImage from '../../../assets/sidebar/ProfileImage.webp';
+import { useAuth } from '../../../hooks/auth/useUser';
 
 const Sidebar = () => {
   const activeClass = 'bg-blue-200 text-blue-700 font-bold';
   const inactiveClass = 'hover:bg-blue-100';
+  const { user } = useAuth();
 
   return (
     <div className="flex flex-col w-64 bg-light shadow-lg px-4 py-8 relative">
@@ -18,7 +20,7 @@ const Sidebar = () => {
         />
       </div>
       <div className="flex items-center justify-center mb-6">
-        <h2 className="text-small font-bold text-light-textSecondary">Steveen Ordoñez</h2>
+        <h2 className="text-small font-bold text-light-textSecondary">{user?.name}</h2>
       </div>
       <nav className="flex flex-col gap-6">
         <NavLink

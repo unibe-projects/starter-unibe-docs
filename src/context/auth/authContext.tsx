@@ -47,15 +47,15 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
   };
 
   useEffect(() => {
-    try {
-      setIsLoading(true);
-      const initializeAuth = async () => {
+    const initializeAuth = async () => {
+      try {
+        setIsLoading(true);
         await setCurrentUser();
-      };
-      initializeAuth();
-    } finally {
-      setIsLoading(false);
-    }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initializeAuth();
   }, []);
 
   const handleSignIn = useCallback(
