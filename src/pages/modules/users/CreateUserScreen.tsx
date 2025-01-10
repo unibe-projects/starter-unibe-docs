@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { useAuth } from "../../../hooks/auth/useUser";
+import React, { useState } from 'react';
+import { useAuth } from '../../../hooks/auth/useUser';
 
 // Enum de roles
 export enum RoleEnum {
-  ADMIN = "Admin",
-  PATIENTS = "patients",
+  ADMIN = 'Admin',
+  PATIENTS = 'patients',
 }
 
 const CreateUserScreen = () => {
   const { handleCreateUser } = useAuth();
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    email: "",
+    username: '',
+    password: '',
+    email: '',
     role: RoleEnum.ADMIN,
   });
 
@@ -28,10 +28,10 @@ const CreateUserScreen = () => {
     e.preventDefault();
     try {
       await handleCreateUser(formData);
-      alert("Usuario creado exitosamente");
+      alert('Usuario creado exitosamente');
     } catch (error) {
-      console.error("Error al crear el usuario:", error);
-      alert("Hubo un error al crear el usuario.");
+      console.error('Error al crear el usuario:', error);
+      alert('Hubo un error al crear el usuario.');
     }
   };
 

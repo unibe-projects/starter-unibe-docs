@@ -23,7 +23,6 @@ import {
 } from '../../interface/auth/auth.interface';
 import {
   changePasswordService,
-  resendCodeService,
   resendPasswordService,
   signInService,
 } from '../../services/auth/authSingInService';
@@ -39,7 +38,6 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
     try {
       setIsLoading(true);
       const userAttributes: FetchUserAttributesOutput = await fetchUserAttributes();
-      console.log('userAttributes', userAttributes);
       setUser(userAttributes);
     } catch (error) {
       setUser(null);
@@ -105,7 +103,6 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
     return changePasswordService({ oldPassword, newPassword });
   };
 
-
   const handleConfirmResetPassword = async ({
     username,
     confirmationCode,
@@ -122,43 +119,38 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
     }
   };
 
-  const handleResendCode = (username: string)  => {
-    return resendCodeService(username)
-  }
-
-  const handleCreateUser = async ({ username, password, email, role}: SignUpParameters) => {
-   try {
-    const { isSignUpComplete, userId, nextStep } = await signUp({
-      username,
-      password,
-      options: {
-        userAttributes: {
-          email,
-          'custom:role': role
-        },
-        autoSignIn: false
-      }
-    });
-    console.log('isSignUpComplete:', isSignUpComplete, 'userId:', userId,  'nextStep:', nextStep );
-   } catch (e){
-    throw new Error(errorToString(e));
-   }
-  }
-
- const handleSignUpConfirmation= async ({
-    username,
-    confirmationCode
-  }: ConfirmSignUpInput):Promise<ConfirmSignUpOutput | undefined> => {
+  const handleCreateUser = async ({ username, password, email, role }: SignUpParameters) => {
     try {
-        const response = await confirmSignUp({
+      await signUp({
         username,
-        confirmationCode
+        password,
+        options: {
+          userAttributes: {
+            email,
+            'custom:role': role,
+          },
+          autoSignIn: false,
+        },
+      });
+    } catch (e) {
+      throw new Error(errorToString(e));
+    }
+  };
+
+  const handleSignUpConfirmation = async ({
+    username,
+    confirmationCode,
+  }: ConfirmSignUpInput): Promise<ConfirmSignUpOutput | undefined> => {
+    try {
+      const response = await confirmSignUp({
+        username,
+        confirmationCode,
       });
       return response;
     } catch (error) {
-      console.log('error confirming sign up', error);
+      throw new Error(errorToString(error));
     }
-  }
+  };
 
   const providerValue = useMemo(
     () => ({
@@ -174,7 +166,7 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
       handleSignUpConfirmation,
       isLoading,
     }),
-    [user, isLoading, handleSignIn, handleSignOut, handleConfirmSignIn, ],
+    [user, isLoading, handleSignIn, handleSignOut, handleConfirmSignIn],
   );
 
   return <AuthContext.Provider value={providerValue}>{children}</AuthContext.Provider>;

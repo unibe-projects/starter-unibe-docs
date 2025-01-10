@@ -15,7 +15,7 @@ export async function signInNextStep(
   try {
     switch (response.nextStep?.signInStep) {
     case SignUpStepEnum.CONFIRM_SIGN_UP:
-      resendCodeService(attributes.username)
+      resendCodeService(attributes.username);
       navigate('/complete-record', { state: { attributes: attributes } });
       clearError();
       return response;

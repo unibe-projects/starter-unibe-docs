@@ -17,7 +17,6 @@ type FormValues = {
   [key: string]: string;
 };
 
-
 const CompleteRecordScreen = () => {
   const { handleSignUpConfirmation } = useAuth();
   const { handleError, errorMessage, clearError } = useErrorHandler();
@@ -36,10 +35,11 @@ const CompleteRecordScreen = () => {
   };
 
   const navigateHome = (response: ConfirmSignUpOutput | undefined) => {
-    if(response?.nextStep.signUpStep === SignUpStepEnum.DONE)
-    navigate('/login')
+    if (response?.nextStep.signUpStep === SignUpStepEnum.DONE) {
+      navigate('/login');
+    }
     clearError();
-  }
+  };
 
   const handleChangePasswordSumit = async (value: CompleteRecord) => {
     try {
