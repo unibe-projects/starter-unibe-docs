@@ -1,9 +1,9 @@
 import { AuthSignInInput, AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
 import { SignUpStepEnum } from '../../enums/auth/signUpStepEnum';
-import { ConfirmSignUpError, SignInFailedError } from '../../error/messages/authSingInError';
+import { SignInFailedError } from '../../error/messages/authSingInError';
 import { errorToString } from '../../error/messages/errorToString';
-import { resendCodeService } from '../../services/auth/authSingInService';
 import { NavigateFunction } from 'react-router-dom';
+import { resendCodeService } from '../../services/auth/authSingInService';
 
 export async function signInNextStep(
   response: AuthSignInOutput,
@@ -15,8 +15,10 @@ export async function signInNextStep(
   try {
     switch (response.nextStep?.signInStep) {
     case SignUpStepEnum.CONFIRM_SIGN_UP:
-      await resendCodeService(credentials.username);
-      throw new ConfirmSignUpError();
+      resendCodeService(attributes.username);
+      navigate('/complete-record', { state: { attributes: attributes } });
+      clearError();
+      return response;
 
     case SignUpStepEnum.CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED:
       navigate('/password-required', { state: { attributes: attributes } });
