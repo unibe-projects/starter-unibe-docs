@@ -3,20 +3,27 @@ import {
   confirmResetPassword,
   ConfirmResetPasswordInput,
   confirmSignIn,
-  getCurrentUser,
+  confirmSignUp,
+  ConfirmSignUpInput,
+  ConfirmSignUpOutput,
+  fetchUserAttributes,
+  FetchUserAttributesOutput,
   ResetPasswordOutput,
   SignInInput,
   signOut,
+  signUp,
 } from 'aws-amplify/auth';
-import { AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
+import { AuthNextSignUpStep, AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
 import { useMemo, createContext, useState, useEffect, useCallback } from 'react';
 import {
   AuthInterface,
   AuthProviderInterface,
   ChangePasswordInput,
+  SignUpParameters,
 } from '../../interface/auth/auth.interface';
 import {
   changePasswordService,
+  resendCodeService,
   resendPasswordService,
   signInService,
 } from '../../services/auth/authSingInService';
@@ -25,14 +32,15 @@ import { errorToString } from '../../error/messages/errorToString';
 export const AuthContext = createContext<AuthInterface | undefined>(undefined);
 
 export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<FetchUserAttributesOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const setCurrentUser = async (): Promise<void> => {
     try {
       setIsLoading(true);
-      const currentUser: AuthUser = await getCurrentUser();
-      setUser(currentUser);
+      const userAttributes: FetchUserAttributesOutput = await fetchUserAttributes();
+      console.log('userAttributes', userAttributes);
+      setUser(userAttributes);
     } catch (error) {
       setUser(null);
     } finally {
@@ -114,6 +122,44 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
     }
   };
 
+  const handleResendCode = (username: string)  => {
+    return resendCodeService(username)
+  }
+
+  const handleCreateUser = async ({ username, password, email, role}: SignUpParameters) => {
+   try {
+    const { isSignUpComplete, userId, nextStep } = await signUp({
+      username,
+      password,
+      options: {
+        userAttributes: {
+          email,
+          'custom:role': role
+        },
+        autoSignIn: false
+      }
+    });
+    console.log('isSignUpComplete:', isSignUpComplete, 'userId:', userId,  'nextStep:', nextStep );
+   } catch (e){
+    throw new Error(errorToString(e));
+   }
+  }
+
+ const handleSignUpConfirmation= async ({
+    username,
+    confirmationCode
+  }: ConfirmSignUpInput):Promise<ConfirmSignUpOutput | undefined> => {
+    try {
+        const response = await confirmSignUp({
+        username,
+        confirmationCode
+      });
+      return response;
+    } catch (error) {
+      console.log('error confirming sign up', error);
+    }
+  }
+
   const providerValue = useMemo(
     () => ({
       user,
@@ -124,9 +170,11 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
       handleResendPassword,
       handleChangePassword,
       handleConfirmResetPassword,
+      handleCreateUser,
+      handleSignUpConfirmation,
       isLoading,
     }),
-    [user, isLoading, handleSignIn, handleSignOut, handleConfirmSignIn],
+    [user, isLoading, handleSignIn, handleSignOut, handleConfirmSignIn, ],
   );
 
   return <AuthContext.Provider value={providerValue}>{children}</AuthContext.Provider>;

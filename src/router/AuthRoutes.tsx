@@ -6,6 +6,7 @@ import PageWrapper from '../components/common/page/PageWrapper';
 import Sidebar from '../components/common/sidebar/Sidebar';
 import NotFoundScreen from '../error/404/NotFoundScreen';
 import SettingsUpdatePasswordScreen from '../pages/modules/settings/SettingsUpdatePasswordScreen';
+import CreateUserScreen from '../pages/modules/users/CreateUserScreen';
 
 const AuthRoutes: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const AuthRoutes: React.FC = () => {
               <Route path="/" element={<Navigate to="/home" />} />
               <Route path="/home" element={<HomeScreen />} />
               <Route path="/settings/change-password" element={<SettingsUpdatePasswordScreen />} />
+              <Route path="/user/create" element={<CreateUserScreen />} />
               <Route path="*" element={<NotFoundScreen />} />
             </Routes>
           </main>

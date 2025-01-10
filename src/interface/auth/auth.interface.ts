@@ -1,14 +1,17 @@
 import {
-  AuthUser,
   ConfirmResetPasswordInput,
   ConfirmSignInOutput,
+  ConfirmSignUpInput,
+  ConfirmSignUpOutput,
+  FetchUserAttributesOutput,
   ResetPasswordOutput,
 } from 'aws-amplify/auth';
 import { ReactNode } from 'react';
 import { AuthSignInInput, AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
+import { RoleEnum } from '../../enums/auth/roleEnum';
 
 export interface AuthInterface {
-  user: AuthUser | null;
+  user: FetchUserAttributesOutput | null;
   isAuthenticated: boolean;
   handleSignIn: (_credentials: AuthSignInInput) => Promise<AuthSignInOutput>;
   handleConfirmSignIn: (
@@ -23,6 +26,8 @@ export interface AuthInterface {
     confirmationCode,
     newPassword,
   }: ConfirmResetPasswordInput) => Promise<void>;
+  handleCreateUser: ({ username, password, email, role}: SignUpParameters) => Promise<void>;
+  handleSignUpConfirmation: ({username, confirmationCode }: ConfirmSignUpInput) => Promise<ConfirmSignUpOutput | undefined>;
   isLoading: boolean;
 }
 
@@ -41,6 +46,11 @@ export interface ChangePassword {
   newPassword: string;
 }
 
+export interface CompleteRecord {
+  username: string;
+  confirmationCode: string;
+}
+
 export interface ChangePasswordInput extends BasePasswordInput {}
 
 export type ResendSignUpCodeResponseInterface = {
@@ -50,9 +60,19 @@ export type ResendSignUpCodeResponseInterface = {
 };
 
 export interface AuthState {
-  user: AuthUser | null;
+  user: FetchUserAttributesOutput | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
+
+
+
+export interface SignUpParameters {
+  username: string;
+  password: string;
+  email: string;
+  role: RoleEnum;
+};
+
 
 export interface AuthContextInterface extends AuthState, AuthInterface {}

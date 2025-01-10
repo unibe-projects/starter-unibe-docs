@@ -6,7 +6,7 @@ import LoadingApp from '../components/loadings/loadingApp/LoadingApp';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const AppRouter: React.FC = () => {
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, isLoading: authLoading, } = useAuth();
 
   if (authLoading) {
     return <LoadingApp />;

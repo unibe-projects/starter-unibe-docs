@@ -5,6 +5,7 @@ import PasswordRequiredScreen from '../pages/auth/login/PasswordRequiredScreen';
 import NotFoundScreen from '../error/404/NotFoundScreen';
 import ForgotPasswordScreen from '../pages/auth/login/ForgotPasswordScreen';
 import ResetPasswordScreen from '../pages/auth/login/ResetPasswordScreen';
+import CompleteRecordScreen from '../pages/auth/login/CompleteRecordScreen';
 
 const MainRoutes: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const MainRoutes: React.FC = () => {
       <Route path="/password-required" element={<PasswordRequiredScreen />} />
       <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
       <Route path="/reset-password" element={<ResetPasswordScreen />} />
+      <Route path="/complete-record" element={<CompleteRecordScreen />} />
       <Route path="*" element={<NotFoundScreen />} />
     </Routes>
   );

@@ -76,5 +76,14 @@ export const validationSchemaResetPassword = Yup.object({
     .matches(/^[^\s]{6}$/, 'El código debe tener exactamente 6 caracteres y no debe contener espacios'),
 });
 
+export const validationSchemaCompleteRecord = Yup.object({
+  email: Yup.string()
+    .email('Correo electrónico inválido')
+    .required('El correo es obligatorio'),
+  confirmationCode: Yup.string()
+    .required('El código de confirmación es obligatorio.')
+    .matches(/^[^\s]{6}$/, 'El código debe tener exactamente 6 caracteres y no debe contener espacios'),
+});
+
 
 
