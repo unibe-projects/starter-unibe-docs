@@ -12,6 +12,14 @@ interface ManageDatesProps {
   userId: string | undefined;
 }
 
+interface ScheduleDay {
+  id: string;
+  date: string;
+  created_by: string;
+  createdAt: string;
+  is_working_day: boolean;
+}
+
 const ManageDates: React.FC<ManageDatesProps> = ({
   onDisableDate,
   onEnableDate,
@@ -24,12 +32,13 @@ const ManageDates: React.FC<ManageDatesProps> = ({
 
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
+  const ISO_DATE_LENGTH = 10;
   const TIMEZONE_OFFSET = 60000;
 
   const getLocalDate = (): string => {
     const now = new Date();
     const localTime = new Date(now.getTime() - now.getTimezoneOffset() * TIMEZONE_OFFSET);
-    return localTime.toISOString().slice(0, 10);
+    return localTime.toISOString().slice(0, ISO_DATE_LENGTH);
   };
 
   const currentDateFormatted = getLocalDate();
@@ -43,7 +52,7 @@ const ManageDates: React.FC<ManageDatesProps> = ({
       await createScheduleDay({
         variables: {
           createdBy: userId,
-          date: date.toISOString().slice(0, 10),
+          date: date.toISOString().slice(0, ISO_DATE_LENGTH),
           isWorkingDay: false,
         },
       });
@@ -59,7 +68,7 @@ const ManageDates: React.FC<ManageDatesProps> = ({
       await createScheduleDay({
         variables: {
           createdBy: userId,
-          date: date.toISOString().slice(0, 10),
+          date: date.toISOString().slice(0, ISO_DATE_LENGTH),
           isWorkingDay: true,
         },
       });
@@ -70,14 +79,20 @@ const ManageDates: React.FC<ManageDatesProps> = ({
     }
   };
 
-  // Paginar los días de programación
   const paginateDays = () => {
     if (!data?.listScheduleDays?.items) {
       return [];
     }
+
+    const sortedDays = [...data.listScheduleDays.items].sort((a: ScheduleDay, b: ScheduleDay) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateA.getTime() - dateB.getTime();
+    });
+
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
-    return data.listScheduleDays.items.slice(startIndex, endIndex);
+    return sortedDays.slice(startIndex, endIndex);
   };
 
   const handlePageChange = (pageNumber: number) => {
@@ -90,7 +105,7 @@ const ManageDates: React.FC<ManageDatesProps> = ({
 
   if (loading) {
     return <LoadingSpinner />;
-  } // Cambiado aquí para mostrar el spinner centrado
+  }
   if (error) {
     return <ErrorMessage message="Hubo un error al cargar los datos." onRetry={handleRetryFetch} />;
   }
@@ -106,27 +121,29 @@ const ManageDates: React.FC<ManageDatesProps> = ({
             const selectedDate = new Date(e.target.value + 'T00:00:00');
             onSelectDate(selectedDate);
           }}
-          value={selectedDate ? selectedDate.toISOString().slice(0, 10) : ''}
+          value={selectedDate ? selectedDate.toISOString().slice(0, ISO_DATE_LENGTH) : ''}
           className="w-full p-2 border border-gray-300 rounded-md"
         />
-        {selectedDate && isDateAlreadyScheduled(selectedDate?.toISOString().slice(0, 10) || '') && (
+        {selectedDate &&
+          isDateAlreadyScheduled(selectedDate?.toISOString().slice(0, ISO_DATE_LENGTH) || '') && (
           <p className="text-red-500 text-sm mt-2">Esta fecha ya está programada</p>
         )}
       </div>
 
-      {selectedDate && !isDateAlreadyScheduled(selectedDate?.toISOString().slice(0, 10) || '') && (
+      {selectedDate &&
+        !isDateAlreadyScheduled(selectedDate?.toISOString().slice(0, ISO_DATE_LENGTH) || '') && (
         <div className="flex mb-4 gap-4 w-full">
           <button
             onClick={() => handleEnableDate(selectedDate)}
             className="bg-green-500 text-white p-3 rounded w-full md:w-auto"
           >
-            Habilitar este día
+              Habilitar este día
           </button>
           <button
             onClick={() => handleDisableDate(selectedDate)}
             className="bg-red-500 text-white p-3 rounded w-full md:w-auto"
           >
-            Deshabilitar este día
+              Deshabilitar este día
           </button>
         </div>
       )}

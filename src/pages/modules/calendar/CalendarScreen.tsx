@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Event } from '../../../interface/calendar/calendare.interface';
 import CalendarComponent from '../../../components/calendar/CalendarComponent';
 import EventModal from '../../../components/calendar/EventModal';
@@ -15,6 +15,7 @@ import MessageModal from '../../../components/calendar/MessageModal';
 import { isDateAlreadyScheduled } from '../../../utils/calendar/isDateAlreadySchedule';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
+import { parseDateSafe } from '../../../utils/calendar/parseDateSafe';
 
 const CalendarScreen: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -126,6 +127,29 @@ const CalendarScreen: React.FC = () => {
     refetch();
   };
 
+  useEffect(() => {
+    if (data) {
+      const enabled: Date[] = [];
+      const disabled: Date[] = [];
+
+      data.listScheduleDays.items.forEach(
+        (item: { date: string | number | Date; is_working_day: boolean }) => {
+          const date = parseDateSafe(item.date as string);
+
+          if (date) {
+            if (item.is_working_day) {
+              enabled.push(date);
+            } else {
+              disabled.push(date);
+            }
+          }
+        },
+      );
+      setEnabledDates(enabled);
+      setDisabledDates(disabled);
+    }
+  }, [data]);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Calendario de Horarios de Atención</h1>
@@ -140,7 +164,12 @@ const CalendarScreen: React.FC = () => {
           )}
           {!loading && !error && (
             <>
-              <CalendarComponent events={events} onSelectSlot={handleSelectSlot} />
+              <CalendarComponent
+                events={events}
+                onSelectSlot={handleSelectSlot}
+                disabledDates={disabledDates}
+                enabledDates={enabledDates}
+              />
 
               {isModalOpen && selectedDate && !errorMessage && (
                 <EventModal
@@ -163,7 +192,7 @@ const CalendarScreen: React.FC = () => {
               {showRegisterDayModal && (
                 <MessageModal
                   title="¡Alvertencia!"
-                  message=" No puedes seleccionar este dia"
+                  message=" No puedes seleccionar este día"
                   onClose={handleCloseRegisterDayModal}
                 />
               )}

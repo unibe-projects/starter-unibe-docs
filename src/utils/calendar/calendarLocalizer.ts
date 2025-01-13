@@ -3,7 +3,7 @@ import { format, parse, startOfWeek, getDay } from 'date-fns';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const locales = {
-  'en-US': require('date-fns/locale/en-US'),
+  'es-EC': require('date-fns/locale/es'),
   es: require('date-fns/locale/es'),
 };
 
