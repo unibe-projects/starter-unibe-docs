@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { CREATE_SCHEDULE_DAY, listScheduleDays } from '../../services/calendar/calendarService';
+import LoadingSpinner from '../loadings/spinner/LoadingSpinner';
+import ErrorMessage from '../../error/messages/ErrorMessageRefresh';
 
 interface ManageDatesProps {
   onDisableDate: (date: Date) => void;
@@ -21,20 +23,19 @@ const ManageDates: React.FC<ManageDatesProps> = ({
   const [createScheduleDay] = useMutation(CREATE_SCHEDULE_DAY);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const ITEMS_PER_PAGE = 10;
+  const TIMEZONE_OFFSET = 60000;
 
   const getLocalDate = (): string => {
     const now = new Date();
-    const localTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    const localTime = new Date(now.getTime() - now.getTimezoneOffset() * TIMEZONE_OFFSET);
     return localTime.toISOString().slice(0, 10);
   };
 
   const currentDateFormatted = getLocalDate();
 
   const isDateAlreadyScheduled = (date: string): boolean => {
-    return data?.listScheduleDays?.items.some(
-      (scheduleDay: any) => scheduleDay.date === date
-    );
+    return data?.listScheduleDays?.items.some((scheduleDay: any) => scheduleDay.date === date);
   };
 
   const handleDisableDate = async (date: Date) => {
@@ -71,9 +72,11 @@ const ManageDates: React.FC<ManageDatesProps> = ({
 
   // Paginar los días de programación
   const paginateDays = () => {
-    if (!data?.listScheduleDays?.items) return [];
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    if (!data?.listScheduleDays?.items) {
+      return [];
+    }
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
     return data.listScheduleDays.items.slice(startIndex, endIndex);
   };
 
@@ -81,8 +84,16 @@ const ManageDates: React.FC<ManageDatesProps> = ({
     setCurrentPage(pageNumber);
   };
 
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>Error al cargar los datos: {error.message}</p>;
+  const handleRetryFetch = () => {
+    refetch();
+  };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  } // Cambiado aquí para mostrar el spinner centrado
+  if (error) {
+    return <ErrorMessage message="Hubo un error al cargar los datos." onRetry={handleRetryFetch} />;
+  }
 
   return (
     <div className="mb-4">
@@ -148,7 +159,7 @@ const ManageDates: React.FC<ManageDatesProps> = ({
         </button>
         <button
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage * itemsPerPage >= data?.listScheduleDays?.items.length}
+          disabled={currentPage * ITEMS_PER_PAGE >= data?.listScheduleDays?.items.length}
           className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:bg-gray-300"
         >
           Siguiente
