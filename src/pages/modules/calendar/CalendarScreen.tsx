@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Event } from '../../../interface/calendar/calendare.interface';
 import CalendarComponent from '../../../components/calendar/CalendarComponent';
 import EventModal from '../../../components/calendar/EventModal';
-import { createEvent } from '../../../utils/calendar/createEvent';
 import { isValidSelectedDate } from '../../../utils/calendar/dateUtils';
-import { formatTime } from '../../../utils/calendar/timeUtils';
 import ManageDates from '../../../components/calendar/ManageDates';
 import { useAuth } from '../../../hooks/auth/useUser';
 import { useQuery } from '@apollo/client';
@@ -18,7 +15,6 @@ import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 import { parseDateSafe } from '../../../utils/calendar/parseDateSafe';
 
 const CalendarScreen: React.FC = () => {
-  const [events, setEvents] = useState<Event[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [workingHours, setWorkingHours] = useState({
     start: '09:00',
@@ -63,7 +59,7 @@ const CalendarScreen: React.FC = () => {
   const handleWorkingDay = (start: Date) => {
     if (isValidSelectedDate(start)) {
       setSelectedDate(start);
-      setWorkingHours(getWorkingHours(start));
+      setWorkingHours({ start: '09:00', end: '17:00' });
       setIsModalOpen(true);
       setErrorMessage(null);
     } else {
@@ -77,28 +73,10 @@ const CalendarScreen: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const getWorkingHours = (start: Date) => {
-    const selectedHour = start.getHours();
-    const selectedMinute = start.getMinutes();
-    const formattedHour = formatTime(selectedHour, selectedMinute);
-
-    return {
-      start: formattedHour,
-      end: formatTime(selectedHour + 1, selectedMinute),
-    };
-  };
-
-  const handleSaveWorkingHours = () => {
-    if (selectedDate && workingHours.start && workingHours.end) {
-      const newEvent = createEvent(selectedDate.toISOString(), workingHours);
-
-      if (newEvent) {
-        setEvents([...events, newEvent]);
-        setIsModalOpen(false);
-      }
-    } else {
-      alert('Por favor, complete las horas de atención.');
-    }
+  const getScheduleId = (date: Date): string => {
+    const dayStr = date.toISOString().split('T')[0];
+    const scheduleItem = data?.listScheduleDays.items.find((item: any) => item.date === dayStr);
+    return scheduleItem ? scheduleItem.id : '';
   };
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'start' | 'end') => {
@@ -165,7 +143,6 @@ const CalendarScreen: React.FC = () => {
           {!loading && !error && (
             <>
               <CalendarComponent
-                events={events}
                 onSelectSlot={handleSelectSlot}
                 disabledDates={disabledDates}
                 enabledDates={enabledDates}
@@ -176,8 +153,8 @@ const CalendarScreen: React.FC = () => {
                   selectedDate={selectedDate}
                   workingHours={workingHours}
                   onTimeChange={handleTimeChange}
-                  onSave={handleSaveWorkingHours}
                   onClose={handleCloseModal}
+                  idDaySelect={getScheduleId(selectedDate)}
                 />
               )}
 
