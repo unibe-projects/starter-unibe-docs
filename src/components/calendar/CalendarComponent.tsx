@@ -18,7 +18,10 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
   disabledDates: propDisabledDates,
   enabledDates: propEnabledDates,
 }) => {
-  const { data, loading, error, refetch } = useQuery(LIST_WORKING_HOURS);
+  const { data, loading, error, refetch } = useQuery(LIST_WORKING_HOURS, {
+    fetchPolicy: 'network-only',
+  });
+
   const events: Event[] = useMemo(() => {
     if (!data || !data.listWorkingHours) {
       return [];

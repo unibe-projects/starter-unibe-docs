@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
-import { CREATE_WORKING_HOURS } from '../../services/calendar/calendarService';
+import { CREATE_WORKING_HOURS, LIST_WORKING_HOURS } from '../../services/calendar/calendarService';
 
 interface EventModalProps {
   selectedDate: Date;
@@ -18,7 +18,10 @@ const EventModal: React.FC<EventModalProps> = ({
   idDaySelect,
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [createWorkingHours] = useMutation(CREATE_WORKING_HOURS);
+  const [createWorkingHours] = useMutation(CREATE_WORKING_HOURS, {
+    refetchQueries: [{ query: LIST_WORKING_HOURS }],
+    awaitRefetchQueries: true,
+  });
 
   const handleSaveWorkingHours = async () => {
     if (selectedDate && workingHours.start && workingHours.end) {
