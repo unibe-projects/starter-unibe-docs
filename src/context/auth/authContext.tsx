@@ -1,5 +1,4 @@
 import {
-  AuthUser,
   confirmResetPassword,
   ConfirmResetPasswordInput,
   confirmSignIn,
@@ -13,7 +12,7 @@ import {
   signOut,
   signUp,
 } from 'aws-amplify/auth';
-import { AuthNextSignUpStep, AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
+import { AuthSignInOutput } from '@aws-amplify/auth/dist/esm/types';
 import { useMemo, createContext, useState, useEffect, useCallback } from 'react';
 import {
   AuthInterface,
@@ -47,29 +46,26 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
   };
 
   useEffect(() => {
-    try {
-      setIsLoading(true);
-      const initializeAuth = async () => {
+    const initializeAuth = async () => {
+      try {
+        setIsLoading(true);
         await setCurrentUser();
-      };
-      initializeAuth();
-    } finally {
-      setIsLoading(false);
-    }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initializeAuth();
   }, []);
 
-  const handleSignIn = useCallback(
-    async (credentials: SignInInput): Promise<AuthSignInOutput> => {
-      try {
-        const response = await signInService(credentials);
-        await setCurrentUser();
-        return response;
-      } catch (error) {
-        throw new Error(errorToString(error));
-      }
-    },
-    [setUser],
-  );
+  const handleSignIn = useCallback(async (credentials: SignInInput): Promise<AuthSignInOutput> => {
+    try {
+      const response = await signInService(credentials);
+      await setCurrentUser();
+      return response;
+    } catch (error) {
+      throw new Error(errorToString(error));
+    }
+  }, []);
 
   const handleConfirmSignIn = useCallback(
     async (newPassword: string, attributes: { username: string }) => {
@@ -83,14 +79,14 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
     [],
   );
 
-  const handleSignOut = async (): Promise<void> => {
+  const handleSignOut = useCallback(async (): Promise<void> => {
     try {
       await signOut();
       await setCurrentUser();
     } catch (error) {
       throw new Error(errorToString(error));
     }
-  };
+  }, []);
 
   const handleResendPassword = async (username: string): Promise<ResetPasswordOutput> => {
     return resendPasswordService(username);

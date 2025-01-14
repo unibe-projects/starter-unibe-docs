@@ -16,17 +16,7 @@ const SidebarSettings = () => {
             }`
           }
         >
-          Cambio de Contraseña
-        </NavLink>
-        <NavLink
-          to="/update-profile"
-          className={({ isActive }) =>
-            `block py-2 px-4 rounded text-left transition-colors ${
-              isActive ? activeClass : inactiveClass
-            }`
-          }
-        >
-          Actualizar Datos
+          Actualiza datos
         </NavLink>
       </div>
     </div>

@@ -18,7 +18,7 @@ const SettingsUpdatePasswordScreen = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-  const { handleChangePassword } = useAuth();
+  const { handleChangePassword, user } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { handleError, handleSuccess, errorMessage, successMessage, clearError, clearSuccess } =
     useErrorHandler();
@@ -60,6 +60,20 @@ const SettingsUpdatePasswordScreen = () => {
               <div className="mb-6 text-start">
                 <h1 className="text-2xl font-bold text-gray-800">Actualiza Contraseña</h1>
               </div>
+
+              {/* Mostrar correo del usuario */}
+              <div className="mb-4 p-4 bg-blue-100 border border-blue-300 rounded-md">
+                <p className="text-gray-700">
+                  <span className="font-semibold">Usuario Actual:</span> {user?.name || 'N/A'}
+                </p>
+              </div>
+
+              <div className="mb-4 p-4 bg-blue-100 border border-blue-300 rounded-md">
+                <p className="text-gray-700">
+                  <span className="font-semibold">Email Actual:</span> {user?.email || 'N/A'}
+                </p>
+              </div>
+
               {errorMessage && <Message text={errorMessage} type="error" />}
               {successMessage && <Message text={successMessage} type="success" />}
               <Formik

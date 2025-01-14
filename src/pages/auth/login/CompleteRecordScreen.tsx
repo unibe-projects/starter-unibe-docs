@@ -9,7 +9,7 @@ import UnibeBackgraund from '../../../assets/auth/UnibeBackgraund.jpg';
 import UnibeLogo from '../../../assets/header/LogoUnibe.png';
 import CustomInput from '../../../components/common/form/CustomInput';
 import { validationSchemaCompleteRecord } from './validationSchemaLogin';
-import { ChangePassword, CompleteRecord } from '../../../interface/auth/auth.interface';
+import { CompleteRecord } from '../../../interface/auth/auth.interface';
 import { ConfirmSignUpOutput } from 'aws-amplify/auth';
 import { SignUpStepEnum } from '../../../enums/auth/signUpStepEnum';
 

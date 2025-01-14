@@ -3,12 +3,14 @@ import LogoUnibe from '../../../assets/header/LogoUnibe.png';
 import { useAuth } from '../../../hooks/auth/useUser';
 import { useNavigate } from 'react-router-dom';
 import LoadingButton from '../../loadings/buttons/LoadingButton';
+import ProfileImage from '../../../assets/sidebar/ProfileImage.webp';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { handleSignOut } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -84,13 +86,11 @@ const Header: React.FC = () => {
       )}
 
       <div className="flex items-center space-x-4">
-        <h1 className="text-light-textSecondary text-small font-bold">
-          Hector Steveen Ordoñez Chamba
-        </h1>
+        <h1 className="text-light-textSecondary text-small font-bold">{user?.name}</h1>
         <img
-          src="logo_url_derecha"
+          src={ProfileImage}
           alt="Logo Derecha"
-          className="h-10 w-10 cursor-pointer"
+          className="h-10 w-10 cursor-pointer  rounded-full border-2 border-gray-300"
           onClick={toggleMenu}
         />
       </div>
