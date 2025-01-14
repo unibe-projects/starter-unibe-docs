@@ -28,6 +28,9 @@ const CalendarScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'calendar' | 'settings'>('calendar');
   const [showRegisterDayModal, setShowRegisterDayModal] = useState(false);
   const { data, loading, error, refetch } = useQuery(listScheduleDays);
+  const [selectedWorkingHours, setSelectedWorkingHours] = useState<{ start: Date; end: Date }[]>(
+    [],
+  );
 
   const handleSelectSlot = ({ start }: { start: Date }) => {
     const startDateStr = start.toISOString().split('T')[0];
@@ -59,7 +62,7 @@ const CalendarScreen: React.FC = () => {
   const handleWorkingDay = (start: Date) => {
     if (isValidSelectedDate(start)) {
       setSelectedDate(start);
-      setWorkingHours({ start: '09:00', end: '17:00' });
+      setWorkingHours({ start: '09:00', end: '12:00' });
       setIsModalOpen(true);
       setErrorMessage(null);
     } else {
@@ -105,6 +108,10 @@ const CalendarScreen: React.FC = () => {
     refetch();
   };
 
+  const handleDateSelected = (workingHours: { start: Date; end: Date }[]) => {
+    setSelectedWorkingHours(workingHours);
+  };
+
   useEffect(() => {
     if (data) {
       const enabled: Date[] = [];
@@ -143,6 +150,7 @@ const CalendarScreen: React.FC = () => {
           {!loading && !error && (
             <>
               <CalendarComponent
+                onDateSelected={handleDateSelected}
                 onSelectSlot={handleSelectSlot}
                 disabledDates={disabledDates}
                 enabledDates={enabledDates}
@@ -150,6 +158,7 @@ const CalendarScreen: React.FC = () => {
 
               {isModalOpen && selectedDate && !errorMessage && (
                 <EventModal
+                  selectedWorkingHours={selectedWorkingHours}
                   selectedDate={selectedDate}
                   workingHours={workingHours}
                   onTimeChange={handleTimeChange}

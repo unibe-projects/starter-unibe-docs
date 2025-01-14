@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CREATE_WORKING_HOURS, LIST_WORKING_HOURS } from '../../services/calendar/calendarService';
 
 interface EventModalProps {
@@ -8,6 +8,10 @@ interface EventModalProps {
   onTimeChange: (e: React.ChangeEvent<HTMLInputElement>, type: 'start' | 'end') => void;
   onClose: () => void;
   idDaySelect: string;
+  selectedWorkingHours: {
+    start: Date;
+    end: Date;
+  }[];
 }
 
 const EventModal: React.FC<EventModalProps> = ({
@@ -16,6 +20,7 @@ const EventModal: React.FC<EventModalProps> = ({
   onTimeChange,
   onClose,
   idDaySelect,
+  selectedWorkingHours,
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [createWorkingHours] = useMutation(CREATE_WORKING_HOURS, {
@@ -23,8 +28,38 @@ const EventModal: React.FC<EventModalProps> = ({
     awaitRefetchQueries: true,
   });
 
+  useEffect(() => {
+    if (!workingHours.start || !workingHours.end) {
+      setErrorMessage('Por favor, complete las horas de inicio y fin.');
+    }
+  }, [workingHours]);
+
   const handleSaveWorkingHours = async () => {
     if (selectedDate && workingHours.start && workingHours.end) {
+      const selectedStart = new Date(selectedDate);
+      const selectedEnd = new Date(selectedDate);
+
+      const [startHour, startMinute] = workingHours.start.split(':').map(Number);
+      const [endHour, endMinute] = workingHours.end.split(':').map(Number);
+
+      selectedStart.setHours(startHour || 0, startMinute || 0, 0, 0);
+      selectedEnd.setHours(endHour || 0, endMinute || 0, 0, 0);
+
+      const isOverlapping = selectedWorkingHours.some((workHour) => {
+        const existingStart = new Date(workHour.start);
+        const existingEnd = new Date(workHour.end);
+        return (
+          (selectedStart >= existingStart && selectedStart < existingEnd) ||
+          (selectedEnd > existingStart && selectedEnd <= existingEnd) ||
+          (selectedStart <= existingStart && selectedEnd >= existingEnd)
+        );
+      });
+
+      if (isOverlapping) {
+        setErrorMessage('El horario seleccionado se solapa con otro ya registrado.');
+        return;
+      }
+
       try {
         await createWorkingHours({
           variables: {

@@ -11,12 +11,14 @@ interface CalendarComponentProps {
   onSelectSlot?: ({ start }: { start: Date }) => void;
   disabledDates: Date[];
   enabledDates: Date[];
+  onDateSelected?: (workingHours: { start: Date; end: Date }[]) => void;
 }
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({
   onSelectSlot,
   disabledDates: propDisabledDates,
   enabledDates: propEnabledDates,
+  onDateSelected,
 }) => {
   const { data, loading, error, refetch } = useQuery(LIST_WORKING_HOURS, {
     fetchPolicy: 'network-only',
@@ -85,6 +87,20 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
   const handleSelectSlot = (slotInfo: { start: Date }) => {
     if (onSelectSlot) {
       onSelectSlot(slotInfo);
+    }
+
+    const selectedDate = slotInfo.start.toDateString();
+    const workingHoursForSelectedDay = events.filter((event) => {
+      return event.start.toDateString() === selectedDate;
+    });
+
+    if (onDateSelected) {
+      onDateSelected(
+        workingHoursForSelectedDay.map((event) => ({
+          start: event.start,
+          end: event.end,
+        })),
+      );
     }
   };
 
