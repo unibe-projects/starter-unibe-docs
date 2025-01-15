@@ -1,5 +1,5 @@
 interface MessageProps {
-  text: string;
+  text: string | null;
   type: 'success' | 'error';
 }
 
