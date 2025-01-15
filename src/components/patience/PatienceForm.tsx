@@ -2,6 +2,7 @@ import { Formik, Form } from 'formik';
 import { validationSchemaPatience } from '../../pages/modules/patience/validationSchemaPatience';
 import CustomInput from '../common/form/CustomInput';
 import LoadingButton from '../loadings/buttons/LoadingButton';
+import Message from '../../error/messages/Message';
 
 type FormValues = {
   cedula_patient: string;
@@ -12,12 +13,17 @@ type FormValues = {
 type Props = {
   onSubmit: (values: FormValues) => Promise<void>;
   isLoading: boolean;
+  errorMessage: string | null;
+  successMessage: string | null;
 };
 
-const PatienceForm = ({ onSubmit, isLoading }: Props) => {
+const PatienceForm = ({ onSubmit, isLoading, errorMessage, successMessage }: Props) => {
   return (
     <div className="w-1/2 bg-gray-100 p-6 rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4">Crear Paciente</h1>
+      {(errorMessage || successMessage) && (
+        <Message text={errorMessage || successMessage} type="error" />
+      )}
       <Formik
         initialValues={{
           cedula_patient: '',

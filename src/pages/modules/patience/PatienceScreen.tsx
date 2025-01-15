@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { CREATE_PATIENT, EXIST_CEDULA, LIST_PATIENTS } from '../../../services/patience/patienceService';
+import {
+  CREATE_PATIENT,
+  EXIST_CEDULA,
+  LIST_PATIENTS,
+} from '../../../services/patience/patienceService';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
-import Message from '../../../error/messages/Message';
 import PatienceForm from '../../../components/patience/PatienceForm';
 import PatienceTable from '../../../components/patience/PatienceTable';
 
@@ -16,7 +19,8 @@ const PatienceScreen = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const { data: patientsData, loading: loadingPatients } = useQuery(LIST_PATIENTS);
-  const { handleError, errorMessage,  handleSuccess, successMessage, clearError, clearSuccess } = useErrorHandler();
+  const { handleError, errorMessage, handleSuccess, successMessage, clearError, clearSuccess } =
+    useErrorHandler();
   const { refetch: refetchCedula } = useQuery(EXIST_CEDULA, {
     skip: true,
   });
@@ -29,7 +33,7 @@ const PatienceScreen = () => {
       const { data } = await refetchCedula({ cedula_patient: values.cedula_patient });
 
       if (data?.listPatients?.items?.length > 0) {
-        handleSuccess("La cédula ingresada ya está registrada");
+        handleSuccess('La cédula ingresada ya está registrada');
         return;
       }
       await createPatient({
@@ -49,12 +53,17 @@ const PatienceScreen = () => {
   const totalPatients = patientsData?.listPatients?.items.length || 0;
   const totalPages = Math.ceil(totalPatients / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = patientsData?.listPatients?.items.slice(startIndex, startIndex + itemsPerPage) || [];
+  const currentItems =
+    patientsData?.listPatients?.items.slice(startIndex, startIndex + itemsPerPage) || [];
 
   return (
     <div className="flex p-8 gap-8">
-      {errorMessage || successMessage && <Message text={errorMessage || successMessage} type="error" />}
-      <PatienceForm onSubmit={handleCreatePatience} isLoading={isLoading} />
+      <PatienceForm
+        onSubmit={handleCreatePatience}
+        errorMessage={errorMessage}
+        successMessage={successMessage}
+        isLoading={isLoading}
+      />
       {!loadingPatients && (
         <PatienceTable
           patients={currentItems}
