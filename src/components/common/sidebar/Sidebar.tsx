@@ -46,7 +46,7 @@ const Sidebar = () => {
           <span>Calendario</span>
         </NavLink>
         <NavLink
-          to="/user/create"
+          to="/paciente"
           className={({ isActive }) =>
             `flex items-center gap-4 text-light-accent p-2 rounded-lg transition-colors ${
               isActive ? activeClass : inactiveClass
@@ -54,7 +54,7 @@ const Sidebar = () => {
           }
         >
           <FaHome className="text-xl" />
-          <span>User</span>
+          <span>Pacientes</span>
         </NavLink>
         <NavLink
           to="/documentos"

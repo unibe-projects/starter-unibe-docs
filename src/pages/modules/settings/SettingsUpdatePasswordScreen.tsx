@@ -39,7 +39,6 @@ const SettingsUpdatePasswordScreen = () => {
       handleSuccess('Contraseña actualizada exitosamente!');
       clearError();
     } catch (error) {
-      console.error(error);
       handleError({ error });
       clearSuccess();
     } finally {
