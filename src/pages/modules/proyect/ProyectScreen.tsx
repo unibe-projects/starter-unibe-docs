@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFormValues } from '../../../hooks/formValues/formValues';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   LIST_PROJECTS,
@@ -24,7 +23,6 @@ export interface Proyect {
 
 const ProyectScreen: React.FC = () => {
   const navigate = useNavigate();
-  const { setFormValues } = useFormValues();
   const { data, loading, error: errorListProyect, refetch } = useQuery(LIST_PROJECTS);
   const [createProyect] = useMutation(CREATE_PROYECT);
   const [updateProyect] = useMutation(UPDATE_PROYECT);
@@ -33,9 +31,8 @@ const ProyectScreen: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Proyect | null>(null);
   const { handleError, errorMessage, clearError } = useErrorHandler();
 
-  const handleNavigate = (idProyect: string, nameProyect: string ) => {
-    setFormValues({ id: idProyect, name: nameProyect });
-    navigate('/proyecto/periodo');
+  const handleNavigate = (periodProyectId: string, nameProyect: string) => {
+    navigate(`/proyecto/periodo/${periodProyectId}/${nameProyect}`);
   };
 
   const handleRetryFetch = () => {
@@ -48,7 +45,7 @@ const ProyectScreen: React.FC = () => {
       refetch();
       clearError();
     } catch (error) {
-      handleError({error})
+      handleError({ error });
     }
   };
 
@@ -58,7 +55,8 @@ const ProyectScreen: React.FC = () => {
       refetch();
       clearError();
     } catch (error) {
-      handleError({error})
+      console.error(error);
+      handleError({ error });
     }
   };
 
@@ -72,14 +70,14 @@ const ProyectScreen: React.FC = () => {
       await deleteProyect({ variables: { id } });
       refetch();
     } catch (error) {
-      handleError({error})
+      handleError({ error });
     }
   };
 
-  const closeModal = () =>{
-    setSelectedProject(null); 
-    setIsModalOpen(false)
-  }
+  const closeModal = () => {
+    setSelectedProject(null);
+    setIsModalOpen(false);
+  };
 
   if (loading) {
     return <LoadingSpinner />;
