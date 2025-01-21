@@ -28,11 +28,11 @@ const AuthRoutes: React.FC = () => {
               <Route path="/calendar" element={<CalendarScreen />} />
               <Route path="/proyecto" element={<ProyectScreen />} />
               <Route
-                path="/proyecto/periodo/:periodProyectId/:nameProyect"
+                path="/proyecto/:periodProyectId/:nameProyect/periodo"
                 element={<PeriodScreen />}
               />
               <Route
-                path="/proyecto/periodo/activities/:year-semester/:id"
+                path="/proyecto/:periodProyectId/periodo/:year-semester/:id/activities"
                 element={<ActivitiesScreen />}
               />
               <Route

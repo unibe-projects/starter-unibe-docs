@@ -25,7 +25,9 @@ const PeriodScreen: React.FC = () => {
   const navigate = useNavigate();
 
   const handleViewActivities = (period: { id: string; year: string; semester: string }) => {
-    navigate(`/proyecto/periodo/activities/${period.year}-${period.semester}/${period.id}`);
+    navigate(
+      `/proyecto/${periodProyectId}/periodo/${period.year}-${period.semester}/${period.id}/activities`,
+    );
   };
 
   const handleCreatePeriod = async (year: string, semester: string, description: string) => {
