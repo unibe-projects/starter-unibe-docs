@@ -2,36 +2,41 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { LIST_ACTIVITIES } from '../../../services/activities/activitiesServices';
-import { useFormValues } from '../../../hooks/formValues/formValues';
+import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
+import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 
 const ActivitiesScreen: React.FC = () => {
   const navigate = useNavigate();
-  const { periodProyectId, id } = useParams<{
+  const { periodProyectId, id, "year-semester": yearSemester } = useParams<{
     periodProyectId: string;
     id: string;
+    "year-semester": string;
   }>();
-  const { formValues } = useFormValues();
 
   const {
     data,
     loading,
     error: errorListProyect,
+    refetch
   } = useQuery(LIST_ACTIVITIES(periodProyectId ?? '', id ?? ''));
 
-  // Manejo de errores o estado de carga
+  const handleRetryFetch = () => {
+    refetch();
+  };
+
+
   if (loading) {
-    return <p className="text-center">Cargando actividades...</p>;
-  }
-  if (errorListProyect) {
-    return <p className="text-center text-red-500">Error al cargar actividades.</p>;
+    return <LoadingSpinner />;
   }
 
-  // Asignar actividades desde la data obtenida
+  if (errorListProyect) {
+    return <ErrorMessage message="Hubo un error al cargar los datos." onRetry={handleRetryFetch} />;
+  }
   const activities = data?.listActivities?.items ?? [];
 
   const handleCreateActivity = () => {
     navigate(
-      `/proyecto/periodo/activities/${formValues.year}-${formValues.semester}/crear-actividad`,
+      `/proyecto/${periodProyectId}/periodo/${yearSemester}/${id}/activities/crear-actividad`,
     );
   };
 
@@ -39,7 +44,7 @@ const ActivitiesScreen: React.FC = () => {
     navigate('/calendar');
   };
 
-  const handleDownloadPDF = (activity: { name: string; description: string }) => {};
+  const handleDownloadPDF = (activity: { project_manager: string; charge: string }) => {};
 
   return (
     <div className="p-6">
@@ -65,14 +70,14 @@ const ActivitiesScreen: React.FC = () => {
 
         {activities.length > 0 ? (
           <div className="space-y-6">
-            {activities.map((activity: { id: string; name: string; description: string }) => (
+            {activities.map((activity: { id: string; project_manager: string; charge: string }) => (
               <div
                 key={activity.id}
                 className="bg-white shadow-lg rounded-lg p-6 flex justify-between items-center"
               >
                 <div>
-                  <h3 className="text-xl font-semibold">{activity.name}</h3>
-                  <p className="text-gray-600">{activity.description}</p>
+                  <h3 className="text-xl font-semibold">{activity.project_manager}</h3>
+                  <p className="text-gray-600">{activity.charge}</p>
                 </div>
                 <div className="flex gap-4">
                   <button
@@ -82,7 +87,7 @@ const ActivitiesScreen: React.FC = () => {
                     Descargar PDF
                   </button>
                   <button
-                    onClick={() => alert(`Ver detalles de ${activity.name}`)}
+                    onClick={() => alert(`Ver detalles de ${activity.project_manager}`)}
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
                   >
                     Ver Detalles

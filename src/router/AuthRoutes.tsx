@@ -36,7 +36,7 @@ const AuthRoutes: React.FC = () => {
                 element={<ActivitiesScreen />}
               />
               <Route
-                path="/proyecto/periodo/activities/:year-semester/crear-actividad"
+                path="/proyecto/:activityProyectId/periodo/:year-semester/:activityPeriodId/activities/crear-actividad"
                 element={<CreateActivitiesScreen />}
               />
               <Route path="*" element={<NotFoundScreen />} />
