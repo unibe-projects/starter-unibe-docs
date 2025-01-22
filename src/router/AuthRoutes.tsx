@@ -11,6 +11,7 @@ import SettingsUpdatePasswordScreen from '../pages/modules/settings/SettingsUpda
 import PeriodScreen from '../pages/modules/proyect/PeriodScreen';
 import ActivitiesScreen from '../pages/modules/activities/ActivitiesScreen';
 import CreateActivitiesScreen from '../pages/modules/activities/CreateActivitiesScreen';
+import Breadcrumbs from '../components/common/header/Breadcrumbs';
 
 const AuthRoutes: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const AuthRoutes: React.FC = () => {
         <Sidebar />
         <PageWrapper>
           <main className="flex-1 overflow-auto pb-8">
+            <Breadcrumbs />
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
               <Route path="/home" element={<HomeScreen />} />
@@ -28,15 +30,15 @@ const AuthRoutes: React.FC = () => {
               <Route path="/calendar" element={<CalendarScreen />} />
               <Route path="/proyecto" element={<ProyectScreen />} />
               <Route
-                path="/proyecto/:periodProyectId/:nameProyect/periodo"
+                path="/proyecto/periodo"
                 element={<PeriodScreen />}
               />
               <Route
-                path="/proyecto/:periodProyectId/periodo/:year-semester/:id/activities"
+                path="/proyecto/periodo/actividad"
                 element={<ActivitiesScreen />}
               />
               <Route
-                path="/proyecto/periodo/activities/:year-semester/crear-actividad"
+                path="/proyecto/periodo/actividad/crear-actividad"
                 element={<CreateActivitiesScreen />}
               />
               <Route path="*" element={<NotFoundScreen />} />

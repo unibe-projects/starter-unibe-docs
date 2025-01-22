@@ -2,25 +2,33 @@ import { gql } from '@apollo/client';
 
 export const CREATE_ACTIVITY = gql`
   mutation CreateActivity(
-    $name: String!
-    $status: String!
-    $start_time: String!
-    $hora_fin: String!
-    $description: String!
-    $activity_date: String!
     $activityProyectId: ID!
     $activityPeriodId: ID!
+    $activity_date: AWSDate
+    $start_time: AWSTime
+    $hora_fin: AWSTime
+    $executing_institution: String
+    $project_manager: String
+    $charge: String!
+    $unit: String
+    $general_objective: String
+    $number_participants: Int
+    $budget_used: String
   ) {
     createActivity(
       input: {
-        name: $name
-        status: $status
-        start_time: $start_time
-        hora_fin: $hora_fin
-        description: $description
-        activity_date: $activity_date
         activityProyectId: $activityProyectId
         activityPeriodId: $activityPeriodId
+        activity_date: $activity_date
+        start_time: $start_time
+        hora_fin: $hora_fin
+        executing_institution: $executing_institution
+        project_manager: $project_manager
+        charge: $charge
+        unit: $unit
+        general_objective: $general_objective
+        number_participants: $number_participants
+        budget_used: $budget_used
       }
     ) {
       id
@@ -28,6 +36,25 @@ export const CREATE_ACTIVITY = gql`
     }
   }
 `;
+
+
+export const CREATE_ACTIVITY_TASKS = gql`
+  mutation createActivityTasks($name: String!, $description: String! ) {
+    createActivityTasks(input: { name: $name, description: $description }) {
+      id
+      createdAt
+    }
+  }
+`;
+
+export const CREATE_ACTIVITY_ACTIVITY_TASKS = gql`
+  mutation CreateActivityActivityTasks($activityTasksId: ID!, $activityId: ID!) {
+    createActivityActivityTasks(input: {activityTasksId: $activityTasksId, activityId: $activityId}) {
+    id
+    }
+  }
+`;
+
 
 export const LIST_ACTIVITIES = (projectId: string, periodId: string) => gql`
   query ListActivities {
@@ -39,8 +66,8 @@ export const LIST_ACTIVITIES = (projectId: string, periodId: string) => gql`
     ) {
       items {
         id
-        name
-        description
+        project_manager
+        charge
       }
     }
   }
