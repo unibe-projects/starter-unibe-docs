@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PERIOD, LIST_PERIODS } from '../../../services/period/periodService';
 import CreatePeriodModal from '../../../components/period/CreatePeriodModal';
@@ -10,10 +10,8 @@ import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner'
 
 const PeriodScreen: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { periodProyectId, nameProyect } = useParams<{
-    periodProyectId: string;
-    nameProyect: string;
-  }>();
+  const location = useLocation();
+  const { periodProyectId, nameProyect } = location.state || {};
   const {
     data,
     loading,
@@ -26,9 +24,18 @@ const PeriodScreen: React.FC = () => {
 
   const handleViewActivities = (period: { id: string; year: string; semester: string }) => {
     navigate(
-      `/proyecto/${periodProyectId}/periodo/${period.year}-${period.semester}/${period.id}/activities`,
+      '/proyecto/periodo/actividad',
+      {
+        state: { 
+          periodProyectId, 
+          periodId: period.id, 
+          periodYear: period.year, 
+          periodSemester: period.semester 
+        }
+      }
     );
   };
+  
 
   const handleCreatePeriod = async (year: string, semester: string, description: string) => {
     try {

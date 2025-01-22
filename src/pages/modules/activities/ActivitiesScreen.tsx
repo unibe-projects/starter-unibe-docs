@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { LIST_ACTIVITIES } from '../../../services/activities/activitiesServices';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
@@ -7,18 +7,15 @@ import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 
 const ActivitiesScreen: React.FC = () => {
   const navigate = useNavigate();
-  const { periodProyectId, id, "year-semester": yearSemester } = useParams<{
-    periodProyectId: string;
-    id: string;
-    "year-semester": string;
-  }>();
+  const location = useLocation();
+  const { periodProyectId, periodId, periodYear, periodSemester } = location.state || {};
 
   const {
     data,
     loading,
     error: errorListProyect,
     refetch
-  } = useQuery(LIST_ACTIVITIES(periodProyectId ?? '', id ?? ''));
+  } = useQuery(LIST_ACTIVITIES(periodProyectId ?? '', periodId ?? ''));
 
   const handleRetryFetch = () => {
     refetch();
@@ -36,7 +33,14 @@ const ActivitiesScreen: React.FC = () => {
 
   const handleCreateActivity = () => {
     navigate(
-      `/proyecto/${periodProyectId}/periodo/${yearSemester}/${id}/activities/crear-actividad`,
+      `/proyecto/periodo/actividad/crear-actividad`, {
+        state: { 
+          activityProyectId: periodProyectId, 
+          activityPeriodId: periodId, 
+          periodYear, 
+          periodSemester
+        }
+      }
     );
   };
 

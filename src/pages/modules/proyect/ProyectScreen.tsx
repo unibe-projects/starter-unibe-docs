@@ -32,7 +32,9 @@ const ProyectScreen: React.FC = () => {
   const { handleError, errorMessage, clearError } = useErrorHandler();
 
   const handleNavigate = (periodProyectId: string, nameProyect: string) => {
-    navigate(`/proyecto/${periodProyectId}/${nameProyect}/periodo`);
+    navigate('/proyecto/periodo', {
+      state: { periodProyectId, nameProyect }
+    });
   };
 
   const handleRetryFetch = () => {
