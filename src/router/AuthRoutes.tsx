@@ -5,6 +5,7 @@ import Sidebar from '../components/common/sidebar/Sidebar';
 import NotFoundScreen from '../error/404/NotFoundScreen';
 import CalendarScreen from '../pages/modules/calendar/CalendarScreen';
 import HomeScreen from '../pages/modules/home/HomeScreen';
+import GenerateDocScreen from '../pages/modules/activities/GenerateDocScreen';
 import PatienceScreen from '../pages/modules/patience/PatienceScreen';
 import ProyectScreen from '../pages/modules/proyect/ProyectScreen';
 import SettingsUpdatePasswordScreen from '../pages/modules/settings/SettingsUpdatePasswordScreen';
@@ -29,17 +30,19 @@ const AuthRoutes: React.FC = () => {
               <Route path="/paciente" element={<PatienceScreen />} />
               <Route path="/calendar" element={<CalendarScreen />} />
               <Route path="/proyecto" element={<ProyectScreen />} />
+              <Route path="/proyecto/periodo" element={<PeriodScreen />} />
+              <Route path="/proyecto/periodo/actividad" element={<ActivitiesScreen />} />
               <Route
-                path="/proyecto/periodo"
-                element={<PeriodScreen />}
-              />
-              <Route
-                path="/proyecto/periodo/actividad"
-                element={<ActivitiesScreen />}
+                path="/proyecto/periodo/actividad/crear-actividad"
+                element={<CreateActivitiesScreen />}
               />
               <Route
                 path="/proyecto/periodo/actividad/crear-actividad"
                 element={<CreateActivitiesScreen />}
+              />
+              <Route
+                path="/proyecto/periodo/actividad/generar-informe"
+                element={<GenerateDocScreen />}
               />
               <Route path="*" element={<NotFoundScreen />} />
             </Routes>

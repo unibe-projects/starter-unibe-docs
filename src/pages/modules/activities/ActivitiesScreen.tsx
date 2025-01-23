@@ -14,13 +14,12 @@ const ActivitiesScreen: React.FC = () => {
     data,
     loading,
     error: errorListProyect,
-    refetch
+    refetch,
   } = useQuery(LIST_ACTIVITIES(periodProyectId ?? '', periodId ?? ''));
 
   const handleRetryFetch = () => {
     refetch();
   };
-
 
   if (loading) {
     return <LoadingSpinner />;
@@ -32,16 +31,25 @@ const ActivitiesScreen: React.FC = () => {
   const activities = data?.listActivities?.items ?? [];
 
   const handleCreateActivity = () => {
-    navigate(
-      `/proyecto/periodo/actividad/crear-actividad`, {
-        state: { 
-          activityProyectId: periodProyectId, 
-          activityPeriodId: periodId, 
-          periodYear, 
-          periodSemester
-        }
-      }
-    );
+    navigate('/proyecto/periodo/actividad/crear-actividad', {
+      state: {
+        activityProyectId: periodProyectId,
+        activityPeriodId: periodId,
+        periodYear,
+        periodSemester,
+      },
+    });
+  };
+
+  const handleGenerateDoc = () => {
+    navigate('/proyecto/periodo/actividad/generar-informe', {
+      state: {
+        activityProyectId: periodProyectId,
+        activityPeriodId: periodId,
+        periodYear,
+        periodSemester,
+      },
+    });
   };
 
   const handleViewCalendar = () => {
@@ -53,8 +61,14 @@ const ActivitiesScreen: React.FC = () => {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Actividades del Periodo</h1>
-
       <div className="flex justify-end gap-4 mb-8">
+        <button
+          onClick={handleGenerateDoc}
+          className="bg-purple-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-purple-700 transition"
+        >
+          Generar Informe
+        </button>
+
         <button
           onClick={handleCreateActivity}
           className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
