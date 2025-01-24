@@ -30,7 +30,8 @@ const PeriodScreen: React.FC = () => {
           periodProyectId, 
           periodId: period.id, 
           periodYear: period.year, 
-          periodSemester: period.semester 
+          periodSemester: period.semester,
+          nameProyect
         }
       }
     );

@@ -4,11 +4,11 @@ export const CREATE_ACTIVITY = gql`
   mutation CreateActivity(
     $activityProyectId: ID!
     $activityPeriodId: ID!
+    $project_manager: String
     $activity_date: AWSDate
     $start_time: AWSTime
     $hora_fin: AWSTime
     $executing_institution: String
-    $project_manager: String
     $charge: String!
     $unit: String
     $general_objective: String
