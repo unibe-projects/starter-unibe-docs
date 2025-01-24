@@ -8,7 +8,7 @@ const Breadcrumbs: React.FC = () => {
     <nav className="px-4 py-2 text-sm rounded-md">
       <ol className="flex space-x-2">
         <li>
-          <Link to="/" className="text-blue-600 hover:underline">
+          <Link to="/" state={location.state} className="text-blue-600 hover:underline">
             Inicio
           </Link>
         </li>
@@ -22,7 +22,7 @@ const Breadcrumbs: React.FC = () => {
               {isLast ? (
                 <span className="text-gray-500">{decodeURIComponent(value)}</span>
               ) : (
-                <Link to={to} className="text-blue-600 hover:underline">
+                <Link to={to} state={location.state} className="text-blue-600 hover:underline">
                   {decodeURIComponent(value)}
                 </Link>
               )}

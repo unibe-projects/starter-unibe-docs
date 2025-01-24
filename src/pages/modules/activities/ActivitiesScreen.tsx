@@ -8,14 +8,20 @@ import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 const ActivitiesScreen: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } = location.state || {};
+  const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } =
+    location.state || {};
 
   const {
     data,
     loading,
     error: errorListProyect,
     refetch,
-  } = useQuery(LIST_ACTIVITIES(periodProyectId ?? '', periodId ?? ''));
+  } = useQuery(LIST_ACTIVITIES(periodProyectId, periodId), {
+    variables: {
+      periodProyectId: periodProyectId ?? '',
+      periodId: periodId ?? '',
+    },
+  });
 
   const handleRetryFetch = () => {
     refetch();
@@ -28,6 +34,7 @@ const ActivitiesScreen: React.FC = () => {
   if (errorListProyect) {
     return <ErrorMessage message="Hubo un error al cargar los datos." onRetry={handleRetryFetch} />;
   }
+
   const activities = data?.listActivities?.items ?? [];
 
   const handleCreateActivity = () => {
@@ -37,7 +44,7 @@ const ActivitiesScreen: React.FC = () => {
         activityPeriodId: periodId,
         periodYear,
         periodSemester,
-        nameProyect
+        nameProyect,
       },
     });
   };
@@ -53,11 +60,28 @@ const ActivitiesScreen: React.FC = () => {
     });
   };
 
-  const handleViewCalendar = () => {
-    navigate('/calendar'); 
+  const handleViewActivities = (id: string) => {
+    navigate('/proyecto/periodo/actividad/view', {
+      state: {
+        id,
+        periodProyectId,
+        periodId,
+        periodYear,
+        periodSemester,
+        nameProyect,
+      },
+    });
   };
 
-  const handleDownloadPDF = (activity: { project_manager: string; charge: string }) => {};
+  const handleViewCalendar = () => {
+    navigate('/calendar');
+  };
+
+  const handleDownloadPDF = (activity: {
+    id: string;
+    project_manager: string;
+    charge: string;
+  }) => {};
 
   return (
     <div className="p-6">
@@ -106,7 +130,7 @@ const ActivitiesScreen: React.FC = () => {
                     Descargar PDF
                   </button>
                   <button
-                    onClick={() => alert(`Ver detalles de ${activity.project_manager}`)}
+                    onClick={() => handleViewActivities(activity.id)}
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
                   >
                     Ver Detalles
