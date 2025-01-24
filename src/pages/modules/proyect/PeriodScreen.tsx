@@ -23,20 +23,16 @@ const PeriodScreen: React.FC = () => {
   const navigate = useNavigate();
 
   const handleViewActivities = (period: { id: string; year: string; semester: string }) => {
-    navigate(
-      '/proyecto/periodo/actividad',
-      {
-        state: { 
-          periodProyectId, 
-          periodId: period.id, 
-          periodYear: period.year, 
-          periodSemester: period.semester,
-          nameProyect
-        }
-      }
-    );
+    navigate('/proyecto/periodo/actividad', {
+      state: {
+        periodProyectId,
+        periodId: period.id,
+        periodYear: period.year,
+        periodSemester: period.semester,
+        nameProyect,
+      },
+    });
   };
-  
 
   const handleCreatePeriod = async (year: string, semester: string, description: string) => {
     try {

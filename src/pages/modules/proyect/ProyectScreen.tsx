@@ -33,7 +33,7 @@ const ProyectScreen: React.FC = () => {
 
   const handleNavigate = (periodProyectId: string, nameProyect: string) => {
     navigate('/proyecto/periodo', {
-      state: { periodProyectId, nameProyect }
+      state: { periodProyectId, nameProyect },
     });
   };
 

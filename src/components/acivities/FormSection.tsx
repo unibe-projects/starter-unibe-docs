@@ -70,7 +70,7 @@ const FormSection: React.FC<FormSectionProps> = ({
                 onChange={handleInputChange}
                 values={values.charge}
               />
-               <CustomInput
+              <CustomInput
                 name="activity_date"
                 type="date"
                 placeholder="Fecha de la actividad"
@@ -126,7 +126,11 @@ const FormSection: React.FC<FormSectionProps> = ({
                 onChange={handleInputChange}
                 values={values.budget_used}
               />
-              <ActivityTasks tasks={values.tasks} setFieldValue={setFieldValue} onChange={handleTaskUpdate} />
+              <ActivityTasks
+                tasks={values.tasks}
+                setFieldValue={setFieldValue}
+                onChange={handleTaskUpdate}
+              />
               <div className="mt-6">
                 <button
                   type="submit"
