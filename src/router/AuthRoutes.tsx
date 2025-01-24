@@ -13,6 +13,7 @@ import PeriodScreen from '../pages/modules/proyect/PeriodScreen';
 import ActivitiesScreen from '../pages/modules/activities/ActivitiesScreen';
 import CreateActivitiesScreen from '../pages/modules/activities/CreateActivitiesScreen';
 import Breadcrumbs from '../components/common/header/Breadcrumbs';
+import ActivitiesViewScreen from '../pages/modules/activities/ActivitiesViewScreen';
 
 const AuthRoutes: React.FC = () => {
   return (
@@ -44,6 +45,7 @@ const AuthRoutes: React.FC = () => {
                 path="/proyecto/periodo/actividad/generar-informe"
                 element={<GenerateDocScreen />}
               />
+              <Route path="/proyecto/periodo/actividad/view" element={<ActivitiesViewScreen />} />
               <Route path="*" element={<NotFoundScreen />} />
             </Routes>
           </main>

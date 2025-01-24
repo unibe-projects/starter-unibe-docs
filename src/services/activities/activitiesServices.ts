@@ -37,9 +37,8 @@ export const CREATE_ACTIVITY = gql`
   }
 `;
 
-
 export const CREATE_ACTIVITY_TASKS = gql`
-  mutation createActivityTasks($name: String!, $description: String! ) {
+  mutation createActivityTasks($name: String!, $description: String!) {
     createActivityTasks(input: { name: $name, description: $description }) {
       id
       createdAt
@@ -49,12 +48,13 @@ export const CREATE_ACTIVITY_TASKS = gql`
 
 export const CREATE_ACTIVITY_ACTIVITY_TASKS = gql`
   mutation CreateActivityActivityTasks($activityTasksId: ID!, $activityId: ID!) {
-    createActivityActivityTasks(input: {activityTasksId: $activityTasksId, activityId: $activityId}) {
-    id
+    createActivityActivityTasks(
+      input: { activityTasksId: $activityTasksId, activityId: $activityId }
+    ) {
+      id
     }
   }
 `;
-
 
 export const LIST_ACTIVITIES = (projectId: string, periodId: string) => gql`
   query ListActivities {
@@ -68,6 +68,34 @@ export const LIST_ACTIVITIES = (projectId: string, periodId: string) => gql`
         id
         project_manager
         charge
+      }
+    }
+  }
+`;
+
+export const GET_ACTIVITY = gql`
+  query GetActivity($id: ID!) {
+    getActivity(id: $id) {
+      status
+      start_time
+      project_manager
+      number_participants
+      id
+      hora_fin
+      general_objective
+      executing_institution
+      createdAt
+      charge
+      budget_used
+      activity_date
+      unit
+      ActivityTasks {
+        items {
+          activityTasks {
+            name
+            description
+          }
+        }
       }
     }
   }

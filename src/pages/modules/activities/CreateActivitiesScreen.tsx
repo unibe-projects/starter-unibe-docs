@@ -62,7 +62,6 @@ interface InitialValues {
   tasks: Task[];
 }
 
-
 const CreateActivitiesScreen: React.FC = () => {
   const location = useLocation();
   const { activityProyectId, activityPeriodId, periodYear, periodSemester, nameProyect } =
@@ -76,7 +75,7 @@ const CreateActivitiesScreen: React.FC = () => {
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { handleError, errorMessage, clearError } = useErrorHandler();
+  const { handleError, errorMessage } = useErrorHandler();
 
   const [previewData, setPreviewData] = useState<Activities>({
     activityProyectId: activityProyectId ?? '',
@@ -142,7 +141,7 @@ const CreateActivitiesScreen: React.FC = () => {
       });
 
       const activityId = activityData.createActivity.id;
-      let tasksp = values.tasks
+      const tasksp = values.tasks;
       for (const task of tasksp) {
         const { data: taskData } = await createTask({
           variables: {
@@ -160,18 +159,15 @@ const CreateActivitiesScreen: React.FC = () => {
         });
       }
 
-      navigate(
-        '/proyecto/periodo/actividad',
-        {
-          state: { 
-            periodProyectId: activityProyectId, 
-            periodId: activityPeriodId,
-            periodYear ,
-            periodSemester,
-            nameProyect
-          }
-        }
-      );
+      navigate('/proyecto/periodo/actividad', {
+        state: {
+          periodProyectId: activityProyectId,
+          periodId: activityPeriodId,
+          periodYear,
+          periodSemester,
+          nameProyect,
+        },
+      });
     } catch (error) {
       console.error('error', error);
       handleError({ error });
@@ -201,4 +197,3 @@ const CreateActivitiesScreen: React.FC = () => {
 };
 
 export default CreateActivitiesScreen;
-
