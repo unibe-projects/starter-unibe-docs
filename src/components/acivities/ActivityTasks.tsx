@@ -1,7 +1,14 @@
 import { FieldArray } from 'formik';
 import CustomInput from '../common/form/CustomInput';
+import { Task } from '../../pages/modules/activities/CreateActivitiesScreen';
 
-const ActivityTasks = () => {
+interface ActivityTasksProps {
+  setFieldValue: (field: string, value: any) => void;
+  tasks: Task[];
+  onChange: (updatedTasks: Task[]) => void;
+}
+
+const ActivityTasks: React.FC<ActivityTasksProps> = ({ setFieldValue, tasks, onChange }) => {
   return (
     <div>
       <h3 className="text-lg font-semibold">Actividades realizadas</h3>
@@ -9,21 +16,40 @@ const ActivityTasks = () => {
         name="tasks"
         render={(arrayHelpers) => (
           <div>
-            {arrayHelpers.form.values.tasks.map((_: any, index: any) => (
+            {tasks.map((task, index) => (
               <div key={index} className="space-y-2">
                 <CustomInput
                   name={`tasks[${index}].name`}
                   type="text"
                   placeholder={`Nombre de la actividad ${index + 1}`}
+                  values={task.name}
+                  onChange={(e) => {
+                    const updatedTasks = [...tasks];
+                    updatedTasks[index].name = e.target.value;
+                    onChange(updatedTasks);
+                    setFieldValue('tasks', updatedTasks);
+                  }}
                 />
                 <CustomInput
                   name={`tasks[${index}].description`}
                   type="text"
                   placeholder={`Descripción de la actividad ${index + 1}`}
+                  values={task.description}
+                  onChange={(e) => {
+                    const updatedTasks = [...tasks];
+                    updatedTasks[index].description = e.target.value;
+                    onChange(updatedTasks);
+                    setFieldValue('tasks', updatedTasks);
+                  }}
                 />
                 <button
                   type="button"
-                  onClick={() => arrayHelpers.remove(index)}
+                  onClick={() => {
+                    const updatedTasks = [...tasks];
+                    updatedTasks.splice(index, 1);
+                    onChange(updatedTasks);
+                    setFieldValue('tasks', updatedTasks);
+                  }}
                   className="text-red-500"
                 >
                   Eliminar
@@ -32,7 +58,12 @@ const ActivityTasks = () => {
             ))}
             <button
               type="button"
-              onClick={() => arrayHelpers.push({ name: '', description: '' })}
+              onClick={() => {
+                const newTask = { name: '', description: '' };
+                const updatedTasks = [...tasks, newTask];
+                onChange(updatedTasks);
+                setFieldValue('tasks', updatedTasks);
+              }}
               className="mt-4 text-blue-500"
             >
               Agregar Tarea

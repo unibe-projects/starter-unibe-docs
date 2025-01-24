@@ -8,7 +8,7 @@ import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 const ActivitiesScreen: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { periodProyectId, periodId, periodYear, periodSemester } = location.state || {};
+  const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } = location.state || {};
 
   const {
     data,
@@ -37,6 +37,7 @@ const ActivitiesScreen: React.FC = () => {
         activityPeriodId: periodId,
         periodYear,
         periodSemester,
+        nameProyect
       },
     });
   };
@@ -53,7 +54,7 @@ const ActivitiesScreen: React.FC = () => {
   };
 
   const handleViewCalendar = () => {
-    navigate('/calendar');
+    navigate('/calendar'); 
   };
 
   const handleDownloadPDF = (activity: { project_manager: string; charge: string }) => {};

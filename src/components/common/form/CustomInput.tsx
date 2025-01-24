@@ -6,15 +6,17 @@ interface PasswordInputProps {
   placeholder: string;
   type: string;
   values?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Reci
 }
 
-const CustomInput: React.FC<PasswordInputProps> = ({ name, placeholder, type, values }) => {
+const CustomInput: React.FC<PasswordInputProps> = ({ name, placeholder, type, values, onChange }) => {
   return (
     <div className="relative">
       <Field
         type={type}
         name={name}
         value={values}
+        onChange={onChange}
         placeholder={placeholder}
         className="w-full px-4 py-3 text-gray-700 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
       />
