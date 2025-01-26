@@ -1,9 +1,10 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { LIST_ACTIVITIES } from '../../../services/activities/activitiesServices';
+import { useQuery, useLazyQuery } from '@apollo/client';
+import { GET_ACTIVITY, LIST_ACTIVITIES, LIST_ACTIVITIES_ALL } from '../../../services/activities/activitiesServices';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
+import { generatePDF } from './pdf/activities';
 
 const ActivitiesScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const ActivitiesScreen: React.FC = () => {
   const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } =
     location.state || {};
 
+  // Consulta para listar actividades
   const {
     data,
     loading,
@@ -23,6 +25,17 @@ const ActivitiesScreen: React.FC = () => {
     },
   });
 
+  // Consulta para obtener una actividad específica (usando useLazyQuery)
+  const [fetchActivity, { loading: isLoadingActivity, error: errorActivity }] = useLazyQuery(
+    GET_ACTIVITY
+  );
+
+  const { data: dataListActivities, loading:isLoadingActivities, error: errorActivities } = useQuery(LIST_ACTIVITIES_ALL, {
+    variables: { activityProyectId: periodProyectId, activityPeriodId: periodId },
+  });
+
+
+  console.log('periodProyectId:', periodProyectId, 'periodId:', periodId, 'datalis', dataListActivities );
   const handleRetryFetch = () => {
     refetch();
   };
@@ -77,11 +90,23 @@ const ActivitiesScreen: React.FC = () => {
     navigate('/calendar');
   };
 
-  const handleDownloadPDF = (activity: {
-    id: string;
-    project_manager: string;
-    charge: string;
-  }) => {};
+  const generatePdfActivities = async (id: string) => {
+    try {
+      
+      const { data: activityData } = await fetchActivity({ variables: { id } });
+
+      console.log('dataaaaaaaaaaa:', data);
+      if (activityData) {
+        generatePDF(activityData); // Generar el PDF con los datos completos
+      }
+    } catch (err) {
+      console.error('Error al generar el PDF:', err);
+    }
+  };
+
+const generateInforme = () => {
+
+}
 
   return (
     <div className="p-6">
@@ -124,7 +149,7 @@ const ActivitiesScreen: React.FC = () => {
                 </div>
                 <div className="flex gap-4">
                   <button
-                    onClick={() => handleDownloadPDF(activity)}
+                    onClick={() => generatePdfActivities(activity.id)}
                     className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-yellow-600 transition"
                   >
                     Descargar PDF
@@ -143,6 +168,15 @@ const ActivitiesScreen: React.FC = () => {
           <p className="text-gray-500">No hay actividades disponibles.</p>
         )}
       </div>
+
+      {/* Indicador de carga para PDF */}
+      {isLoadingActivity && <LoadingSpinner />}
+      {errorActivity && (
+        <ErrorMessage
+          message="Hubo un error al cargar los datos de la actividad para el PDF."
+          onRetry={() => {}}
+        />
+      )}
     </div>
   );
 };

@@ -100,3 +100,35 @@ export const GET_ACTIVITY = gql`
     }
   }
 `;
+
+export const LIST_ACTIVITIES_ALL = gql`
+  query MyQuery($activityProyectId: ID!, $activityPeriodId: ID!) {
+    listActivities(
+      filter: {
+        activityProyectId: { eq: $activityProyectId },
+        activityPeriodId: { eq: $activityPeriodId }
+      }
+    ) {
+      items {
+        Period {
+          semester
+          year
+          Proyect {
+            name
+          }
+        }
+        ActivityTasks {
+          items {
+            activityTasks {
+              name
+              createdAt
+            }
+          }
+        }
+        project_manager
+        number_participants
+        budget_used
+      }
+    }
+  }
+`;
