@@ -14,6 +14,8 @@ export const CREATE_ACTIVITY = gql`
     $general_objective: String
     $number_participants: Int
     $budget_used: String
+    $status: ActivitiesStatusEnum
+    $name: String
   ) {
     createActivity(
       input: {
@@ -29,6 +31,8 @@ export const CREATE_ACTIVITY = gql`
         general_objective: $general_objective
         number_participants: $number_participants
         budget_used: $budget_used
+        status: $status
+        name: $name
       }
     ) {
       id
@@ -89,6 +93,7 @@ export const GET_ACTIVITY = gql`
       budget_used
       activity_date
       unit
+      name
       ActivityTasks {
         items {
           activityTasks {
@@ -128,6 +133,26 @@ export const LIST_ACTIVITIES_ALL = gql`
         project_manager
         number_participants
         budget_used
+      }
+    }
+  }
+`;
+
+
+export const LIST_ACTIVITIES_DATES = gql`
+  query ListActivities($activityPeriodId: ID!, $activityProyectId: ID!) {
+    listActivities(
+      filter: {
+        activityPeriodId: { eq: $activityPeriodId },
+        activityProyectId: { eq: $activityProyectId }
+      }
+    ) {
+      items {
+        activity_date
+        hora_fin
+        start_time
+        status
+        name
       }
     }
   }

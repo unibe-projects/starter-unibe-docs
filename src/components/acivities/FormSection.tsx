@@ -57,6 +57,16 @@ const FormSection: React.FC<FormSectionProps> = ({
           return (
             <Form className="space-y-4">
               <CustomInput
+                name="name"
+                placeholder="Nombre de la actividad"
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase(); // Convierte el valor a mayúsculas
+                  handleInputChange(e); // Pasa el evento transformado al manejador original
+                }}
+                type="text"
+                values={values.name}
+              />
+              <CustomInput
                 name="project_manager"
                 placeholder="Responsable del Proyecto"
                 onChange={handleInputChange}

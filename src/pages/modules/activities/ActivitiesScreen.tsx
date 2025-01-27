@@ -11,8 +11,6 @@ const ActivitiesScreen: React.FC = () => {
   const location = useLocation();
   const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } =
     location.state || {};
-
-  // Consulta para listar actividades
   const {
     data,
     loading,
@@ -35,7 +33,8 @@ const ActivitiesScreen: React.FC = () => {
   });
 
 
-  console.log('periodProyectId:', periodProyectId, 'periodId:', periodId, 'datalis', dataListActivities );
+  console.log('periodProyectId:', periodProyectId, 'periodId:', periodId);
+
   const handleRetryFetch = () => {
     refetch();
   };
@@ -87,17 +86,23 @@ const ActivitiesScreen: React.FC = () => {
   };
 
   const handleViewCalendar = () => {
-    navigate('/calendar');
+    navigate('/proyecto/periodo/actividad/calendar', {
+      state: {
+        periodProyectId,
+        periodId,
+        periodYear,
+        periodSemester,
+        nameProyect,
+      }
+    });
   };
 
   const generatePdfActivities = async (id: string) => {
     try {
       
       const { data: activityData } = await fetchActivity({ variables: { id } });
-
-      console.log('dataaaaaaaaaaa:', data);
       if (activityData) {
-        generatePDF(activityData); // Generar el PDF con los datos completos
+        generatePDF(activityData);
       }
     } catch (err) {
       console.error('Error al generar el PDF:', err);

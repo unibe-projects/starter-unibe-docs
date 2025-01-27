@@ -28,7 +28,10 @@ const PreviewSection: React.FC<PreviewSectionProps> = ({ previewData }) => {
         <div className="space-y-4">
           {previewData.tasks &&
             previewData.tasks.map((task: any, index: number) => (
-              <div key={index} className="border border-gray-400 rounded-lg p-4 shadow-md overflow-hidden">
+              <div
+                key={index}
+                className="border border-gray-400 rounded-lg p-4 shadow-md overflow-hidden"
+              >
                 <p className="text-lg font-semibold">{task.name}</p>
                 <p className="text-gray-600">{task.description}</p>
               </div>
@@ -98,6 +101,11 @@ const PreviewSection: React.FC<PreviewSectionProps> = ({ previewData }) => {
       </div>
 
       <div className="space-y-6 mt-4">
+        <div className="flex flex-col items-center justify-center">
+          <h1 className="text-1xl font-bold text-black">{previewData.name}</h1>
+          <h1 className="text-1xl font-bold text-black">BIENESTAR UNIVERSITARIO</h1>
+        </div>
+
         {displayedSections.map((section, index) => (
           <div key={index}>
             <h3 className="text-xl font-semibold text-gray-700 mb-2">{section.title}</h3>
@@ -123,7 +131,7 @@ const PreviewSection: React.FC<PreviewSectionProps> = ({ previewData }) => {
                 </table>
               </div>
             ) : (
-              <div className="text-gray-600 break-words">{section.content}</div> 
+              <div className="text-gray-600 break-words">{section.content}</div>
             )}
           </div>
         ))}

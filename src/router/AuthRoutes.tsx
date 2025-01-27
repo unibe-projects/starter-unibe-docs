@@ -29,7 +29,7 @@ const AuthRoutes: React.FC = () => {
               <Route path="/home" element={<HomeScreen />} />
               <Route path="/settings/change-password" element={<SettingsUpdatePasswordScreen />} />
               <Route path="/paciente" element={<PatienceScreen />} />
-              <Route path="/calendar" element={<CalendarScreen />} />
+              <Route path="/proyecto/periodo/actividad/calendar" element={<CalendarScreen />} />
               <Route path="/proyecto" element={<ProyectScreen />} />
               <Route path="/proyecto/periodo" element={<PeriodScreen />} />
               <Route path="/proyecto/periodo/actividad" element={<ActivitiesScreen />} />

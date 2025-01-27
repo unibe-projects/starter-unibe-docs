@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import { GET_ACTIVITY } from '../../../services/activities/activitiesServices';
 import PreviewSection from '../../../components/acivities/PreviewSection';
 import { useMemo } from 'react';
-import { Activities } from './CreateActivitiesScreen';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
 
@@ -31,6 +30,7 @@ const ActivitiesViewScreen = () => {
       general_objective,
       number_participants,
       budget_used,
+      name,
       ActivityTasks,
     } = data.getActivity;
 
@@ -49,6 +49,7 @@ const ActivitiesViewScreen = () => {
       budget_used: budget_used ?? '',
       project_name: nameProyect ?? '',
       report_period: `${periodYear ?? ''} - ${periodSemester ?? ''}`,
+      name: name ?? '',
       tasks: ActivityTasks?.items?.map((item: any) => item.activityTasks) || [],
     };
   }, [data, nameProyect, periodYear, periodSemester]);

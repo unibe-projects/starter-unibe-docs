@@ -11,6 +11,7 @@ import {
 import FormSection from '../../../components/acivities/FormSection';
 import PreviewSection from '../../../components/acivities/PreviewSection';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
+import { ActivitiesStatusEnum } from '../../../enums/activities/ActivitiesStatusEnum';
 
 export interface Task {
   name: string;
@@ -20,6 +21,7 @@ export interface Task {
 export interface Activities {
   activityProyectId: string;
   activityPeriodId: string;
+  name: string;
   activity_date: string;
   start_time: string;
   hora_fin: string;
@@ -80,6 +82,7 @@ const CreateActivitiesScreen: React.FC = () => {
   const [previewData, setPreviewData] = useState<Activities>({
     activityProyectId: activityProyectId ?? '',
     activityPeriodId: activityPeriodId ?? '',
+    name: '',
     project_manager: '',
     activity_date: '',
     start_time: '',
@@ -98,6 +101,7 @@ const CreateActivitiesScreen: React.FC = () => {
   const initialValues: Activities = {
     activityProyectId: activityProyectId ?? '',
     activityPeriodId: activityPeriodId ?? '',
+    name: '',
     charge: '',
     activity_date: '',
     start_time: '',
@@ -137,6 +141,8 @@ const CreateActivitiesScreen: React.FC = () => {
           general_objective: values.general_objective,
           number_participants: values.number_participants,
           budget_used: values.budget_used,
+          status: ActivitiesStatusEnum.EARRING,
+          name: previewData.name,
         },
       });
 
