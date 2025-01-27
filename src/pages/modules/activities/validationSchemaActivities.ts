@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 
 export const validationSchemaActivities = Yup.object({
   name: Yup.string()
-  .transform((value) => value?.toUpperCase()) // Convierte el valor a mayúsculas
-  .required('El nombre es requerido.'),
+    .transform((value) => value?.toUpperCase()) // Convierte el valor a mayúsculas
+    .required('El nombre es requerido.'),
   charge: Yup.string().required('El cargo es requerido.'),
   activity_date: Yup.date().required('La fecha de la actividad es requerida.'),
   start_time: Yup.string().required('La hora de inicio es requerida.'),

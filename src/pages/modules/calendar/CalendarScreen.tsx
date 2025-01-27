@@ -8,10 +8,13 @@ import { LIST_ACTIVITIES_DATES } from '../../../services/activities/activitiesSe
 
 const CalendarScreen: React.FC = () => {
   const location = useLocation();
-  const { periodProyectId: activityProyectId, periodId: activityPeriodId, periodYear,
+  const {
+    periodProyectId: activityProyectId,
+    periodId: activityPeriodId,
+    periodYear,
     periodSemester,
-    nameProyect, } =
-  location.state || {};
+    nameProyect,
+  } = location.state || {};
   const { data, loading, error, refetch } = useQuery(LIST_ACTIVITIES_DATES, {
     variables: {
       activityPeriodId,
@@ -26,18 +29,18 @@ const CalendarScreen: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Calendario del proyecto {nameProyect}-{periodYear}-{periodSemester}</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        Calendario del proyecto {nameProyect}-{periodYear}-{periodSemester}
+      </h1>
       {loading && <LoadingSpinner />}
-          {error && (
-            <ErrorMessage message="Hubo un error al cargar los datos." onRetry={handleRetryFetch} />
-          )}
-          {!loading && !error && (
-            <>
-              <CalendarComponent
-               data={data}
-              />
-            </>
-          )}
+      {error && (
+        <ErrorMessage message="Hubo un error al cargar los datos." onRetry={handleRetryFetch} />
+      )}
+      {!loading && !error && (
+        <>
+          <CalendarComponent data={data} />
+        </>
+      )}
     </div>
   );
 };
