@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import Message from '../../error/messages/Message';
-import CustomInput from '../common/form/CustomInput';
 import LoadingButton from '../loadings/buttons/LoadingButton';
 import ActivityTasks from './ActivityTasks';
 import { Activities, Task } from '../../pages/modules/activities/CreateActivitiesScreen';
+import CustomInputActivities from '../common/form/CustomInputActivities';
 
 interface FormSectionProps {
   handleFormSubmit: (values: any) => Promise<void>;
@@ -56,7 +56,7 @@ const FormSection: React.FC<FormSectionProps> = ({
 
           return (
             <Form className="space-y-4">
-              <CustomInput
+              <CustomInputActivities
                 name="name"
                 placeholder="Nombre de la actividad"
                 onChange={(e) => {
@@ -66,70 +66,70 @@ const FormSection: React.FC<FormSectionProps> = ({
                 type="text"
                 values={values.name}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="project_manager"
                 placeholder="Responsable del Proyecto"
                 onChange={handleInputChange}
                 type="text"
                 values={values.project_manager}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="charge"
                 type="text"
                 placeholder="Cargo"
                 onChange={handleInputChange}
                 values={values.charge}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="activity_date"
                 type="date"
                 placeholder="Fecha de la actividad"
                 onChange={handleInputChange}
                 values={values.activity_date}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="start_time"
                 type="time"
                 placeholder="Hora de inicio"
                 onChange={handleInputChange}
                 values={values.start_time}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="hora_fin"
                 type="time"
                 placeholder="Hora de finalización"
                 onChange={handleInputChange}
                 values={values.hora_fin}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="executing_institution"
                 type="text"
                 placeholder="Institución ejecutora"
                 onChange={handleInputChange}
                 values={values.executing_institution}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="unit"
                 type="text"
                 placeholder="Unidad"
                 onChange={handleInputChange}
                 values={values.unit}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="general_objective"
                 type="text"
                 placeholder="Objetivo general"
                 onChange={handleInputChange}
                 values={values.general_objective}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="number_participants"
                 type="number"
                 placeholder="Número de participantes"
                 onChange={handleInputChange}
                 values={values.number_participants}
               />
-              <CustomInput
+              <CustomInputActivities
                 name="budget_used"
                 type="text"
                 placeholder="Presupuesto utilizado"

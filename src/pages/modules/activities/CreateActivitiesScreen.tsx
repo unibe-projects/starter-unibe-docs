@@ -7,6 +7,7 @@ import {
   CREATE_ACTIVITY_TASKS,
   CREATE_ACTIVITY_ACTIVITY_TASKS,
   LIST_ACTIVITIES,
+  GET_ACTIVITIES,
 } from '../../../services/activities/activitiesServices';
 import FormSection from '../../../components/acivities/FormSection';
 import PreviewSection from '../../../components/acivities/PreviewSection';
@@ -72,7 +73,10 @@ const CreateActivitiesScreen: React.FC = () => {
   const [createActivity] = useMutation(CREATE_ACTIVITY);
   const [createTask] = useMutation(CREATE_ACTIVITY_TASKS);
   const [createActivityTask] = useMutation(CREATE_ACTIVITY_ACTIVITY_TASKS, {
-    refetchQueries: [{ query: LIST_ACTIVITIES(activityProyectId ?? '', activityPeriodId ?? '') }],
+    refetchQueries: [
+      { query: LIST_ACTIVITIES(activityProyectId ?? '', activityPeriodId ?? '') },
+      { query: GET_ACTIVITIES },
+    ],
     awaitRefetchQueries: true,
   });
 

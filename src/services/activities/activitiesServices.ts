@@ -110,7 +110,7 @@ export const LIST_ACTIVITIES_ALL = gql`
   query MyQuery($activityProyectId: ID!, $activityPeriodId: ID!) {
     listActivities(
       filter: {
-        activityProyectId: { eq: $activityProyectId },
+        activityProyectId: { eq: $activityProyectId }
         activityPeriodId: { eq: $activityPeriodId }
       }
     ) {
@@ -138,12 +138,11 @@ export const LIST_ACTIVITIES_ALL = gql`
   }
 `;
 
-
 export const LIST_ACTIVITIES_DATES = gql`
   query ListActivities($activityPeriodId: ID!, $activityProyectId: ID!) {
     listActivities(
       filter: {
-        activityPeriodId: { eq: $activityPeriodId },
+        activityPeriodId: { eq: $activityPeriodId }
         activityProyectId: { eq: $activityProyectId }
       }
     ) {
@@ -153,6 +152,25 @@ export const LIST_ACTIVITIES_DATES = gql`
         start_time
         status
         name
+      }
+    }
+  }
+`;
+
+export const GET_ACTIVITIES = gql`
+  query MyQuery {
+    listActivities {
+      items {
+        name
+        createdAt
+        Proyect {
+          id
+          name
+        }
+        Period {
+          year
+          semester
+        }
       }
     }
   }

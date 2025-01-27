@@ -1,7 +1,11 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useQuery, useLazyQuery } from '@apollo/client';
-import { GET_ACTIVITY, LIST_ACTIVITIES, LIST_ACTIVITIES_ALL } from '../../../services/activities/activitiesServices';
+import {
+  GET_ACTIVITY,
+  LIST_ACTIVITIES,
+  LIST_ACTIVITIES_ALL,
+} from '../../../services/activities/activitiesServices';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 import { generatePDF } from './pdf/activities';
@@ -24,16 +28,8 @@ const ActivitiesScreen: React.FC = () => {
   });
 
   // Consulta para obtener una actividad específica (usando useLazyQuery)
-  const [fetchActivity, { loading: isLoadingActivity, error: errorActivity }] = useLazyQuery(
-    GET_ACTIVITY
-  );
-
-  const { data: dataListActivities, loading:isLoadingActivities, error: errorActivities } = useQuery(LIST_ACTIVITIES_ALL, {
-    variables: { activityProyectId: periodProyectId, activityPeriodId: periodId },
-  });
-
-
-  console.log('periodProyectId:', periodProyectId, 'periodId:', periodId);
+  const [fetchActivity, { loading: isLoadingActivity, error: errorActivity }] =
+    useLazyQuery(GET_ACTIVITY);
 
   const handleRetryFetch = () => {
     refetch();
@@ -93,13 +89,12 @@ const ActivitiesScreen: React.FC = () => {
         periodYear,
         periodSemester,
         nameProyect,
-      }
+      },
     });
   };
 
   const generatePdfActivities = async (id: string) => {
     try {
-      
       const { data: activityData } = await fetchActivity({ variables: { id } });
       if (activityData) {
         generatePDF(activityData);
@@ -108,10 +103,6 @@ const ActivitiesScreen: React.FC = () => {
       console.error('Error al generar el PDF:', err);
     }
   };
-
-const generateInforme = () => {
-
-}
 
   return (
     <div className="p-6">

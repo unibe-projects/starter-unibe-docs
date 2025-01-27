@@ -1,6 +1,6 @@
 import { FieldArray } from 'formik';
-import CustomInput from '../common/form/CustomInput';
 import { Task } from '../../pages/modules/activities/CreateActivitiesScreen';
+import CustomInputActivities from '../common/form/CustomInputActivities';
 
 interface ActivityTasksProps {
   setFieldValue: (field: string, value: any) => void;
@@ -18,7 +18,7 @@ const ActivityTasks: React.FC<ActivityTasksProps> = ({ setFieldValue, tasks, onC
           <div>
             {tasks.map((task, index) => (
               <div key={index} className="space-y-2">
-                <CustomInput
+                <CustomInputActivities
                   name={`tasks[${index}].name`}
                   type="text"
                   placeholder={`Nombre de la actividad ${index + 1}`}
@@ -30,7 +30,7 @@ const ActivityTasks: React.FC<ActivityTasksProps> = ({ setFieldValue, tasks, onC
                     setFieldValue('tasks', updatedTasks);
                   }}
                 />
-                <CustomInput
+                <CustomInputActivities
                   name={`tasks[${index}].description`}
                   type="text"
                   placeholder={`Descripción de la actividad ${index + 1}`}

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Calendar, EventProps } from 'react-big-calendar';
+import { Calendar } from 'react-big-calendar';
 import localizer from '../../utils/calendar/calendarLocalizer';
 
 export enum ActivitiesStatusEnum {
@@ -22,26 +22,22 @@ interface CalendarComponentProps {
   data: any;
 }
 
-// Función para asignar colores según el estado
 const getStatusColor = (status: ActivitiesStatusEnum): string => {
   switch (status) {
-    case ActivitiesStatusEnum.EARRING:
-      return '#FFA500'; // Naranja
-    case ActivitiesStatusEnum.COMPLETED:
-      return '#4CAF50'; // Verde
-    case ActivitiesStatusEnum.CANCELADA:
-      return '#F44336'; // Rojo
-    case ActivitiesStatusEnum.IN_PROGRESS:
-      return '#2196F3'; // Azul
-    default:
-      return '#9E9E9E'; // Gris para valores no definidos
+  case ActivitiesStatusEnum.EARRING:
+    return '#FFA500';
+  case ActivitiesStatusEnum.COMPLETED:
+    return '#4CAF50';
+  case ActivitiesStatusEnum.CANCELADA:
+    return '#F44336';
+  case ActivitiesStatusEnum.IN_PROGRESS:
+    return '#2196F3';
+  default:
+    return '#9E9E9E';
   }
 };
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ data }) => {
-  console.log('data componente:', data);
-
-  // Mapear los datos a eventos con colores basados en el estado
   const events: Event[] = useMemo(() => {
     if (!data || !data.listActivities) {
       return [];
@@ -55,7 +51,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ data }) => {
       const color = getStatusColor(status);
 
       return {
-        title: `${name || 'Sin título'} (${status})`, // Mostrar el título y el estado
+        title: `${name || 'Sin título'} (${status})`,
         start,
         end,
         allDay: false,
@@ -65,8 +61,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ data }) => {
     });
   }, [data]);
 
-  // Personalizar el estilo del evento según su color
-  const eventStyleGetter = (event: Event, start: Date, end: Date, isSelected: boolean) => {
+  const eventStyleGetter = (event: Event) => {
     return {
       style: {
         backgroundColor: event.color,

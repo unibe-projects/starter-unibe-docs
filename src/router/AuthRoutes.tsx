@@ -6,7 +6,6 @@ import NotFoundScreen from '../error/404/NotFoundScreen';
 import CalendarScreen from '../pages/modules/calendar/CalendarScreen';
 import HomeScreen from '../pages/modules/home/HomeScreen';
 import GenerateDocScreen from '../pages/modules/activities/GenerateDocScreen';
-import PatienceScreen from '../pages/modules/patience/PatienceScreen';
 import ProyectScreen from '../pages/modules/proyect/ProyectScreen';
 import SettingsUpdatePasswordScreen from '../pages/modules/settings/SettingsUpdatePasswordScreen';
 import PeriodScreen from '../pages/modules/proyect/PeriodScreen';
@@ -28,7 +27,6 @@ const AuthRoutes: React.FC = () => {
               <Route path="/" element={<Navigate to="/home" />} />
               <Route path="/home" element={<HomeScreen />} />
               <Route path="/settings/change-password" element={<SettingsUpdatePasswordScreen />} />
-              <Route path="/paciente" element={<PatienceScreen />} />
               <Route path="/proyecto/periodo/actividad/calendar" element={<CalendarScreen />} />
               <Route path="/proyecto" element={<ProyectScreen />} />
               <Route path="/proyecto/periodo" element={<PeriodScreen />} />
