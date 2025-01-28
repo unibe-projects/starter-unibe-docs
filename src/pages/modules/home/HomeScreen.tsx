@@ -45,23 +45,32 @@ const HomeScreen = () => {
 
   const groupedByProject: GroupedByProject = data.listActivities.items.reduce(
     (acc: GroupedByProject, activity: Activity) => {
-      const projectName = activity.Proyect.name;
-      const period = `${activity.Period.year}-Semestre ${activity.Period.semester}`;
-
+      const projectName = activity.Proyect?.name;
+      const period = activity.Period
+        ? `${activity.Period.year}-Semestre ${activity.Period.semester}`
+        : null;
+  
+      if (!projectName || !period) {
+        // Si faltan datos, omitir esta actividad
+        console.warn("Actividad omitida por falta de datos:", activity);
+        return acc;
+      }
+  
       if (!acc[projectName]) {
         acc[projectName] = { totalActivities: 0 };
       }
       if (!acc[projectName][period]) {
         acc[projectName][period] = 0;
       }
-
+  
       acc[projectName][period] += 1;
       acc[projectName].totalActivities += 1;
-
+  
       return acc;
     },
     {},
   );
+  
 
   // Obtener todos los periodos únicos de todos los proyectos
   const allPeriods = Object.values(groupedByProject).flatMap((project) =>

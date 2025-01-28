@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { handleUpload } from '../../services/s3/S3Service';
 import CustomInput from '../common/form/CustomInput';
-import { Proyect } from '../../pages/modules/proyect/ProyectScreen';
+import { validationSchemaProyect } from '../../pages/modules/proyect/validationSchemaProyect';
+
+export interface Proyect {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  path: string;
+}
 
 interface CreateProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (name: string, description: string) => void;
-  onEdit: (id: string, name: string, description: string) => void;
+  onCreate: (name: string, description: string, path: string) => void;
+  onEdit: (id: string, name: string, description: string, path: string) => void;
   selectedProject: Proyect | null;
 }
 
@@ -19,13 +27,17 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   onEdit,
   selectedProject,
 }) => {
-  const validationSchema = Yup.object({
-    name: Yup.string().required('El nombre del proyecto es obligatorio.'),
-    description: Yup.string(),
-  });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setImageFile(event.target.files[0]); // Guardar la imagen seleccionada
+    }
+  };
 
   const handleClose = () => {
     onClose();
+    setImageFile(null);
   };
 
   if (!isOpen) {
@@ -43,16 +55,32 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
           initialValues={{
             name: selectedProject?.name || '',
             description: selectedProject?.description || '',
+            path: selectedProject?.path || '',
           }}
-          validationSchema={validationSchema}
-          onSubmit={(values, { resetForm }) => {
-            if (selectedProject) {
-              onEdit(selectedProject.id, values.name, values.description);
-            } else {
-              onCreate(values.name, values.description);
+          validationSchema={validationSchemaProyect}
+          onSubmit={async (values, { resetForm }) => {
+            try {
+              let path = selectedProject?.path || '';
+
+              if (imageFile) {
+                // Subir la imagen al bucket S3
+                const timestamp = Date.now(); // Evitar nombres duplicados
+                const extension = imageFile.name.split('.').pop();
+                const fileName = `public/assets/proyect/${values.name}_${timestamp}.${extension}`;
+                const res = await handleUpload(fileName, imageFile);
+                path = res;
+              }
+              if (selectedProject) {
+                onEdit(selectedProject.id, values.name, values.description, path);
+              } else {
+                onCreate(values.name, values.description, path);
+              }
+
+              resetForm();
+              handleClose();
+            } catch (error) {
+              console.error('Error al enviar el formulario:', error);
             }
-            resetForm();
-            handleClose();
           }}
         >
           {({ isSubmitting, values, resetForm }) => (
@@ -73,6 +101,24 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
                   values={values.description}
                 />
               </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">
+                  Imagen del Proyecto
+                </label>
+                <input
+                  name="path"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+                {selectedProject?.path && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    Archivo actual: {selectedProject.path.split('/').pop()}
+                  </p>
+                )}
+              </div>
+
               <div className="flex justify-end gap-4">
                 <button
                   type="button"

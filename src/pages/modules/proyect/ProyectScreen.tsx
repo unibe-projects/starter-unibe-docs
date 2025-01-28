@@ -18,7 +18,7 @@ export interface Proyect {
   name: string;
   description: string;
   createdAt: string;
-  image: string;
+  path: string;
 }
 
 const ProyectScreen: React.FC = () => {
@@ -41,9 +41,9 @@ const ProyectScreen: React.FC = () => {
     refetch();
   };
 
-  const handleCreateProyect = async (name: string, description: string) => {
+  const handleCreateProyect = async (name: string, description: string, path: string) => {
     try {
-      await createProyect({ variables: { name, description } });
+      await createProyect({ variables: { name, description, path } });
       refetch();
       clearError();
     } catch (error) {
@@ -51,9 +51,9 @@ const ProyectScreen: React.FC = () => {
     }
   };
 
-  const handleUpdateProyect = async (id: string, name: string, description: string) => {
+  const handleUpdateProyect = async (id: string, name: string, description: string, path: string) => {
     try {
-      await updateProyect({ variables: { id, name, description } });
+      await updateProyect({ variables: { id, name, description, path } });
       refetch();
       clearError();
     } catch (error) {

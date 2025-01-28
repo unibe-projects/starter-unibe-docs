@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_PROYECT = gql`
-mutation CreateProyect($name: String!, $description: String!) {
-  createProyect(input: { name: $name, description: $description }) {
+mutation CreateProyect($name: String!, $description: String!, $path: String) {
+  createProyect(input: { name: $name, description: $description, path: $path }) {
     id
     createdAt
   }
@@ -17,6 +17,7 @@ export const LIST_PROJECTS = gql`
       name
       createdAt
       description
+      path
       }
     }
   }
@@ -31,8 +32,8 @@ export const DELETE_PROYECT = gql`
 `;
 
 export const UPDATE_PROYECT =  gql`
-mutation UpdateProyect($id: ID!, $name: String!, $description: String!) {
-    updateProyect(input: { id: $id, name: $name, description: $description }) {
+mutation UpdateProyect($id: ID!, $name: String!, $description: String!, $path: String! ) {
+    updateProyect(input: { id: $id, name: $name, description: $description, path: $path }) {
       id
     }
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Proyect } from '../../pages/modules/proyect/ProyectScreen';
+import useResourcesController from '../../hooks/resource/resourcesController';
 
 interface ProjectCardProps {
   project: Proyect;
@@ -9,6 +10,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onDelete }) => {
+    const { isLoading, errorOccurred, resourceUrl } = useResourcesController(project.path);
   const handleImageClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClick(project.id, project.name);
@@ -30,7 +32,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
       onClick={() => onClick(project.id, project.name)}
     >
       <img
-        src={project.image}
+        src={resourceUrl}
         alt={project.name}
         className="w-full h-64 object-cover"
         onClick={handleImageClick}
