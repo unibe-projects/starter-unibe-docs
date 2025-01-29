@@ -1,6 +1,6 @@
 import { Formik, Form } from 'formik';
-import CustomInput from '../common/form/CustomInput';
 import * as Yup from 'yup';
+import CustomInput from '../common/form/CustomInput';
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -13,9 +13,13 @@ export const CreatePeriodModal: React.FC<CreateProjectModalProps> = ({
   onClose,
   onCreate,
 }) => {
+  const currentYear = new Date().getFullYear();
+
+  const periods = ['1', '2', '3', '4', '5'];
+
   const validationSchema = Yup.object({
-    year: Yup.string().required('El nombre del proyecto es obligatorio.'),
-    semester: Yup.string().required('El nombre del proyecto es obligatorio.'),
+    year: Yup.string().required('El año es obligatorio.'),
+    semester: Yup.string().required('El semestre es obligatorio.'),
     description: Yup.string(),
   });
 
@@ -34,8 +38,8 @@ export const CreatePeriodModal: React.FC<CreateProjectModalProps> = ({
         <Formik
           enableReinitialize={true}
           initialValues={{
-            year: '',
-            semester: '',
+            year: currentYear.toString(),
+            semester: '1',
             description: '',
           }}
           validationSchema={validationSchema}
@@ -45,32 +49,44 @@ export const CreatePeriodModal: React.FC<CreateProjectModalProps> = ({
             handleClose();
           }}
         >
-          {({ isSubmitting, values, resetForm }) => (
+          {({ isSubmitting, values, resetForm, setFieldValue }) => (
             <Form>
               <div className="mb-4">
-                <CustomInput
+                <label htmlFor="year" className="block mb-2 font-semibold">Año</label>
+                <select
                   name="year"
-                  type="text"
-                  placeholder="Ingresa el año del periodo"
-                  values={values.year}
-                />
+                  value={values.year}
+                  onChange={(e) => setFieldValue('year', e.target.value)}
+                  className="w-full border p-2 rounded-md"
+                  disabled
+                >
+                  <option value={currentYear}>{currentYear}</option>
+                </select>
               </div>
               <div className="mb-4">
-                <CustomInput
+                <label htmlFor="semester" className="block mb-2 font-semibold">Semestre</label>
+                <select
                   name="semester"
-                  type="text"
-                  placeholder="Ingresa el semestre al que pertenece"
-                  values={values.semester}
-                />
+                  value={values.semester}
+                  onChange={(e) => setFieldValue('semester', e.target.value)}
+                  className="w-full border p-2 rounded-md"
+                >
+                  {periods.map((p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="mb-4">
                 <CustomInput
                   name="description"
                   type="textarea"
-                  placeholder="Descripción del proyecto"
+                  placeholder="Descripción del periodo"
                   values={values.description}
                 />
               </div>
+
               <div className="flex justify-end gap-4">
                 <button
                   type="button"
