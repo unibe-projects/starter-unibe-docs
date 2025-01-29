@@ -1,6 +1,15 @@
 import { jsPDF } from 'jspdf';
 import logoUnibe from '../../../../assets/header/LogoUnibe.png';
 
+interface ActivityTask {
+  name: string;
+  description: string;
+}
+
+interface ActivityTasksConnection {
+  items: Array<{ activityTasks: ActivityTask }>;
+}
+
 interface Activity {
   id: string;
   getActivity: {
@@ -14,6 +23,7 @@ interface Activity {
     activities?: string;
     number_participants?: number | null;
     budget_used?: string;
+    ActivityTasks?: ActivityTasksConnection; // Cambio aquí
   };
   [key: string]: any;
 }
@@ -33,7 +43,7 @@ const TITLE_FONT_SIZE = 12;
 const LABEL_FONT_SIZE = 10;
 const CONTENT_FONT_SIZE = 10;
 
-export const generatePDF = (activity: Activity) => {
+export const generatePDF = (activity: Activity, nameProyect: string, period: string) => {
   try {
     const doc = new jsPDF();
 
@@ -84,7 +94,7 @@ export const generatePDF = (activity: Activity) => {
 
     // Crear tabla con líneas para cada campo
     const fields = [
-      { label: 'Nombre del Proyecto', value: activity.getActivity.project_name || 'N/A' },
+      { label: 'Nombre del Proyecto', value: nameProyect || 'N/A' },
       {
         label: 'Institución Ejecutora',
         value: activity.getActivity.executing_institution || 'N/A',
@@ -92,7 +102,7 @@ export const generatePDF = (activity: Activity) => {
       { label: 'Responsable del Proyecto', value: activity.getActivity.project_manager || 'N/A' },
       { label: 'Cargo', value: activity.getActivity.charge || 'N/A' },
       { label: 'Unidad', value: activity.getActivity.unit || 'N/A' },
-      { label: 'Periodo del informe', value: activity.getActivity.period || 'N/A' },
+      { label: 'Periodo del informe', value: period || 'N/A' },
     ];
 
     // Recuadro general (hasta "Periodo del informe")
@@ -113,7 +123,7 @@ export const generatePDF = (activity: Activity) => {
         MARGIN_LEFT + LABEL_WIDTH,
         yPosition - 0.2,
         MARGIN_LEFT + LABEL_WIDTH,
-        yPosition + ROW_HEIGHT - 1.1,
+        yPosition + ROW_HEIGHT - 1.1
       ); // Ajustada
 
       // Línea divisoria horizontal
@@ -141,12 +151,20 @@ export const generatePDF = (activity: Activity) => {
     doc.text('3. Actividades Realizadas', MARGIN_LEFT, startY);
     startY += TITLE_SPACING;
 
-    // Actividades realizadas (puedes agregar más campos aquí)
-    const activities = activity.getActivity.activities || 'N/A';
-    doc.setFontSize(CONTENT_FONT_SIZE);
-    doc.setFont('Helvetica', 'normal');
-    doc.text(activities, MARGIN_LEFT, startY);
-    startY += 15;
+    // Actividades realizadas (con tareas)
+    const activities = activity.getActivity.ActivityTasks?.items || [];
+    if (activities.length > 0) {
+      activities.forEach((task, index) => {
+        const taskText = `${index + 1}. ${task.activityTasks.name}: ${task.activityTasks.description}`;
+        doc.setFontSize(CONTENT_FONT_SIZE);
+        doc.setFont('Helvetica', 'normal');
+        doc.text(taskText, MARGIN_LEFT, startY);
+        startY += 10;
+      });
+    } else {
+      doc.text('N/A', MARGIN_LEFT, startY);
+      startY += 15;
+    }
 
     // Participantes
     doc.setFontSize(LABEL_FONT_SIZE);

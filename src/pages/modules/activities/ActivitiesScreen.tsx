@@ -97,7 +97,8 @@ const ActivitiesScreen: React.FC = () => {
     try {
       const { data: activityData } = await fetchActivity({ variables: { id } });
       if (activityData) {
-        generatePDF(activityData);
+        const period = periodYear + periodSemester;
+        generatePDF(activityData, nameProyect, period);
       }
     } catch (err) {
       console.error('Error al generar el PDF:', err);

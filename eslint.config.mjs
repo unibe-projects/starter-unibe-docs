@@ -23,7 +23,8 @@ export default [{
         'config/*',
         'eslint.config.mjs',
         'commitlint.config.js',
-        'public/pdf.worker.min.js'
+        'public/pdf.worker.min.js',
+        'src/pages/modules/activities/pdf/activities.ts'
     ],
     rules: {
         'no-unused-vars': ['error',  {
