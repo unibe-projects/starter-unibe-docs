@@ -134,14 +134,14 @@ const ActivitiesScreen: React.FC = () => {
 
         {activities.length > 0 ? (
           <div className="space-y-6">
-            {activities.map((activity: { id: string; project_manager: string; charge: string }) => (
+            {activities.map((activity: { id: string; project_manager: string; name: string }) => (
               <div
                 key={activity.id}
                 className="bg-white shadow-lg rounded-lg p-6 flex justify-between items-center"
               >
                 <div>
-                  <h3 className="text-xl font-semibold">{activity.project_manager}</h3>
-                  <p className="text-gray-600">{activity.charge}</p>
+                  <h3 className="text-xl font-semibold">{activity.name}</h3>
+                  <p className="text-gray-600">{activity.project_manager}</p>
                 </div>
                 <div className="flex gap-4">
                   <button

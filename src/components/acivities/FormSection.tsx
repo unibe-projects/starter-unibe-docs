@@ -118,6 +118,7 @@ const FormSection: React.FC<FormSectionProps> = ({
               <CustomInputActivities
                 name="general_objective"
                 type="text"
+                as="textarea"
                 placeholder="Objetivo general"
                 onChange={handleInputChange}
                 values={values.general_objective}

@@ -33,6 +33,7 @@ const ActivityTasks: React.FC<ActivityTasksProps> = ({ setFieldValue, tasks, onC
                 <CustomInputActivities
                   name={`tasks[${index}].description`}
                   type="text"
+                  as="textarea"
                   placeholder={`Descripción de la actividad ${index + 1}`}
                   values={task.description}
                   onChange={(e) => {

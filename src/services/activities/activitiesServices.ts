@@ -71,7 +71,7 @@ export const LIST_ACTIVITIES = (projectId: string, periodId: string) => gql`
       items {
         id
         project_manager
-        charge
+        name
       }
     }
   }

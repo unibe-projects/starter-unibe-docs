@@ -10,7 +10,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onDelete }) => {
-    const { isLoading, errorOccurred, resourceUrl } = useResourcesController(project.path);
+  const { resourceUrl } = useResourcesController(project.path);
   const handleImageClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClick(project.id, project.name);

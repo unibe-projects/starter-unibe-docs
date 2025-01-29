@@ -12,7 +12,12 @@ const PeriodScreen: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const { periodProyectId, nameProyect } = location.state || {};
-  const { data, loading, error: errorListProyect, refetch } = useQuery(LIST_PERIODS, {
+  const {
+    data,
+    loading,
+    error: errorListProyect,
+    refetch,
+  } = useQuery(LIST_PERIODS, {
     variables: { periodProyectId },
   });
   const [createPeriod] = useMutation(CREATE_PERIOD);
@@ -34,14 +39,13 @@ const PeriodScreen: React.FC = () => {
   const handleCreatePeriod = async (year: string, semester: string, description: string) => {
     try {
       const existingPeriod = data?.listPeriods?.items?.find(
-        (p: { year: string; semester: string }) => p.year === year && p.semester === semester
+        (p: { year: string; semester: string }) => p.year === year && p.semester === semester,
       );
 
       if (existingPeriod) {
-        handleError({ error: new Error("🚫 El período ya existe.") });
+        handleError({ error: new Error('🚫 El período ya existe.') });
         return;
       }
-      console.log(year, semester, description, periodProyectId)
 
       await createPeriod({ variables: { year, semester, description, periodProyectId } });
 
@@ -84,7 +88,10 @@ const PeriodScreen: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
       />
 
-      <PeriodList periods={data?.listPeriods?.items || []} onViewActivities={handleViewActivities} />
+      <PeriodList
+        periods={data?.listPeriods?.items || []}
+        onViewActivities={handleViewActivities}
+      />
     </div>
   );
 };
