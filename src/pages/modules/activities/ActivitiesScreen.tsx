@@ -107,7 +107,7 @@ const ActivitiesScreen: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Actividades del Periodo</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Actividades: {nameProyect} - {periodYear}-{periodSemester}</h1>
       <div className="flex justify-end gap-4 mb-8">
         <button
           onClick={handleGenerateDoc}

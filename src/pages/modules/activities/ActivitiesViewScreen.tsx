@@ -51,6 +51,7 @@ const ActivitiesViewScreen = () => {
       report_period: `${periodYear ?? ''} - ${periodSemester ?? ''}`,
       name: name ?? '',
       tasks: ActivityTasks?.items?.map((item: any) => item.activityTasks) || [],
+      documents: []
     };
   }, [data, nameProyect, periodYear, periodSemester]);
 

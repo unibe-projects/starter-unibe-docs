@@ -3,8 +3,9 @@ import { Formik, Form } from 'formik';
 import Message from '../../error/messages/Message';
 import LoadingButton from '../loadings/buttons/LoadingButton';
 import ActivityTasks from './ActivityTasks';
-import { Activities, Task } from '../../pages/modules/activities/CreateActivitiesScreen';
+import { Activities, Documents, Task } from '../../pages/modules/activities/CreateActivitiesScreen';
 import CustomInputActivities from '../common/form/CustomInputActivities';
+import ActivityDocuments from './ActivityDocuments';
 
 interface FormSectionProps {
   handleFormSubmit: (values: any) => Promise<void>;
@@ -26,6 +27,7 @@ const FormSection: React.FC<FormSectionProps> = ({
   initialValues,
 }) => {
   const [tasks, setTasks] = useState<Task[]>(initialValues.tasks || []);
+  const [documents, setDocuments] = useState<Documents[]>([]);
 
   const handleTaskUpdate = (updatedTasks: Task[]) => {
     setTasks(updatedTasks);
@@ -35,6 +37,23 @@ const FormSection: React.FC<FormSectionProps> = ({
     }));
   };
 
+  const handleDocumentUpload = (files: Documents[]) => {
+    setDocuments(files);
+    setPreviewData((prevData: { documents: any }) => {
+      const updatedDocuments = [...files];
+      
+      return {
+        ...prevData,
+        documents: updatedDocuments,
+      };
+    });
+  };
+  
+  
+  
+  
+  
+
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-gray-700 mb-6">Crear Actividad</h2>
@@ -42,7 +61,7 @@ const FormSection: React.FC<FormSectionProps> = ({
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => handleFormSubmit({ ...values, tasks })}
+        onSubmit={(values) => handleFormSubmit({ ...values, tasks, documents })}
         enableReinitialize
       >
         {({ values, isSubmitting, handleChange, setFieldValue }) => {
@@ -142,6 +161,8 @@ const FormSection: React.FC<FormSectionProps> = ({
                 setFieldValue={setFieldValue}
                 onChange={handleTaskUpdate}
               />
+            <ActivityDocuments handleDocumentUpload={handleDocumentUpload} documents={documents} />
+
               <div className="mt-6">
                 <button
                   type="submit"
