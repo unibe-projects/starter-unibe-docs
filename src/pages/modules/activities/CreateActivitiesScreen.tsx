@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { validationSchemaActivities } from './validationSchemaActivities';
 import {
   CREATE_ACTIVITY,
   CREATE_ACTIVITY_TASKS,
@@ -15,59 +14,13 @@ import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import { ActivitiesStatusEnum } from '../../../enums/activities/ActivitiesStatusEnum';
 import { CREATE_DOCUMENTS, CREATE_ACTIVITY_DOCUMENTS } from '../../../services/documents/documents';
 import { handleUpload } from '../../../services/s3/S3Service';
-
-export interface Task {
-  name: string;
-  description: string;
-}
-
-export interface Documents {
-  name: 'Presupuesto' | 'Lista de participantes' | 'Fotos' | 'Memorando de gestión' | 'Artes gráficos de difusión';
-  description: string;
-  tags: string;
-  file: File;
-}
-
-export interface Activities {
-  activityProyectId: string;
-  activityPeriodId: string;
-  name: string;
-  activity_date: string;
-  start_time: string;
-  hora_fin: string;
-  executing_institution: string;
-  project_manager: string;
-  charge: string;
-  unit: string;
-  general_objective: string;
-  number_participants: string;
-  budget_used: string;
-  project_name: string;
-  report_period: string;
-  tasks: Task[];
-  documents: Documents[];
-}
-
-export interface FormValues {
-  activity_date: string;
-  start_time: string;
-  hora_fin: string;
-  executing_institution: string;
-  project_manager: string;
-  charge: string;
-  unit: string;
-  general_objective: string;
-  number_participants: string;
-  budget_used: string;
-}
-
-export interface LocationState {
-  activityProyectId: string;
-  activityPeriodId: string;
-  periodYear: string;
-  periodSemester: string;
-  nameProyect: string;
-}
+import {
+  LocationState,
+  Activities,
+  FormValues,
+  Task,
+  Documents,
+} from '../../../interface/activities/activities.interface';
 
 const CreateActivitiesScreen: React.FC = () => {
   const location = useLocation();
@@ -130,16 +83,16 @@ const CreateActivitiesScreen: React.FC = () => {
   };
 
   const handleFormSubmit = async (
-    values: FormValues & { tasks: Task[] } & { documents: Documents[] }
+    values: FormValues & { tasks: Task[] } & { documents: Documents[] },
   ) => {
     setIsLoading(true);
     try {
       const formattedDate = values.activity_date
-        ? new Date(values.activity_date).toISOString().split("T")[0]
+        ? new Date(values.activity_date).toISOString().split('T')[0]
         : null;
       const formattedStartTime = `${values.start_time}:00.000`;
       const formattedHoraFin = `${values.hora_fin}:00.000`;
-  
+
       const activityId = await createNewActivity({
         activityProyectId,
         activityPeriodId,
@@ -149,18 +102,18 @@ const CreateActivitiesScreen: React.FC = () => {
         previewData,
         values,
       });
-  
+
       await processTasksAndDocuments(values.tasks, values.documents, activityId);
-  
+
       navigateToActivity();
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
       handleError({ error });
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   const createNewActivity = async ({
     activityProyectId,
     activityPeriodId,
@@ -169,7 +122,15 @@ const CreateActivitiesScreen: React.FC = () => {
     formattedHoraFin,
     previewData,
     values,
-  }: any) => {
+  }: {
+    activityProyectId: string;
+    activityPeriodId: string;
+    formattedDate: string | null;
+    formattedStartTime: string;
+    formattedHoraFin: string;
+    previewData: Activities;
+    values: FormValues;
+  }): Promise<string> => {
     const { data } = await createActivity({
       variables: {
         activityProyectId,
@@ -190,16 +151,20 @@ const CreateActivitiesScreen: React.FC = () => {
     });
     return data.createActivity.id;
   };
-  
-  const processTasksAndDocuments = async (tasks: Task[], documents: Documents[], activityId: any) => {
+
+  const processTasksAndDocuments = async (
+    tasks: Task[],
+    documents: Documents[],
+    activityId: string,
+  ): Promise<void> => {
     for (const task of tasks) {
       const taskId = await createNewTask(task);
       await linkTaskToActivity(taskId, activityId);
-      await processDocuments(documents, activityId);
     }
+    await processDocuments(documents, activityId);
   };
-  
-  const createNewTask = async (task: { name: any; description: any; }) => {
+
+  const createNewTask = async (task: Task): Promise<string> => {
     const { data } = await createTask({
       variables: {
         name: task.name,
@@ -208,8 +173,8 @@ const CreateActivitiesScreen: React.FC = () => {
     });
     return data.createActivityTasks.id;
   };
-  
-  const linkTaskToActivity = async (taskId: any, activityId: any) => {
+
+  const linkTaskToActivity = async (taskId: string, activityId: string): Promise<void> => {
     await createActivityTask({
       variables: {
         activityTasksId: taskId,
@@ -217,23 +182,19 @@ const CreateActivitiesScreen: React.FC = () => {
       },
     });
   };
-  
-  const processDocuments = async (documents: any, activityId: any) => {
-    console.log('documentos:', documents)
+
+  const processDocuments = async (documents: Documents[], activityId: string): Promise<void> => {
     for (const file of documents) {
-      const timestamp = Date.now(); // Evitar nombres duplicados
+      const timestamp = Date.now();
       const extension = file.file.name.split('.').pop();
       const fileName = `public/assets/documents/${file.file.name}_${timestamp}.${extension}`;
-      // console.log(fileName, file.file, file.name, file.description, file.tags);
       const uploadedPath = await handleUpload(fileName, file.file);
       const documentId = await createNewDocument(file, uploadedPath);
       await linkDocumentToActivity(documentId, activityId);
     }
   };
-  
-  const createNewDocument = async (file: { name: any; tags: any; }, uploadedPath: string) => {
 
-    console.log('data', file)
+  const createNewDocument = async (file: Documents, uploadedPath: string): Promise<string> => {
     const { data } = await createDocument({
       variables: {
         name: file.name,
@@ -243,8 +204,8 @@ const CreateActivitiesScreen: React.FC = () => {
     });
     return data.createDocuments.id;
   };
-  
-  const linkDocumentToActivity = async (documentId: any, activityId: any) => {
+
+  const linkDocumentToActivity = async (documentId: string, activityId: string): Promise<void> => {
     await createActivityDocument({
       variables: {
         documentsId: documentId,
@@ -252,9 +213,9 @@ const CreateActivitiesScreen: React.FC = () => {
       },
     });
   };
-  
+
   const navigateToActivity = () => {
-    navigate("/proyecto/periodo/actividad", {
+    navigate('/proyecto/periodo/actividad', {
       state: {
         periodProyectId: activityProyectId,
         periodId: activityPeriodId,
@@ -273,8 +234,6 @@ const CreateActivitiesScreen: React.FC = () => {
       <div className="flex-1 w-full lg:w-1/2 px-2">
         <FormSection
           handleFormSubmit={handleFormSubmit}
-          validationSchema={validationSchemaActivities}
-          previewData={previewData}
           setPreviewData={setPreviewData}
           errorMessage={errorMessage}
           isLoading={isLoading}

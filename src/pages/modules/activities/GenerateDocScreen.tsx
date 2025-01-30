@@ -12,7 +12,7 @@ const GenerateDocScreen: React.FC = () => {
 
   const onLoadSuccess = ({ numPages }: any) => {
     setNumPages(numPages);
-    setError(null); // Reset error on successful load
+    setError(null);
   };
 
   const onLoadError = (error: any) => {

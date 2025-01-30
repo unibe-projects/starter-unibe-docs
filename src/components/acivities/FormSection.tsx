@@ -3,14 +3,13 @@ import { Formik, Form } from 'formik';
 import Message from '../../error/messages/Message';
 import LoadingButton from '../loadings/buttons/LoadingButton';
 import ActivityTasks from './ActivityTasks';
-import { Activities, Documents, Task } from '../../pages/modules/activities/CreateActivitiesScreen';
 import CustomInputActivities from '../common/form/CustomInputActivities';
 import ActivityDocuments from './ActivityDocuments';
+import { Activities, Task, Documents } from '../../interface/activities/activities.interface';
+import { validationSchemaActivities } from '../../pages/modules/activities/validationSchemaActivities';
 
 interface FormSectionProps {
   handleFormSubmit: (values: any) => Promise<void>;
-  validationSchema: any;
-  previewData: any;
   setPreviewData: React.Dispatch<React.SetStateAction<any>>;
   errorMessage: string | null;
   isLoading: boolean;
@@ -19,8 +18,6 @@ interface FormSectionProps {
 
 const FormSection: React.FC<FormSectionProps> = ({
   handleFormSubmit,
-  validationSchema,
-  previewData,
   setPreviewData,
   errorMessage,
   isLoading,
@@ -31,7 +28,7 @@ const FormSection: React.FC<FormSectionProps> = ({
 
   const handleTaskUpdate = (updatedTasks: Task[]) => {
     setTasks(updatedTasks);
-    setPreviewData((prevData: any) => ({
+    setPreviewData((prevData: Partial<Activities>) => ({
       ...prevData,
       tasks: updatedTasks,
     }));
@@ -39,20 +36,15 @@ const FormSection: React.FC<FormSectionProps> = ({
 
   const handleDocumentUpload = (files: Documents[]) => {
     setDocuments(files);
-    setPreviewData((prevData: { documents: any }) => {
+    setPreviewData((prevData: Partial<Activities>) => {
       const updatedDocuments = [...files];
-      
+
       return {
         ...prevData,
         documents: updatedDocuments,
       };
     });
   };
-  
-  
-  
-  
-  
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -60,7 +52,7 @@ const FormSection: React.FC<FormSectionProps> = ({
       {errorMessage && <Message text={errorMessage} type="error" />}
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={validationSchemaActivities}
         onSubmit={(values) => handleFormSubmit({ ...values, tasks, documents })}
         enableReinitialize
       >
@@ -79,8 +71,8 @@ const FormSection: React.FC<FormSectionProps> = ({
                 name="name"
                 placeholder="Nombre de la actividad"
                 onChange={(e) => {
-                  e.target.value = e.target.value.toUpperCase(); // Convierte el valor a mayúsculas
-                  handleInputChange(e); // Pasa el evento transformado al manejador original
+                  e.target.value = e.target.value.toUpperCase();
+                  handleInputChange(e);
                 }}
                 type="text"
                 values={values.name}
@@ -161,7 +153,10 @@ const FormSection: React.FC<FormSectionProps> = ({
                 setFieldValue={setFieldValue}
                 onChange={handleTaskUpdate}
               />
-            <ActivityDocuments handleDocumentUpload={handleDocumentUpload} documents={documents} />
+              <ActivityDocuments
+                handleDocumentUpload={handleDocumentUpload}
+                documents={documents}
+              />
 
               <div className="mt-6">
                 <button

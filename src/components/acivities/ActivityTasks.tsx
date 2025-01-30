@@ -1,6 +1,6 @@
 import { FieldArray } from 'formik';
-import { Task } from '../../pages/modules/activities/CreateActivitiesScreen';
 import CustomInputActivities from '../common/form/CustomInputActivities';
+import { Task } from '../../interface/activities/activities.interface';
 
 interface ActivityTasksProps {
   setFieldValue: (field: string, value: any) => void;

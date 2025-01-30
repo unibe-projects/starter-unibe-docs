@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import UnibeLogo from '../../assets/header/LogoUnibe.png';
-import { Activities } from '../../pages/modules/activities/CreateActivitiesScreen';
+import { Activities, Documents } from '../../interface/activities/activities.interface';
 
 interface PreviewSectionProps {
   previewData: Activities;
@@ -9,6 +9,8 @@ interface PreviewSectionProps {
 const PreviewSection: React.FC<PreviewSectionProps> = ({ previewData }) => {
   const [page, setPage] = useState(1);
   const itemsPerPage = 5;
+  const imageExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+
   const sections = [
     {
       title: '1. Datos Generales',
@@ -27,7 +29,7 @@ const PreviewSection: React.FC<PreviewSectionProps> = ({ previewData }) => {
       content: (
         <div className="space-y-4">
           {previewData.tasks &&
-            previewData.tasks.map((task: any, index: number) => (
+            previewData.tasks.map((task, index) => (
               <div
                 key={index}
                 className="border border-gray-400 rounded-lg p-4 shadow-md overflow-hidden"
@@ -45,7 +47,32 @@ const PreviewSection: React.FC<PreviewSectionProps> = ({ previewData }) => {
     },
     { title: '4. Número de Participantes', content: previewData.number_participants },
     { title: '5. Presupuesto Utilizado', content: previewData.budget_used },
-    // { title: '6. Anexos', content: previewData.attachments },
+    {
+      title: '6. Anexos',
+      content: previewData.documents && (
+        <div className="space-y-2">
+          {previewData.documents
+            .filter((doc: Documents) =>
+              imageExtensions.includes(doc.file.name.split('.').pop()?.toLowerCase() ?? ''),
+            )
+            .map((doc: Documents, index: number) => (
+              <div
+                key={index}
+                className="border border-gray-400 rounded-lg p-4 shadow-md overflow-hidden"
+              >
+                <p className="text-gray-700 font-semibold">{doc.name}</p>
+                {doc.file && (
+                  <img
+                    src={URL.createObjectURL(doc.file)}
+                    alt={doc.name}
+                    className="max-w-full h-auto"
+                  />
+                )}
+              </div>
+            ))}
+        </div>
+      ),
+    },
   ];
 
   const handleNextPage = () => {

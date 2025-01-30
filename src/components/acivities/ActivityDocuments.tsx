@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Documents } from "../../pages/modules/activities/CreateActivitiesScreen";
+import React, { useState } from 'react';
+import { Documents } from '../../interface/activities/activities.interface';
 
 interface ActivityDocumentsProps {
   documents: Documents[];
@@ -7,11 +7,11 @@ interface ActivityDocumentsProps {
 }
 
 const ALLOWED_NAMES = [
-  "Presupuesto",
-  "Lista de participantes",
-  "Fotos",
-  "Memorando de gestión",
-  "Artes gráficos de difusión",
+  'Presupuesto',
+  'Lista de participantes',
+  'Fotos',
+  'Memorando de gestión',
+  'Artes gráficos de difusión',
 ] as const;
 
 type DocumentName = (typeof ALLOWED_NAMES)[number];
@@ -23,76 +23,51 @@ const ActivityDocuments: React.FC<ActivityDocumentsProps> = ({
   // Estado local para gestionar los documentos seleccionados
   const [selectedDocuments, setSelectedDocuments] = useState<Documents[]>(documents);
 
-  const handleFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    name: DocumentName
-  ) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, name: DocumentName) => {
     if (event.target.files) {
       const newFiles: Documents[] = Array.from(event.target.files).map((file) => ({
-        name, // Asignar el nombre según el input
-        description: "",
-        tags: file.name.split(".").pop() || "",
+        name,
+        description: '',
+        tags: file.name.split('.').pop() || '',
         file,
       }));
-
-      // Si el nombre es "Fotos", agregamos varios archivos
-      if (name === "Fotos") {
-        const updatedDocuments = [
-          ...selectedDocuments,
-          ...newFiles, // Acumular los archivos de "Fotos"
-        ];
+      if (name === 'Fotos') {
+        const updatedDocuments = [...selectedDocuments, ...newFiles];
 
         setSelectedDocuments(updatedDocuments);
         handleDocumentUpload(updatedDocuments);
-
-        // Mostrar el arreglo final de documentos seleccionados
-        // console.log("Documentos después de subir en Fotos:", updatedDocuments);
       } else {
-        // Si no es "Fotos", solo agregamos un archivo
         const updatedDocuments = [
-          ...selectedDocuments.filter((doc) => doc.name !== name), // Eliminar el archivo previamente seleccionado de ese tipo
-          ...newFiles, // Agregar el nuevo archivo
+          ...selectedDocuments.filter((doc) => doc.name !== name),
+          ...newFiles,
         ];
 
         setSelectedDocuments(updatedDocuments);
         handleDocumentUpload(updatedDocuments);
-
-        // Mostrar el arreglo final de documentos seleccionados
-        // console.log("Documentos después de subir en otro tipo:", updatedDocuments);
       }
     }
   };
 
   const removeFile = (fileName: string) => {
-    // Eliminar solo el archivo específico
     const updatedDocuments = selectedDocuments.filter((doc) => doc.file.name !== fileName);
-
-    // Actualizar el estado después de eliminar el archivo
     setSelectedDocuments(updatedDocuments);
     handleDocumentUpload(updatedDocuments);
-
-    // // Mostrar el arreglo final de documentos seleccionados después de eliminar un archivo
-    // console.log("Documentos después de eliminar:", updatedDocuments);
   };
 
   return (
     <div className="space-y-4">
-      <label className="block text-gray-700 font-semibold">
-        Adjuntar Documentos
-      </label>
+      <label className="block text-gray-700 font-semibold">Adjuntar Documentos</label>
 
       {ALLOWED_NAMES.map((name) => (
         <div key={name} className="space-y-2">
           <label className="block text-gray-700 font-medium">{name}</label>
           <input
             type="file"
-            multiple={name === "Fotos"} // Permitir múltiples archivos solo para "Fotos"
-            accept=".jpg, .jpeg, .png, .pdf, .doc, .docx, .xls, .xlsx" // Permitir imágenes y documentos
+            multiple={name === 'Fotos'}
+            accept=".jpg, .jpeg, .png, .pdf, .doc, .docx, .xls, .xlsx"
             onChange={(e) => handleFileChange(e, name)}
             className="w-full p-2 border rounded-lg"
           />
-
-          {/* Mostrar lista de archivos correctamente para cada tipo */}
           {selectedDocuments.filter((doc) => doc.name === name).length > 0 && (
             <div className="space-y-1 bg-gray-100 p-2 rounded-lg">
               {selectedDocuments
