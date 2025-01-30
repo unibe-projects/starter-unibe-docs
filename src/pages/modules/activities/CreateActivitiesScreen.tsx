@@ -9,7 +9,7 @@ import {
   GET_ACTIVITIES,
 } from '../../../services/activities/activitiesServices';
 import FormSection from '../../../components/acivities/FormSection';
-import PreviewSection from '../../../components/acivities/PreviewSection';
+import PreviewSection from '../../../components/acivities/documentView/PreviewSection';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import { ActivitiesStatusEnum } from '../../../enums/activities/ActivitiesStatusEnum';
 import { CREATE_DOCUMENTS, CREATE_ACTIVITY_DOCUMENTS } from '../../../services/documents/documents';

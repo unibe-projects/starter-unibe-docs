@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useLocation } from 'react-router-dom';
 import { GET_ACTIVITY } from '../../../services/activities/activitiesServices';
-import PreviewSection from '../../../components/acivities/PreviewSection';
+import PreviewSection from '../../../components/acivities/documentView/PreviewSection';
 import { useMemo } from 'react';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
