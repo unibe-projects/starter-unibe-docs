@@ -4,7 +4,6 @@ import { useQuery, useLazyQuery } from '@apollo/client';
 import {
   GET_ACTIVITY,
   LIST_ACTIVITIES,
-  LIST_ACTIVITIES_ALL,
 } from '../../../services/activities/activitiesServices';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
@@ -27,7 +26,6 @@ const ActivitiesScreen: React.FC = () => {
     },
   });
 
-  // Consulta para obtener una actividad específica (usando useLazyQuery)
   const [fetchActivity, { loading: isLoadingActivity, error: errorActivity }] =
     useLazyQuery(GET_ACTIVITY);
 
@@ -48,8 +46,8 @@ const ActivitiesScreen: React.FC = () => {
   const handleCreateActivity = () => {
     navigate('/proyecto/periodo/actividad/crear-actividad', {
       state: {
-        activityProyectId: periodProyectId,
-        activityPeriodId: periodId,
+        periodProyectId,
+        periodId,
         periodYear,
         periodSemester,
         nameProyect,

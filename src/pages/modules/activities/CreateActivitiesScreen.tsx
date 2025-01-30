@@ -24,7 +24,7 @@ import {
 
 const CreateActivitiesScreen: React.FC = () => {
   const location = useLocation();
-  const { activityProyectId, activityPeriodId, periodYear, periodSemester, nameProyect } =
+  const { periodProyectId: activityProyectId, periodId: activityPeriodId, periodYear, periodSemester, nameProyect } =
     (location.state as LocationState) || {};
   const navigate = useNavigate();
   const [createActivity] = useMutation(CREATE_ACTIVITY);
@@ -229,7 +229,7 @@ const CreateActivitiesScreen: React.FC = () => {
   return (
     <div className="flex flex-col lg:flex-row items-start w-full min-h-screen p-6">
       <div className="flex-1 w-full lg:w-1/2 px-2">
-        <PreviewSection previewData={previewData} />
+        <PreviewSection previewData={previewData} iscreate/>
       </div>
       <div className="flex-1 w-full lg:w-1/2 px-2">
         <FormSection

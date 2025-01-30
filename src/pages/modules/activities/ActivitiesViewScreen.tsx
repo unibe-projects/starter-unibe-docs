@@ -32,7 +32,12 @@ const ActivitiesViewScreen = () => {
       budget_used,
       name,
       ActivityTasks,
+      Documents,
     } = data.getActivity;
+
+    const tasks = ActivityTasks?.items?.map((item: any) => item.activityTasks) || [];
+    const documents = Documents?.items?.map((item: any) => item.documents) || [];
+
 
     return {
       activityProyectId: '',
@@ -50,8 +55,8 @@ const ActivitiesViewScreen = () => {
       project_name: nameProyect ?? '',
       report_period: `${periodYear ?? ''} - ${periodSemester ?? ''}`,
       name: name ?? '',
-      tasks: ActivityTasks?.items?.map((item: any) => item.activityTasks) || [],
-      documents: []
+      tasks,
+      documents,
     };
   }, [data, nameProyect, periodYear, periodSemester]);
 
@@ -73,7 +78,7 @@ const ActivitiesViewScreen = () => {
 
   return (
     <div className="flex justify-center items-center px-4 md:px-8 lg:px-32 w-full pb-8">
-      <PreviewSection previewData={previewData} />
+      <PreviewSection previewData={previewData} iscreate={false}/>
     </div>
   );
 };

@@ -102,8 +102,16 @@ export const GET_ACTIVITY = gql`
           }
         }
       }
+      Documents {
+        items {
+          documents {
+            name
+            path
+          }
+        }
     }
-  }
+}
+}
 `;
 
 export const LIST_ACTIVITIES_ALL = gql`

@@ -10,9 +10,10 @@ import GeneralItems from './GeneralItems';
 
 interface PreviewSectionProps {
   previewData: Activities;
+  iscreate: boolean;
 }
 
-const PreviewSection: React.FC<PreviewSectionProps> = ({ previewData }) => {
+const PreviewSection: React.FC<PreviewSectionProps> = ({ previewData, iscreate }) => {
   const [page, setPage] = useState(1);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(previewData.documents.length / itemsPerPage);
@@ -52,7 +53,7 @@ const PreviewSection: React.FC<PreviewSectionProps> = ({ previewData }) => {
         <GeneralItems name={previewData.budget_used} title='5.	Presupuesto utilizado' />
         <div>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">6. Anexos</h3>
-          <DocumentPreview documents={previewData.documents} />
+          <DocumentPreview documents={previewData.documents} isCreate={iscreate} />
         </div>
       </div>
 

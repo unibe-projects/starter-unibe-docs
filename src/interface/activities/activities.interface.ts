@@ -12,6 +12,7 @@ export interface Documents {
     | 'Artes gráficos de difusión';
   description: string;
   tags: string;
+  path?: string;
   file: File;
 }
 
@@ -49,8 +50,8 @@ export interface FormValues {
 }
 
 export interface LocationState {
-  activityProyectId: string;
-  activityPeriodId: string;
+  periodProyectId: string;
+  periodId: string;
   periodYear: string;
   periodSemester: string;
   nameProyect: string;
