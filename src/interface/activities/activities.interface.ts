@@ -13,6 +13,8 @@ export interface Documents {
   description: string;
   tags: string;
   path?: string;
+  createdAt?: string;
+  updatedAt?: string;
   file: File;
 }
 
@@ -55,4 +57,13 @@ export interface LocationState {
   periodYear: string;
   periodSemester: string;
   nameProyect: string;
+}
+
+export interface Period {
+  year: string;
+  semester: string;
+}
+
+export interface Proyect {
+  name: string;
 }

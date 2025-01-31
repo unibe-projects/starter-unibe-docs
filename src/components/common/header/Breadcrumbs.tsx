@@ -5,7 +5,7 @@ const Breadcrumbs: React.FC = () => {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
-    <nav className="px-4 py-2 text-sm rounded-md">
+    <nav className="py-2 text-sm rounded-md">
       <ol className="flex space-x-2">
         <li>
           <Link to="/" state={location.state} className="text-blue-600 hover:underline">

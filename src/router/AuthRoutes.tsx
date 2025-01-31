@@ -13,6 +13,7 @@ import ActivitiesScreen from '../pages/modules/activities/ActivitiesScreen';
 import CreateActivitiesScreen from '../pages/modules/activities/CreateActivitiesScreen';
 import Breadcrumbs from '../components/common/header/Breadcrumbs';
 import ActivitiesViewScreen from '../pages/modules/activities/ActivitiesViewScreen';
+import DocumentsScreen from '../pages/modules/documents/DocumentsScreen';
 
 const AuthRoutes: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ const AuthRoutes: React.FC = () => {
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
               <Route path="/home" element={<HomeScreen />} />
+              <Route path="/documentos" element={<DocumentsScreen />} />
               <Route path="/settings/change-password" element={<SettingsUpdatePasswordScreen />} />
               <Route path="/proyecto/periodo/actividad/calendar" element={<CalendarScreen />} />
               <Route path="/proyecto" element={<ProyectScreen />} />

@@ -18,3 +18,44 @@ export const CREATE_ACTIVITY_DOCUMENTS =  gql`
     }
   }
 `;
+
+export const LIST_DOCUMENTS = gql`
+  query MyQuery {
+    listDocuments {
+      items {
+        name
+        tags
+        path
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const LIST_DOCUMENTS_all = gql`
+  query MyQuery {
+    listActivities {
+      items {
+        Proyect {
+          name
+        }
+        Period {
+          semester
+          year
+        }
+        Documents {
+          items {
+            documents {
+              name
+              path
+              tags
+              updatedAt
+              createdAt
+            }
+          }
+        }
+      }
+    }
+  }
+`;

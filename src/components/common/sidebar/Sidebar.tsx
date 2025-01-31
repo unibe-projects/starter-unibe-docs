@@ -57,7 +57,7 @@ const Sidebar = () => {
           <span>Proyecto</span>
         </NavLink>
         <NavLink
-          to="/calendar"
+          to="/documentos"
           className={({ isActive }) =>
             `flex items-center gap-5 text-lg p-3 rounded-lg transition-colors ${
               isActive ? activeClass : inactiveClass
