@@ -24,8 +24,13 @@ import {
 
 const CreateActivitiesScreen: React.FC = () => {
   const location = useLocation();
-  const { periodProyectId: activityProyectId, periodId: activityPeriodId, periodYear, periodSemester, nameProyect } =
-    (location.state as LocationState) || {};
+  const {
+    periodProyectId: activityProyectId,
+    periodId: activityPeriodId,
+    periodYear,
+    periodSemester,
+    nameProyect,
+  } = (location.state as LocationState) || {};
   const navigate = useNavigate();
   const [createActivity] = useMutation(CREATE_ACTIVITY);
   const [createTask] = useMutation(CREATE_ACTIVITY_TASKS);
@@ -197,7 +202,8 @@ const CreateActivitiesScreen: React.FC = () => {
   const createNewDocument = async (file: Documents, uploadedPath: string): Promise<string> => {
     const { data } = await createDocument({
       variables: {
-        name: file.name,
+        name: file.file.name,
+        type: file.name,
         path: uploadedPath,
         tags: file.tags,
       },
@@ -229,7 +235,7 @@ const CreateActivitiesScreen: React.FC = () => {
   return (
     <div className="flex flex-col lg:flex-row items-start w-full min-h-screen p-6">
       <div className="flex-1 w-full lg:w-1/2 px-2">
-        <PreviewSection previewData={previewData} iscreate/>
+        <PreviewSection previewData={previewData} iscreate />
       </div>
       <div className="flex-1 w-full lg:w-1/2 px-2">
         <FormSection

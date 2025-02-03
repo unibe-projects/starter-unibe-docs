@@ -13,6 +13,7 @@ export interface Documents {
   description: string;
   tags: string;
   path?: string;
+  type?: string;
   createdAt?: string;
   updatedAt?: string;
   file: File;

@@ -1,18 +1,17 @@
-
 import { gql } from '@apollo/client';
 
 export const CREATE_DOCUMENTS = gql`
-  mutation CreateDocuments($name: String!, $path: String!, $tags: String!) {
-    createDocuments(input: {name: $name, path: $path, tags: $tags}) {
+  mutation CreateDocuments($name: String!, $path: String!, $tags: String!, $type: String!) {
+    createDocuments(input: { name: $name, path: $path, tags: $tags, type: $type }) {
       id
       createdAt
     }
   }
 `;
 
-export const CREATE_ACTIVITY_DOCUMENTS =  gql`
+export const CREATE_ACTIVITY_DOCUMENTS = gql`
   mutation CreateActivityDocuments($documentsId: ID!, $activityId: ID!) {
-    createActivityDocuments(input: {documentsId: $documentsId, activityId: $activityId}) {
+    createActivityDocuments(input: { documentsId: $documentsId, activityId: $activityId }) {
       id
       createdAt
     }
@@ -50,6 +49,7 @@ export const LIST_DOCUMENTS_all = gql`
               name
               path
               tags
+              type
               updatedAt
               createdAt
             }

@@ -12,7 +12,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ document, period, proyect }
   const { resourceUrl } = useResourcesController(document.path ?? '');
   const fileIcon = getFileTypeIcon(
     Array.isArray(document.tags) ? document.tags : [document.tags],
-    resourceUrl
+    resourceUrl,
   );
 
   return (
@@ -23,12 +23,13 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ document, period, proyect }
         <span className="text-3xl">{fileIcon}</span>
       )}
       <div>
-        <h3 className="font-semibold">{document.name}</h3>
+        <h3 className="font-semibold">Tipo: {document.type}</h3>
+        <h3 className="font-semibold">Nombre: {document.name}</h3>
         <p className="text-sm text-gray-500">proyecto: {proyect.name}</p>
         <p className="text-sm text-gray-500">
           periodo: {period.year}-{period.semester}
         </p>
-        <p className="text-sm text-gray-500">Tipo: {document.tags.toString()}</p>
+        <p className="text-sm text-gray-500">tags: {document.tags.toString()}</p>
         <p className="text-xs text-gray-400">
           Creado: {new Date(document.createdAt ?? '').toLocaleString()}
         </p>

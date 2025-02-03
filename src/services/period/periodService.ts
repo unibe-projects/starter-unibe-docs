@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 
-
 export const LIST_PERIODS = gql`
   query ListPeriods($periodProyectId: ID!) {
     listPeriods(filter: { periodProyectId: { eq: $periodProyectId } }) {
@@ -14,7 +13,6 @@ export const LIST_PERIODS = gql`
     }
   }
 `;
-
 
 export const CREATE_PERIOD = gql`
   mutation CreatePeriod(
@@ -33,6 +31,17 @@ export const CREATE_PERIOD = gql`
     ) {
       id
       createdAt
+    }
+  }
+`;
+
+export const GET_PERIODS = gql`
+  query MyQuery {
+    listPeriods {
+      items {
+        semester
+        year
+      }
     }
   }
 `;
