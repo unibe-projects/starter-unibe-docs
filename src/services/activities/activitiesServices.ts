@@ -72,6 +72,7 @@ export const LIST_ACTIVITIES = (projectId: string, periodId: string) => gql`
         id
         project_manager
         name
+        status
       }
     }
   }
@@ -107,6 +108,7 @@ export const GET_ACTIVITY = gql`
           documents {
             name
             path
+            type
           }
         }
     }
@@ -180,6 +182,15 @@ export const GET_ACTIVITIES = gql`
           semester
         }
       }
+    }
+  }
+`;
+
+export const UPDATE_ACTIVITY_STATUS = gql`
+  mutation UpdateActivityStatus($id: ID!, $status: ActivitiesStatusEnum!) {
+    updateActivity(input: { id: $id, status: $status }) {
+      id
+      status
     }
   }
 `;

@@ -16,11 +16,11 @@ const DocumentPreview: React.FC<{ documents: Documents[]; isCreate: boolean }> =
             )
             .map((doc, index) => (
               <div key={index} className="rounded-lg p-4 flex flex-col items-center">
-                <p className="text-gray-700 font-semibold text-center">{doc.name}</p>
+                <p className="text-gray-700 font-semibold text-center">{doc.type}</p>
                 {doc.file && (
                   <img
                     src={URL.createObjectURL(doc.file)}
-                    alt={doc.name}
+                    alt={doc.type}
                     className="w-40 h-40 object-cover rounded-md"
                   />
                 )}
@@ -37,9 +37,9 @@ const DocumentPreview: React.FC<{ documents: Documents[]; isCreate: boolean }> =
                     key={index}
                     className="border border-gray-400 rounded-lg p-4 shadow-md overflow-hidden"
                   >
-                    <p className="text-gray-700 font-semibold">{doc.name}</p>
+                    <p className="text-gray-700 font-semibold">{doc.type}</p>
 
-                    <DataDocuments name={doc.name} path={doc.path ?? ''} />
+                    <DataDocuments name={doc.type ?? ''} path={doc.path ?? ''} />
                   </div>
                 );
               })}
