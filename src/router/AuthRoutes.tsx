@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '../hooks/auth/useUser';
 import Header from '../components/common/header/Header';
 import PageWrapper from '../components/common/page/PageWrapper';
 import Sidebar from '../components/common/sidebar/Sidebar';
@@ -14,8 +15,41 @@ import CreateActivitiesScreen from '../pages/modules/activities/CreateActivities
 import Breadcrumbs from '../components/common/header/Breadcrumbs';
 import ActivitiesViewScreen from '../pages/modules/activities/ActivitiesViewScreen';
 import DocumentsScreen from '../pages/modules/documents/DocumentsScreen';
+interface RouteConfig {
+  path: string;
+  element: JSX.Element;
+}
+const roleRoutes: Record<string, RouteConfig[]> = {
+  ADMIN: [
+    { path: '/home', element: <HomeScreen /> },
+    { path: '/documentos', element: <DocumentsScreen /> },
+    { path: '/settings/change-password', element: <SettingsUpdatePasswordScreen /> },
+    { path: '/proyecto/periodo/actividad/calendar', element: <CalendarScreen /> },
+    { path: '/proyecto', element: <ProyectScreen /> },
+    { path: '/proyecto/periodo', element: <PeriodScreen /> },
+    { path: '/proyecto/periodo/actividad', element: <ActivitiesScreen /> },
+    { path: '/proyecto/periodo/actividad/crear-actividad', element: <CreateActivitiesScreen /> },
+    { path: '/proyecto/periodo/actividad/generar-informe', element: <GenerateDocScreen /> },
+    { path: '/proyecto/periodo/actividad/view', element: <ActivitiesViewScreen /> },
+  ],
+  DOCTOR: [
+    { path: '/home', element: <HomeScreen /> },
+    { path: '/documentos', element: <DocumentsScreen /> },
+    { path: '/settings/change-password', element: <SettingsUpdatePasswordScreen /> },
+    { path: '/proyecto/periodo/actividad/calendar', element: <CalendarScreen /> },
+    { path: '/proyecto', element: <ProyectScreen /> },
+    { path: '/proyecto/periodo', element: <PeriodScreen /> },
+    { path: '/proyecto/periodo/actividad', element: <ActivitiesScreen /> },
+    { path: '/proyecto/periodo/actividad/crear-actividad', element: <CreateActivitiesScreen /> },
+    { path: '/proyecto/periodo/actividad/generar-informe', element: <GenerateDocScreen /> },
+    { path: '/proyecto/periodo/actividad/view', element: <ActivitiesViewScreen /> },
+  ],
+};
 
 const AuthRoutes: React.FC = () => {
+  const { user } = useAuth();
+  const role =  user?.["custom:role"] || 'DOCTOR';
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
@@ -26,26 +60,9 @@ const AuthRoutes: React.FC = () => {
             <Breadcrumbs />
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
-              <Route path="/home" element={<HomeScreen />} />
-              <Route path="/documentos" element={<DocumentsScreen />} />
-              <Route path="/settings/change-password" element={<SettingsUpdatePasswordScreen />} />
-              <Route path="/proyecto/periodo/actividad/calendar" element={<CalendarScreen />} />
-              <Route path="/proyecto" element={<ProyectScreen />} />
-              <Route path="/proyecto/periodo" element={<PeriodScreen />} />
-              <Route path="/proyecto/periodo/actividad" element={<ActivitiesScreen />} />
-              <Route
-                path="/proyecto/periodo/actividad/crear-actividad"
-                element={<CreateActivitiesScreen />}
-              />
-              <Route
-                path="/proyecto/periodo/actividad/crear-actividad"
-                element={<CreateActivitiesScreen />}
-              />
-              <Route
-                path="/proyecto/periodo/actividad/generar-informe"
-                element={<GenerateDocScreen />}
-              />
-              <Route path="/proyecto/periodo/actividad/view" element={<ActivitiesViewScreen />} />
+              {roleRoutes[role]?.map(({ path, element }: RouteConfig) => (
+                <Route key={path} path={path} element={element} />
+              ))}
               <Route path="*" element={<NotFoundScreen />} />
             </Routes>
           </main>

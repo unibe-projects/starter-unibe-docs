@@ -7,11 +7,15 @@ import PeriodList from '../../../components/period/PeriodList';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
+import { useAuth } from '../../../hooks/auth/useUser';
 
 const PeriodScreen: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
   const { periodProyectId, nameProyect } = location.state || {};
+  const { user } = useAuth();
+  const role = user?.["custom:role"];
+
   const {
     data,
     loading,
@@ -20,6 +24,7 @@ const PeriodScreen: React.FC = () => {
   } = useQuery(LIST_PERIODS, {
     variables: { periodProyectId },
   });
+
   const [createPeriod] = useMutation(CREATE_PERIOD);
   const { handleError, errorMessage, clearError } = useErrorHandler();
   const navigate = useNavigate();
@@ -71,17 +76,19 @@ const PeriodScreen: React.FC = () => {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Periodos para {nameProyect}</h1>
+      {role === "ADMIN" && (
+        <div className="flex justify-end mb-8">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
+          >
+            Crear Periodo
+          </button>
+        </div>
+      )}
 
-      {/* Button to open modal */}
-      <div className="flex justify-end mb-8">
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
-        >
-          Crear Periodo
-        </button>
-      </div>
       {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+
       <CreatePeriodModal
         isOpen={isModalOpen}
         onCreate={handleCreatePeriod}

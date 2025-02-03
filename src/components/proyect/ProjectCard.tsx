@@ -1,6 +1,7 @@
 import React from 'react';
 import { Proyect } from '../../pages/modules/proyect/ProyectScreen';
 import useResourcesController from '../../hooks/resource/resourcesController';
+import { useAuth } from '../../hooks/auth/useUser';
 
 interface ProjectCardProps {
   project: Proyect;
@@ -10,7 +11,10 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onDelete }) => {
+  const { user } = useAuth();
+  const role = user?.["custom:role"];
   const { resourceUrl } = useResourcesController(project.path);
+
   const handleImageClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClick(project.id, project.name);
@@ -40,20 +44,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
       <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300">
         <h3 className="text-white text-xl font-semibold">{project.name}</h3>
       </div>
-      <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition duration-300">
-        <button
-          onClick={handleEditClick}
-          className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition"
-        >
-          Editar
-        </button>
-        <button
-          onClick={handleDeleteClick}
-          className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition"
-        >
-          Eliminar
-        </button>
-      </div>
+      {role === "ADMIN" && (
+        <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition duration-300">
+          <button
+            onClick={handleEditClick}
+            className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition"
+          >
+            Editar
+          </button>
+          <button
+            onClick={handleDeleteClick}
+            className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition"
+          >
+            Eliminar
+          </button>
+        </div>
+      )}
     </div>
   );
 };
