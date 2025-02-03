@@ -48,7 +48,7 @@ const roleRoutes: Record<string, RouteConfig[]> = {
 
 const AuthRoutes: React.FC = () => {
   const { user } = useAuth();
-  const role =  user?.["custom:role"] || 'DOCTOR';
+  const role = user?.['custom:role'] || 'DOCTOR';
 
   return (
     <div className="flex flex-col h-screen">

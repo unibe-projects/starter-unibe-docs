@@ -4,8 +4,12 @@ import DocumentsList from '../../../components/documents/DocumentsList';
 
 const DocumentsScreen = () => {
   const { loading, error, data } = useQuery(LIST_DOCUMENTS_all);
-  if (loading) return <p className="text-center">Cargando...</p>;
-  if (error) return <p className="text-red-500">Error: {error.message}</p>;
+  if (loading) {
+    return <p className="text-center">Cargando...</p>;
+  }
+  if (error) {
+    return <p className="text-red-500">Error: {error.message}</p>;
+  }
 
   const items = data?.listActivities?.items || [];
 

@@ -12,7 +12,7 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onDelete }) => {
   const { user } = useAuth();
-  const role = user?.["custom:role"];
+  const role = user?.['custom:role'];
   const { resourceUrl } = useResourcesController(project.path);
 
   const handleImageClick = (e: React.MouseEvent) => {
@@ -44,7 +44,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
       <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300">
         <h3 className="text-white text-xl font-semibold">{project.name}</h3>
       </div>
-      {role === "ADMIN" && (
+      {role === 'ADMIN' && (
         <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition duration-300">
           <button
             onClick={handleEditClick}

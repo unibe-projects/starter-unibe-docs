@@ -32,14 +32,17 @@ export const AuthContext = createContext<AuthInterface | undefined>(undefined);
 export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
   const [user, setUser] = useState<FetchUserAttributesOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const setCurrentUser = async (): Promise<void> => {
     try {
       setIsLoading(true);
       const userAttributes: FetchUserAttributesOutput = await fetchUserAttributes();
+      setIsAuthenticated(!!userAttributes);
       setUser(userAttributes);
     } catch (error) {
       setUser(null);
+      setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
     }
@@ -151,7 +154,7 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
   const providerValue = useMemo(
     () => ({
       user,
-      isAuthenticated: !!user,
+      isAuthenticated,
       handleSignIn,
       handleConfirmSignIn,
       handleSignOut,
@@ -162,7 +165,7 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
       handleSignUpConfirmation,
       isLoading,
     }),
-    [user, isLoading, handleSignIn, handleSignOut, handleConfirmSignIn],
+    [user, isLoading, handleSignIn, handleSignOut, handleConfirmSignIn, isAuthenticated],
   );
 
   return <AuthContext.Provider value={providerValue}>{children}</AuthContext.Provider>;

@@ -14,7 +14,7 @@ const PeriodScreen: React.FC = () => {
   const location = useLocation();
   const { periodProyectId, nameProyect } = location.state || {};
   const { user } = useAuth();
-  const role = user?.["custom:role"];
+  const role = user?.['custom:role'];
 
   const {
     data,
@@ -76,7 +76,7 @@ const PeriodScreen: React.FC = () => {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Periodos para {nameProyect}</h1>
-      {role === "ADMIN" && (
+      {role === 'ADMIN' && (
         <div className="flex justify-end mb-8">
           <button
             onClick={() => setIsModalOpen(true)}
