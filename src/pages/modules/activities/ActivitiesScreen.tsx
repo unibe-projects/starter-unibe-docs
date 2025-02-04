@@ -49,8 +49,6 @@ const ActivitiesScreen: React.FC = () => {
 
   const activities = data?.listActivities?.items ?? [];
 
-  console.log('activities:', activities)
-
   const getStatusColor = (status: ActivitiesStatusEnum): string => {
   switch (status) {
     case ActivitiesStatusEnum.EARRING:
