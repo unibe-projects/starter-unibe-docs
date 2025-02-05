@@ -194,3 +194,34 @@ export const UPDATE_ACTIVITY_STATUS = gql`
     }
   }
 `;
+
+
+export const GET_COMPLETED_ACTIVITIES = gql`
+  query GetCompletedActivities(
+    $activityPeriodId: ID!, 
+    $activityProyectId: ID!
+  ) {
+    listActivities(
+      filter: {
+        status: { eq: COMPLETED },
+        activityPeriodId: { eq: $activityPeriodId },
+        activityProyectId: { eq: $activityProyectId }
+      }
+    ) {
+      items {
+        name
+        createdAt
+        number_participants
+        budget_used
+        Documents {
+          items {
+            documents {
+              path
+              type
+            }
+          }
+        }
+      }
+    }
+  }
+`;

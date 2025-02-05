@@ -1,3 +1,5 @@
+import { ActivitiesStatusEnum } from "../../enums/activities/ActivitiesStatusEnum";
+
 export interface Task {
   name: string;
   description: string;
@@ -67,4 +69,64 @@ export interface Period {
 
 export interface Proyect {
   name: string;
+}
+
+
+export interface ListActivities {
+  id: string;
+  project_manager: string;
+  name: string;
+  status: ActivitiesStatusEnum;
+}
+
+
+export interface ActivityTaskWrapper {
+  activityTasks: Task;
+  __typename: string;
+}
+
+interface ActivityTasksConnection {
+  items: ActivityTaskWrapper[];
+  __typename: string;
+}
+
+interface Document {
+  name: string;
+  path: string;
+  type: string;
+  __typename: string;
+}
+
+export interface DocumentWrapper {
+  documents: Document;
+  __typename: string;
+}
+
+interface DocumentsConnection {
+  items: DocumentWrapper[];
+  __typename: string;
+}
+
+export interface Activity {
+  id: string;
+  name: string;
+  activity_date: string;
+  general_objective: string;
+  executing_institution: string;
+  project_manager: string;
+  unit: string;
+  charge: string;
+  start_time: string;
+  hora_fin: string;
+  number_participants: number;
+  budget_used: string;
+  status: string;
+  createdAt: string;
+  ActivityTasks: ActivityTasksConnection;
+  Documents: DocumentsConnection;
+  __typename: string;
+}
+
+export interface ActivityResponse {
+  getActivity: Activity;
 }
