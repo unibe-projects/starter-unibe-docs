@@ -6,7 +6,7 @@ const TITLE_SPACING = 5;
 const LABEL_FONT_SIZE = 10;
 const CONTENT_FONT_SIZE = 10;
 
-export const dibujarObjetivoGeneral = (doc: jsPDF, activity: any, startY: number) => {
+export const generalObjective = (doc: jsPDF, activity: any, startY: number) => {
   doc.setFontSize(LABEL_FONT_SIZE);
   doc.setFont('Helvetica', 'bold');
   doc.text('2. Objetivo General', MARGIN_LEFT, startY);
@@ -16,5 +16,6 @@ export const dibujarObjetivoGeneral = (doc: jsPDF, activity: any, startY: number
   doc.setFontSize(CONTENT_FONT_SIZE);
   doc.setFont('Helvetica', 'normal');
   doc.text(generalObjective, MARGIN_LEFT, startY);
-  return startY + 15; // Ajusta la posición para el siguiente bloque
+
+  return startY + 15;
 };
