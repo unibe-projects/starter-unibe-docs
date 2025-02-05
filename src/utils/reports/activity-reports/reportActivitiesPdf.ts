@@ -5,63 +5,7 @@ import { ActivitiTask } from './activityTask';
 import { additionalItems } from './additionalItems';
 import { generalInformation } from './generalInformation';
 import { documentsImage } from './documentsImage';
-
-interface ActivityTask {
-  name: string;
-  description: string;
-  __typename: string;
-}
-
-export interface ActivityTaskWrapper {
-  activityTasks: ActivityTask;
-  __typename: string;
-}
-
-interface ActivityTasksConnection {
-  items: ActivityTaskWrapper[];
-  __typename: string;
-}
-
-interface Document {
-  name: string;
-  path: string;
-  type: string;
-  __typename: string;
-}
-
-export interface DocumentWrapper {
-  documents: Document;
-  __typename: string;
-}
-
-interface DocumentsConnection {
-  items: DocumentWrapper[];
-  __typename: string;
-}
-
-export interface Activity {
-  id: string;
-  name: string;
-  activity_date: string;
-  general_objective: string;
-  executing_institution: string;
-  project_manager: string;
-  unit: string;
-  charge: string;
-  start_time: string;
-  hora_fin: string;
-  number_participants: number;
-  budget_used: string;
-  status: string;
-  createdAt: string;
-  ActivityTasks: ActivityTasksConnection;
-  Documents: DocumentsConnection;
-  __typename: string;
-}
-
-export interface ActivityResponse {
-  getActivity: Activity;
-}
+import { ActivityResponse, DocumentWrapper } from '../../../interface/activities/activities.interface';
 
 export const reportActivitiesPdf = async (
   activity: ActivityResponse,

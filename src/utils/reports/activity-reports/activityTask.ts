@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import { ActivityResponse, ActivityTaskWrapper } from './reportActivitiesPdf';
+import { ActivityResponse, ActivityTaskWrapper } from '../../../interface/activities/activities.interface';
 
 const MARGIN_LEFT = 20;
 const LABEL_FONT_SIZE = 10;

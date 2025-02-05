@@ -1,6 +1,6 @@
 import { getUrl } from 'aws-amplify/storage';
 import jsPDF from 'jspdf';
-import { DocumentWrapper } from './reportActivitiesPdf';
+import { DocumentWrapper } from '../../../interface/activities/activities.interface';
 
 const getBase64Image = async (url: string): Promise<string> => {
   const response = await fetch(url);
