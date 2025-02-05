@@ -15,6 +15,7 @@ import CreateActivitiesScreen from '../pages/modules/activities/CreateActivities
 import Breadcrumbs from '../components/common/header/Breadcrumbs';
 import ActivitiesViewScreen from '../pages/modules/activities/ActivitiesViewScreen';
 import DocumentsScreen from '../pages/modules/documents/DocumentsScreen';
+import AnnualReportScreen from '../pages/modules/activities/AnnualReportScreen';
 interface RouteConfig {
   path: string;
   element: JSX.Element;
@@ -29,7 +30,7 @@ const roleRoutes: Record<string, RouteConfig[]> = {
     { path: '/proyecto/periodo', element: <PeriodScreen /> },
     { path: '/proyecto/periodo/actividad', element: <ActivitiesScreen /> },
     { path: '/proyecto/periodo/actividad/crear-actividad', element: <CreateActivitiesScreen /> },
-    { path: '/proyecto/periodo/actividad/generar-informe', element: <GenerateDocScreen /> },
+    { path: '/proyecto/periodo/actividad/generar-informe', element: <AnnualReportScreen /> },
     { path: '/proyecto/periodo/actividad/view', element: <ActivitiesViewScreen /> },
   ],
   DOCTOR: [
@@ -41,7 +42,7 @@ const roleRoutes: Record<string, RouteConfig[]> = {
     { path: '/proyecto/periodo', element: <PeriodScreen /> },
     { path: '/proyecto/periodo/actividad', element: <ActivitiesScreen /> },
     { path: '/proyecto/periodo/actividad/crear-actividad', element: <CreateActivitiesScreen /> },
-    { path: '/proyecto/periodo/actividad/generar-informe', element: <GenerateDocScreen /> },
+    { path: '/proyecto/periodo/actividad/generar-informe', element: <AnnualReportScreen /> },
     { path: '/proyecto/periodo/actividad/view', element: <ActivitiesViewScreen /> },
   ],
 };
@@ -56,7 +57,8 @@ const AuthRoutes: React.FC = () => {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <PageWrapper>
-          <main className="flex-1 overflow-auto pb-8">
+        <main className="flex-1 overflow-auto pb-12 pt-4 min-h-[calc(100vh-100px)]">
+
             <Breadcrumbs />
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />

@@ -1,13 +1,9 @@
 import React, { useMemo } from 'react';
 import { Calendar } from 'react-big-calendar';
 import localizer from '../../utils/calendar/calendarLocalizer';
+import { getStatusColor } from '../../utils/getStatusColor';
+import { ActivitiesStatusEnum } from '../../enums/activities/ActivitiesStatusEnum';
 
-export enum ActivitiesStatusEnum {
-  EARRING = 'EARRING',
-  COMPLETED = 'COMPLETED',
-  CANCELADA = 'CANCELADA',
-  IN_PROGRESS = 'IN_PROGRESS',
-}
 
 interface Event {
   title: string;
@@ -22,20 +18,6 @@ interface CalendarComponentProps {
   data: any;
 }
 
-const getStatusColor = (status: ActivitiesStatusEnum): string => {
-  switch (status) {
-  case ActivitiesStatusEnum.EARRING:
-    return '#FFA500';
-  case ActivitiesStatusEnum.COMPLETED:
-    return '#4CAF50';
-  case ActivitiesStatusEnum.CANCELADA:
-    return '#F44336';
-  case ActivitiesStatusEnum.IN_PROGRESS:
-    return '#2196F3';
-  default:
-    return '#9E9E9E';
-  }
-};
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ data }) => {
   const events: Event[] = useMemo(() => {

@@ -90,7 +90,7 @@ interface ActivityTasksConnection {
   __typename: string;
 }
 
-interface Document {
+interface DocumentItem  {
   name: string;
   path: string;
   type: string;
@@ -98,7 +98,7 @@ interface Document {
 }
 
 export interface DocumentWrapper {
-  documents: Document;
+  documents: DocumentItem;
   __typename: string;
 }
 

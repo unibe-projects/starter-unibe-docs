@@ -13,7 +13,7 @@ const getBase64Image = async (url: string): Promise<string> => {
   });
 };
 
-export const generateImagesForPDF = async (doc: jsPDF, documents: any[], startY: number) => {
+export const anexos = async (doc: jsPDF, documents: any[], startY: number) => {
   let yPosition = startY + 10;
   const imageDocuments = documents.filter((doc: any) => doc.documents.type === 'Fotos');
   if (imageDocuments.length === 0) return yPosition;
@@ -39,10 +39,7 @@ export const generateImagesForPDF = async (doc: jsPDF, documents: any[], startY:
 
   for (const document of imageDocuments) {
     const filePath = document.documents.path;
-    console.log('Archivo:', filePath);
-
     const resourceUrl = await getUrlStorages(filePath);
-    console.log('resourceUrl:', resourceUrl);
     if (resourceUrl) {
       try {
         const base64Image = await getBase64Image(resourceUrl);
