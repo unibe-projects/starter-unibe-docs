@@ -81,7 +81,7 @@ const ActivitiesViewScreen = () => {
       {previewData ? (
         <PreviewSection previewData={previewData} iscreate={false} />
       ) : (
-        <NoDataMessage mesagge="No hay actividades que puedas observar." />
+        <NoDataMessage message="No hay actividades que puedas observar." />
       )}
     </div>
   );

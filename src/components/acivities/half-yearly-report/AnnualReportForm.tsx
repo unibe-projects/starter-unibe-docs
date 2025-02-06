@@ -1,4 +1,5 @@
-import { Form, Formik, Field } from 'formik';
+import { useState } from 'react';
+import { Form, Formik } from 'formik';
 import { useQuery } from '@apollo/client';
 import { GET_COMPLETED_ACTIVITIES } from '../../../services/activities/activitiesServices';
 import { useLocation } from 'react-router-dom';
@@ -8,20 +9,7 @@ import { reporterSemester } from '../../../utils/reports/reports-semester/report
 import LoadingSpinner from '../../loadings/spinner/LoadingSpinner';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 import NoDataMessage from '../../common/NoContent/NoDataMessage';
-
-interface FormData {
-  executing_institution: string;
-  project_manager: string;
-  charge: string;
-  unit: string;
-  general_objective: string;
-  project_scope: string;
-  project_proposal: string;
-  states_advances: string;
-  problems_risks: string;
-  upcoming_tasks: string;
-  signature: File | null;
-}
+import LoadingButton from '../../loadings/buttons/LoadingButton';
 
 const AnnualReportForm = () => {
   const location = useLocation();
@@ -32,6 +20,8 @@ const AnnualReportForm = () => {
     variables: { activityPeriodId: periodId, activityProyectId: periodProyectId },
     skip: !periodId || !periodProyectId,
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRetryFetch = () => {
     refetch();
@@ -64,14 +54,21 @@ const AnnualReportForm = () => {
           }}
           validationSchema={validationSchemaReportHalfYearly}
           onSubmit={async (values) => {
-            const completedActivities = data?.listActivities?.items || [];
-            await reporterSemester({
-              ...values,
-              completedActivities,
-              periodYear,
-              periodSemester,
-              nameProyect,
-            });
+            setIsLoading(true);
+            try {
+              const completedActivities = data?.listActivities?.items || [];
+              await reporterSemester({
+                ...values,
+                completedActivities,
+                periodYear,
+                periodSemester,
+                nameProyect,
+              });
+            } catch (error) {
+              console.error('Error generando el reporte:', error);
+            } finally {
+              setIsLoading(false);
+            }
           }}
         >
           {({ values, handleChange, setFieldValue }) => {
@@ -194,8 +191,9 @@ const AnnualReportForm = () => {
                   <button
                     type="submit"
                     className="bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition duration-200"
+                    disabled={isLoading}
                   >
-                    Generar PDF
+                    {isLoading ? <LoadingButton text="Generando reporte..." /> : 'Descargar Reporte'}
                   </button>
                 </div>
               </Form>
@@ -203,7 +201,7 @@ const AnnualReportForm = () => {
           }}
         </Formik>
       ) : (
-        <NoDataMessage mesagge="No hay actividades realizadas o culminadas para realizar el informe." />
+        <NoDataMessage message="No hay actividades realizadas o culminadas para realizar el informe." />
       )}
     </div>
   );

@@ -105,7 +105,7 @@ const PeriodScreen: React.FC = () => {
           onViewActivities={handleViewActivities}
         />
       ) : (
-        <NoDataMessage mesagge="No hay periodos disponibles." />
+        <NoDataMessage message="No hay periodos disponibles." />
       )}
     </div>
   );

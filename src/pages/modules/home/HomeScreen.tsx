@@ -152,7 +152,7 @@ const HomeScreen = () => {
           </div>
         </>
       ) : (
-        <NoDataMessage mesagge="No hay Actividades realizadas para mostrar un analisis." />
+        <NoDataMessage message="No hay actividades realizadas para mostrar un análisis." />
       )}
     </div>
   );
