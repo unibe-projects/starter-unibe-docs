@@ -1,31 +1,41 @@
-const Pagination = ({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: {
+import React from 'react';
+
+type PaginationProps = {
+  documentsPerPage: number;
+  totalDocuments: number;
+  paginate: (pageNumber: number) => void;
   currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
+};
+
+const Pagination: React.FC<PaginationProps> = ({
+  documentsPerPage,
+  totalDocuments,
+  paginate,
+  currentPage,
 }) => {
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(totalDocuments / documentsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
-    <div className="flex justify-center mt-6">
-      <button
-        className="px-3 py-1 mx-1 border rounded-md bg-gray-200 dark:bg-gray-700"
-        disabled={currentPage === 1}
-        onClick={() => onPageChange(currentPage - 1)}
-      >
-        Anterior
-      </button>
-      <span className="px-3 py-1">
-        {currentPage} / {totalPages}
-      </span>
-      <button
-        className="px-3 py-1 mx-1 border rounded-md bg-gray-200 dark:bg-gray-700"
-        disabled={currentPage === totalPages}
-        onClick={() => onPageChange(currentPage + 1)}
-      >
-        Siguiente
-      </button>
+    <div className="flex justify-center mt-4">
+      <ul className="flex space-x-2">
+        {pageNumbers.map((number) => (
+          <li key={number}>
+            <button
+              onClick={() => paginate(number)}
+              className={`px-4 py-2 border rounded-full ${
+                currentPage === number
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-white text-blue-500'
+              }`}
+            >
+              {number}
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -25,12 +25,12 @@ const DocumentCard: React.FC<DocumentCardProps> = ({ document, period, proyect }
         <span className="text-3xl">{fileIcon}</span>
       )}
       <div>
-        <h3 className="font-semibold">Tipo: {document.documents.type}</h3>
-        <h3 className="font-semibold">Nombre: {document.documents.name}</h3>
-        <p className="text-sm text-gray-500">proyecto: {proyect.name}</p>
-        <p className="text-sm text-gray-500">
+        <h3 className="font-semibold">Proyecto: {proyect.name}</h3>
+        <p className="font-semibold">
           periodo: {period.year}-{period.semester}
         </p>
+        <h3 className="font-semibold">Nombre del archivo: {document.documents.name}</h3>
+        <p className="text-sm text-gray-500">Tipo: {document.documents.type}</p>
         <p className="text-sm text-gray-500">tags: {document.documents.tags.toString()}</p>
         <p className="text-xs text-gray-400">
           Creado: {new Date(document.documents.createdAt ?? '').toLocaleString()}
