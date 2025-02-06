@@ -9,11 +9,11 @@ export const PeriodList: React.FC<{
   onViewActivities: (period: { id: string; year: string; semester: string }) => void;
 }> = ({ periods, onViewActivities }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 ">
       {periods.map((period, index) => (
         <div
           key={index}
-          className="bg-white shadow-lg rounded-lg flex flex-col justify-center items-center text-center h-auto w-full p-6"
+          className="bg-light-base100 shadow-lg rounded-lg flex flex-col justify-center items-center text-center h-auto w-full p-6"
         >
           <h2 className="text-2xl font-bold text-gray-800">
             Periodo: {period.year} - {period.semester}

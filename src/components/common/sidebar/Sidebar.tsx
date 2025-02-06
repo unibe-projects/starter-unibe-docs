@@ -4,12 +4,12 @@ import ProfileImage from '../../../assets/sidebar/ProfileImage.webp';
 import { useAuth } from '../../../hooks/auth/useUser';
 
 const Sidebar = () => {
-  const activeClass = 'bg-blue-500 text-white font-semibold';
+  const activeClass = 'bg-light-primary text-white font-semibold';
   const inactiveClass = 'hover:bg-blue-100 text-gray-600';
   const { user } = useAuth();
 
   return (
-    <div className="flex flex-col w-64 bg-white shadow-lg rounded-lg px-6 py-8 relative border-r-2 border-gray-200">
+    <div className="flex flex-col w-64 bg-light shadow-lg rounded-lg px-6 py-8 relative border-r-2 border-gray-200">
       <div className="absolute top-0 right-0 h-full w-1 bg-gradient-to-b from-gray-800 to-transparent" />
       <div className="flex items-center justify-center mb-6">
         <img
@@ -19,7 +19,7 @@ const Sidebar = () => {
         />
       </div>
       <div className="flex items-center justify-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">{user?.name}</h2>
+        <h2 className="text-xl font-semibold text-light-textSecondary">{user?.name}</h2>
       </div>
       <nav className="flex flex-col gap-6">
         <NavLink

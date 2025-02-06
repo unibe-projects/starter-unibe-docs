@@ -44,7 +44,7 @@ export default {
           accentContent: '#a7b2e6',
           neutral: '#688cca',
           neutralContent: '#c5cac8',
-          base100: '#d6e4f5',
+          base100: '#e2ebf8',
           base200: '#ded9de',
           base300: '#bebabe',
           baseContent: '#161516',

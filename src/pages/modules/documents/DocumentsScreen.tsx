@@ -35,7 +35,7 @@ const DocumentsScreen = () => {
 
   return (
     <div className="h-auto overflow-y-auto pb-8 pt-4">
-      <h2 className="text-2xl text-light-textSecondary text-start">Lista de Documentos</h2>
+      <h2 className="text-2xl text-light-textSecondary font-bold mb-6">Lista de Documentos</h2>
       <DocumentFilter
         filters={filters}
         onFilterChange={(e) => {

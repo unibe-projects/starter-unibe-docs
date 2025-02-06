@@ -113,26 +113,25 @@ const HomeScreen = () => {
   };
 
   return (
-    <div className="p-8" data-testid="home-screen">
-      <h2 className="text-center text-3xl font-semibold text-blue-600 mb-8">
+    <div className="h-auto overflow-y-auto pb-8 pt-4" data-testid="home-screen">
+      <h2 className="text-2xl text-light-textSecondary font-bold mb-6">
         Análisis de actividades
       </h2>
-
       {Object.entries(groupedByProject).map(([projectName, periodsData]) => (
-        <div key={projectName} className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h3 className="text-2xl font-bold text-blue-800">{projectName}</h3>
+        <div key={projectName} className="bg-light-base100 rounded-lg shadow-md p-6 mb-6">
+          <h3 className="text-2xl font-bold text-light-primary">{projectName}</h3>
           <ul className="mt-4">
             {Object.entries(periodsData).map(([period, count]) => {
               if (period !== 'totalActivities') {
                 return (
-                  <li key={period} className="text-lg text-gray-700">
+                  <li key={period} className="text-lg text-light-primaryContent">
                     {period} - Actividades: {count}
                   </li>
                 );
               }
               return null;
             })}
-            <li className="font-bold text-lg text-green-700 mt-2">
+            <li className="font-bold text-lg text-light-accent mt-2">
               Total de actividades: {periodsData.totalActivities}
             </li>
           </ul>

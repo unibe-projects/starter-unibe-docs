@@ -24,7 +24,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     
     <div
       key={activity.id}
-      className="bg-white shadow-lg rounded-lg p-6 flex justify-between items-center"
+      className="bg-light-base100 shadow-lg rounded-lg p-6 flex justify-between items-center"
     >
       <div>
         <h3 className="text-xl font-semibold">{activity.name}</h3>

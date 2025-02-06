@@ -41,7 +41,7 @@ const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange
         name="periodYear"
         value={filters.periodYear}
         onChange={onFilterChange}
-        className="border p-2 rounded bg-white"
+        className="border p-2 rounded bg-light"
       >
         {years.map((year: string) => (
           <option key={year} value={year}>
@@ -54,7 +54,7 @@ const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange
         name="periodSemester"
         value={filters.periodSemester}
         onChange={onFilterChange}
-        className="border p-2 rounded bg-white"
+        className="border p-2 rounded bg-light"
       >
         {semesters.map((semester: string) => (
           <option key={semester} value={semester}>
@@ -67,7 +67,7 @@ const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange
         name="documentType"
         value={filters.documentType}
         onChange={onFilterChange}
-        className="border p-2 rounded bg-white"
+        className="border p-2 rounded bg-light"
       >
         <option value="">Todos los tipos</option>
         {allowedTypes.map((type: string) => (
@@ -81,7 +81,7 @@ const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange
         name="projectName"
         value={filters.projectName}
         onChange={onFilterChange}
-        className="border p-2 rounded bg-white"
+        className="border p-2 rounded bg-light"
       >
         <option value="">Todos los proyectos</option>
         {projects.map((project: string) => (
@@ -97,7 +97,7 @@ const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange
         value={filters.searchTerm}
         onChange={onFilterChange}
         placeholder="Buscar por nombre o tags"
-        className="border p-2 rounded w-60 bg-white"
+        className="border p-2 rounded w-60 bg-light"
       />
     </div>
   );

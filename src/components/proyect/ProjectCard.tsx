@@ -32,7 +32,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onEdit, onD
 
   return (
     <div
-      className="relative group rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 cursor-pointer"
+      className="relative group rounded-lg overflow-hidden shadow-lg transform transition duration-300 hover:scale-105 cursor-pointer  bg-light-base100"
       onClick={() => onClick(project.id, project.name)}
       style={{ overflow: 'hidden' }}
     >
