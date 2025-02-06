@@ -1,10 +1,13 @@
-import { Form, Formik } from 'formik';
+import { Form, Formik, Field } from 'formik';
 import { useQuery } from '@apollo/client';
 import { GET_COMPLETED_ACTIVITIES } from '../../../services/activities/activitiesServices';
 import { useLocation } from 'react-router-dom';
 import CustomInputActivities from '../../../components/common/form/CustomInputActivities';
 import { validationSchemaReportHalfYearly } from '../../../pages/modules/activities/validationSchemaActivities';
-import { repoerterSemester } from '../../../utils/reports/reports-semester/reporterSemester';
+import { reporterSemester } from '../../../utils/reports/reports-semester/reporterSemester';
+import LoadingSpinner from '../../loadings/spinner/LoadingSpinner';
+import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
+import NoDataMessage from '../../common/NoContent/NoDataMessage';
 
 interface FormData {
   executing_institution: string;
@@ -17,6 +20,7 @@ interface FormData {
   states_advances: string;
   problems_risks: string;
   upcoming_tasks: string;
+  signature: File | null;
 }
 
 const AnnualReportForm = () => {
@@ -24,12 +28,30 @@ const AnnualReportForm = () => {
   const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } =
     location.state || {};
 
-  const { data, loading, error } = useQuery(GET_COMPLETED_ACTIVITIES, {
+  const { data, loading, error, refetch } = useQuery(GET_COMPLETED_ACTIVITIES, {
     variables: { activityPeriodId: periodId, activityProyectId: periodProyectId },
   });
 
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  const listActivities = data?.listActivities?.items.length
+
+  const handleRetryFetch = () =>{
+    refetch();
+  }
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorMessage message="Intentalo otra vez." onRetry={handleRetryFetch} />;
+  }
+
+  if (listActivities > 2) {
+    return (
+      <NoDataMessage mesagge='No hay actividades realizadas o culminadas para realizar el informe.'/>
+    );
+  }  
+
 
   return (
     <Formik
@@ -44,11 +66,12 @@ const AnnualReportForm = () => {
         states_advances: '',
         problems_risks: '',
         upcoming_tasks: '',
+        signature: null,
       }}
       validationSchema={validationSchemaReportHalfYearly}
       onSubmit={async (values) => {
         const completedActivities = data?.listActivities?.items || [];
-        await repoerterSemester({
+        await reporterSemester({
           ...values,
           completedActivities,
           periodYear,
@@ -57,7 +80,12 @@ const AnnualReportForm = () => {
         });
       }}
     >
-      {({ values, handleChange }) => {
+      {({ values, handleChange, setFieldValue }) => {
+        const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+          const file = event.target.files ? event.target.files[0] : null;
+          setFieldValue("signature", file);
+        };
+
         return (
           <Form className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
@@ -158,6 +186,16 @@ const AnnualReportForm = () => {
                 values={values.upcoming_tasks}
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Firma (Imagen)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="mt-1 block w-full text-sm text-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+
             <div className="text-center">
               <button
                 type="submit"

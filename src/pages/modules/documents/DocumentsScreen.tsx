@@ -51,7 +51,7 @@ const DocumentsScreen = () => {
         {filteredDocuments.length > 0 ? (
           <DocumentsList documents={filteredDocuments} />
         ) : (
-          <NoDataMessage/>
+          <NoDataMessage mesagge='No hay documentos disponibles.'/>
         )}
       </div>
     </div>

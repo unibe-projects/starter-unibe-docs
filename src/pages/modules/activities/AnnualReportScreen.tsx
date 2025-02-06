@@ -6,7 +6,7 @@ const AnnualReportScreen = () => {
     <div className="flex items-start justify-center min-h-screen py-8">
       <Instructions />
       <div className="w-full lg:w-2/3 bg-white shadow-lg rounded-lg p-12 border border-gray-300">
-        <h3 className="text-2xl font-bold text-center text-indigo-600 mb-6">Informe de Proyecto Anual</h3>
+        <h3 className="text-2xl font-bold text-center text-light-primary">Informe de Proyecto Semestral</h3>
         <AnnualReportForm />
       </div>
     </div>

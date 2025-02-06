@@ -10,6 +10,9 @@ import {
 } from 'chart.js';
 import { useQuery } from '@apollo/client';
 import { GET_ACTIVITIES } from '../../../services/activities/activitiesServices';
+import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
+import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
+import NoDataMessage from '../../../components/common/NoContent/NoDataMessage';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -34,13 +37,18 @@ interface GroupedByProject {
 }
 
 const HomeScreen = () => {
-  const { loading, error, data } = useQuery(GET_ACTIVITIES);
+  const { loading, error, data, refetch } = useQuery(GET_ACTIVITIES);
+
+  const handleRetryFetch = () => {
+    refetch();
+  };
 
   if (loading) {
-    return <p className="text-center">Loading...</p>;
+    return <LoadingSpinner />;
   }
+
   if (error) {
-    return <p className="text-center text-red-600">Error: {error.message}</p>;
+    return <ErrorMessage message="Intentalo otra vez." onRetry={handleRetryFetch} />;
   }
 
   const groupedByProject: GroupedByProject = data.listActivities.items.reduce(
@@ -51,7 +59,6 @@ const HomeScreen = () => {
         : null;
 
       if (!projectName || !period) {
-        // Si faltan datos, omitir esta actividad
         console.warn('Actividad omitida por falta de datos:', activity);
         return acc;
       }
@@ -68,19 +75,18 @@ const HomeScreen = () => {
 
       return acc;
     },
-    {},
+    {}
   );
 
-  // Obtener todos los periodos únicos de todos los proyectos
   const allPeriods = Object.values(groupedByProject).flatMap((project) =>
-    Object.keys(project).filter((key) => key !== 'totalActivities'),
+    Object.keys(project).filter((key) => key !== 'totalActivities')
   );
-  const uniquePeriods = Array.from(new Set(allPeriods)); // Eliminar duplicados
+  const uniquePeriods = Array.from(new Set(allPeriods));
 
-  const labels = uniquePeriods; // Etiquetas del gráfico: los periodos
+  const labels = uniquePeriods;
 
   const datasets = Object.entries(groupedByProject).map(([projectName, periodsData]) => {
-    const periodData = uniquePeriods.map((period) => periodsData[period] || 0); // Asignar 0 si no hay actividades para ese periodo
+    const periodData = uniquePeriods.map((period) => periodsData[period] || 0);
 
     return {
       label: projectName,
@@ -114,36 +120,40 @@ const HomeScreen = () => {
 
   return (
     <div className="h-auto overflow-y-auto pb-8 pt-4" data-testid="home-screen">
-      <h2 className="text-2xl text-light-textSecondary font-bold mb-6">
-        Análisis de actividades
-      </h2>
-      {Object.entries(groupedByProject).map(([projectName, periodsData]) => (
-        <div key={projectName} className="bg-light-base100 rounded-lg shadow-md p-6 mb-6">
-          <h3 className="text-2xl font-bold text-light-primary">{projectName}</h3>
-          <ul className="mt-4">
-            {Object.entries(periodsData).map(([period, count]) => {
-              if (period !== 'totalActivities') {
-                return (
-                  <li key={period} className="text-lg text-light-primaryContent">
-                    {period} - Actividades: {count}
-                  </li>
-                );
-              }
-              return null;
-            })}
-            <li className="font-bold text-lg text-light-accent mt-2">
-              Total de actividades: {periodsData.totalActivities}
-            </li>
-          </ul>
-        </div>
-      ))}
+      <h2 className="text-2xl text-light-textSecondary font-bold mb-6">Análisis de actividades</h2>
+      {data.listActivities.items.length > 0 ? (
+        <>
+          {Object.entries(groupedByProject).map(([projectName, periodsData]) => (
+            <div key={projectName} className="bg-light-base100 rounded-lg shadow-md p-6 mb-6">
+              <h3 className="text-2xl font-bold text-light-primary">{projectName}</h3>
+              <ul className="mt-4">
+                {Object.entries(periodsData).map(([period, count]) => {
+                  if (period !== 'totalActivities') {
+                    return (
+                      <li key={period} className="text-lg text-light-primaryContent">
+                        {period} - Actividades: {count}
+                      </li>
+                    );
+                  }
+                  return null;
+                })}
+                <li className="font-bold text-lg text-light-accent mt-2">
+                  Total de actividades: {periodsData.totalActivities}
+                </li>
+              </ul>
+            </div>
+          ))}
 
-      <div
-        className="chart-container mx-auto"
-        style={{ maxWidth: '1200px', height: '500px', paddingTop: '40px' }}
-      >
-        <Bar data={chartData} options={options} />
-      </div>
+          <div
+            className="chart-container mx-auto"
+            style={{ maxWidth: '1200px', height: '500px', paddingTop: '40px' }}
+          >
+            <Bar data={chartData} options={options} />
+          </div>
+        </>
+      ) : (
+        <NoDataMessage mesagge="No hay Actividades realizadas para mostrar un analisis." />
+      )}
     </div>
   );
 };

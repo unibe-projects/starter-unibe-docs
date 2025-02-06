@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 export const validationSchemaActivities = Yup.object({
   name: Yup.string()
-    .transform((value) => value?.toUpperCase()) // Convierte el valor a mayúsculas
+    .transform((value) => value?.toUpperCase())
     .required('El nombre es requerido.'),
   charge: Yup.string().required('El cargo es requerido.'),
   activity_date: Yup.date().required('La fecha de la actividad es requerida.'),
@@ -27,15 +27,16 @@ export const validationSchemaActivities = Yup.object({
 });
 
 
- export  const validationSchemaReportHalfYearly = Yup.object({
-    executing_institution: Yup.string().required('Este campo es obligatorio'),
-    project_manager: Yup.string().required('Este campo es obligatorio'),
-    charge: Yup.string().required('Este campo es obligatorio'),
-    unit: Yup.string().required('Este campo es obligatorio'),
-    general_objective: Yup.string().required('Este campo es obligatorio'),
-    project_scope: Yup.string().required('Este campo es obligatorio'),
-    project_proposal: Yup.string().required('Este campo es obligatorio'),
-    states_advances: Yup.string().required('Este campo es obligatorio'),
-    problems_risks: Yup.string().required('Este campo es obligatorio'),
-    upcoming_tasks: Yup.string().required('Este campo es obligatorio'),
-  });
+export const validationSchemaReportHalfYearly = Yup.object({
+  executing_institution: Yup.string().required('Este campo es obligatorio'),
+  project_manager: Yup.string().required('Este campo es obligatorio'),
+  charge: Yup.string().required('Este campo es obligatorio'),
+  unit: Yup.string().required('Este campo es obligatorio'),
+  general_objective: Yup.string().required('Este campo es obligatorio'),
+  project_scope: Yup.string().required('Este campo es obligatorio'),
+  project_proposal: Yup.string().required('Este campo es obligatorio'),
+  states_advances: Yup.string().required('Este campo es obligatorio'),
+  problems_risks: Yup.string().required('Este campo es obligatorio'),
+  upcoming_tasks: Yup.string().required('Este campo es obligatorio'),
+  signature: Yup.mixed().required('La firma es obligatoria') // Validación para la firma
+});

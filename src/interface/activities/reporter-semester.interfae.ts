@@ -51,5 +51,6 @@ export interface DocumentInterface {
     periodYear: string;
     periodSemester: string;
     nameProyect: string;
+    signature: File | null;
   }
   

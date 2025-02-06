@@ -9,6 +9,7 @@ import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
 import { useAuth } from '../../../hooks/auth/useUser';
 import Message from '../../../error/messages/Message';
+import NoDataMessage from '../../../components/common/NoContent/NoDataMessage';
 
 const PeriodScreen: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,11 +98,14 @@ const PeriodScreen: React.FC = () => {
         onCreate={handleCreatePeriod}
         onClose={() => setIsModalOpen(false)}
       />
-
-      <PeriodList
-        periods={data?.listPeriods?.items || []}
-        onViewActivities={handleViewActivities}
-      />
+      {data?.listPeriods?.items.length > 0 ? (
+        <PeriodList
+          periods={data?.listPeriods?.items || []}
+          onViewActivities={handleViewActivities}
+        />
+      ) : (
+        <NoDataMessage mesagge="No hay periodos disponibles." />
+      )}
     </div>
   );
 };

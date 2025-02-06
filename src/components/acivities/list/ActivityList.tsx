@@ -30,7 +30,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   };
 
   if (activities.length === 0) {
-    return <NoDataMessage />;
+    return <NoDataMessage mesagge='No hay actividades disponibles en este período.'/>;
   }
 
   return (

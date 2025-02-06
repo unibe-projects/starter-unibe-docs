@@ -116,7 +116,7 @@ const ProyectScreen: React.FC = () => {
             />
           ))
         ) : (
-          <NoDataMessage/>
+          <NoDataMessage mesagge='No hay proyectos disponibles.'/>
         )}
       </div>
 
