@@ -14,6 +14,7 @@ import CreateProjectModal from '../../../components/proyect/CreateProyectModal';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import Message from '../../../error/messages/Message';
 import NoDataMessage from '../../../components/common/NoContent/NoDataMessage';
+import { useAuth } from '../../../hooks/auth/useUser';
 
 export interface Proyect {
   id: string;
@@ -32,6 +33,8 @@ const ProyectScreen: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Proyect | null>(null);
   const { handleError, errorMessage, clearError } = useErrorHandler();
+   const { user } = useAuth();
+    const role = user?.['custom:role'];
 
   const handleNavigate = (periodProyectId: string, nameProyect: string) => {
     navigate('/proyecto/periodo', {
@@ -96,12 +99,14 @@ const ProyectScreen: React.FC = () => {
     <div className="h-auto overflow-y-auto pb-8 pt-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl text-light-textSecondary font-bold">Proyectos</h1>
-        <button
-          className="bg-light-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Crear Proyecto
-        </button>
+        {role === 'ADMIN' &&(
+           <button
+           className="bg-light-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+           onClick={() => setIsModalOpen(true)}
+         >
+           Crear Proyecto
+         </button>
+        )}
       </div>
       {errorMessage && <Message text={errorMessage} type="error" />}
       <div className="flex flex-col gap-6">

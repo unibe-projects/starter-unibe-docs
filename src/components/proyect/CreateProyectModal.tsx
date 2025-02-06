@@ -31,7 +31,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setImageFile(event.target.files[0]); // Guardar la imagen seleccionada
+      setImageFile(event.target.files[0]);
     }
   };
 
@@ -63,8 +63,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
               let path = selectedProject?.path || '';
 
               if (imageFile) {
-                // Subir la imagen al bucket S3
-                const timestamp = Date.now(); // Evitar nombres duplicados
+                const timestamp = Date.now();
                 const extension = imageFile.name.split('.').pop();
                 const fileName = `public/assets/proyect/${values.name}_${timestamp}.${extension}`;
                 const res = await handleUpload(fileName, imageFile);

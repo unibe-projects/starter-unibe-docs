@@ -25,6 +25,7 @@ const PeriodScreen: React.FC = () => {
     refetch,
   } = useQuery(LIST_PERIODS, {
     variables: { periodProyectId },
+    skip: !periodProyectId
   });
 
   const [createPeriod] = useMutation(CREATE_PERIOD);
