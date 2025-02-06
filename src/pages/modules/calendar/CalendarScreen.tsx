@@ -27,20 +27,20 @@ const CalendarScreen: React.FC = () => {
     refetch();
   };
 
+  if(loading){
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <ErrorMessage message="Intentalo otra vez." onRetry={handleRetryFetch} />;
+  }
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">
+    <div className="h-auto overflow-y-auto pb-8 pt-4">
+      <h1 className="text-2xl text-light-textSecondary font-bold mb-6">
         Calendario del proyecto {nameProyect}-{periodYear}-{periodSemester}
       </h1>
-      {loading && <LoadingSpinner />}
-      {error && (
-        <ErrorMessage message="Hubo un error al cargar los datos." onRetry={handleRetryFetch} />
-      )}
-      {!loading && !error && (
-        <>
-          <CalendarComponent data={data} />
-        </>
-      )}
+      <CalendarComponent data={data} />
     </div>
   );
 };

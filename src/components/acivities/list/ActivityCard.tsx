@@ -3,6 +3,7 @@ import { ActivitiesStatusEnum } from '../../../enums/activities/ActivitiesStatus
 import LoadingButton from '../../../components/loadings/buttons/LoadingButton';
 import { ListActivities } from '../../../interface/activities/activities.interface';
 import { getStatusColor } from '../../../utils/getStatusColor';
+import { translateActivityStatus } from '../../../utils/translateActivityStatus';
 
 interface ActivityCardProps {
   activity: ListActivities
@@ -35,7 +36,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-yellow-600 transition"
           style={{ backgroundColor: getStatusColor(activity.status) }}
         >
-          {activity.status}
+          {translateActivityStatus(activity.status)}
         </span>
         {activity.status !== ActivitiesStatusEnum.CANCELADA && (
           <button

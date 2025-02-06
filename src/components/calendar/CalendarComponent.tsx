@@ -3,6 +3,7 @@ import { Calendar } from 'react-big-calendar';
 import localizer from '../../utils/calendar/calendarLocalizer';
 import { getStatusColor } from '../../utils/getStatusColor';
 import { ActivitiesStatusEnum } from '../../enums/activities/ActivitiesStatusEnum';
+import { translateActivityStatus } from '../../utils/translateActivityStatus';
 
 
 interface Event {
@@ -33,7 +34,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ data }) => {
       const color = getStatusColor(status);
 
       return {
-        title: `${name || 'Sin título'} (${status})`,
+        title: `${name || 'Sin título'} (${translateActivityStatus(status)})`,
         start,
         end,
         allDay: false,
