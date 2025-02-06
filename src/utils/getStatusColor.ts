@@ -3,13 +3,13 @@ import { ActivitiesStatusEnum } from "../enums/activities/ActivitiesStatusEnum";
   export const getStatusColor = (status: ActivitiesStatusEnum): string => {
     switch (status) {
       case ActivitiesStatusEnum.EARRING:
-        return '#FFA500';
+        return '#fbd7a7';
       case ActivitiesStatusEnum.COMPLETED:
-        return '#4CAF50';
+        return '#5cb2af';
       case ActivitiesStatusEnum.CANCELADA:
-        return '#F44336';
+        return '#f76e6e';
       case ActivitiesStatusEnum.IN_PROGRESS:
-        return '#2196F3';
+        return '#3b7e9b';
       default:
         return '#9E9E9E';
     }

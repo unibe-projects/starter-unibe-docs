@@ -40,20 +40,20 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         {activity.status !== ActivitiesStatusEnum.CANCELADA && (
           <button
             onClick={() => generatePdfActivities(activity.id)}
-            className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-yellow-600 transition"
+            className="bg-light-secondary text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-blue-600 transition"
           >
-            {isLoading ? <LoadingButton text="Cargando ...." /> : 'Descargar Informe'}
+            {isLoading ? <LoadingButton text="Cargando ...." /> : 'Descargar Reporte'}
           </button>
         )}
         <button
           onClick={() => handleViewActivities(activity.id)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
+          className="bg-light-accentContent text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-purple-400 transition"
         >
           Ver Detalles
         </button>
         <button
           onClick={() => handleChangeStatus(activity)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
+          className="bg-light-neutral text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-blue-5 00 transition"
         >
           Cambiar Estado
         </button>

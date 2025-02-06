@@ -4,7 +4,7 @@ export const PeriodList: React.FC<{
     year: string;
     semester: string;
     description?: string;
-    createdAt?: any;
+    createdAt?:number | Date | undefined;
   }>;
   onViewActivities: (period: { id: string; year: string; semester: string }) => void;
 }> = ({ periods, onViewActivities }) => {
@@ -22,11 +22,11 @@ export const PeriodList: React.FC<{
             Descripción: {period.description || 'Sin descripción'}
           </p>
           <p className="text-gray-400 mb-4">
-            Creado el: {new Date(period.createdAt).toLocaleDateString()}
+          Creado el: {period.createdAt ? new Date(period.createdAt).toLocaleDateString() : 'Fecha no disponible'}
           </p>
           <button
             onClick={() => onViewActivities(period)}
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+            className="mt-4 bg-light-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
           >
             Ver Actividades
           </button>

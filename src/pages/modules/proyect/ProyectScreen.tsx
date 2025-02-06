@@ -12,6 +12,8 @@ import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 import ProjectCard from '../../../components/proyect/ProjectCard';
 import CreateProjectModal from '../../../components/proyect/CreateProyectModal';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
+import Message from '../../../error/messages/Message';
+import NoDataMessage from '../../../components/common/NoContent/NoDataMessage';
 
 export interface Proyect {
   id: string;
@@ -57,7 +59,6 @@ const ProyectScreen: React.FC = () => {
       refetch();
       clearError();
     } catch (error) {
-      console.error(error);
       handleError({ error });
     }
   };
@@ -86,25 +87,23 @@ const ProyectScreen: React.FC = () => {
   }
 
   if (errorListProyect) {
-    return <ErrorMessage message="Hubo un error al cargar los datos." onRetry={handleRetryFetch} />;
+    return <ErrorMessage message="Intentalo otra vez." onRetry={handleRetryFetch} />;
   }
 
   const projects = data?.listProyects.items || [];
 
   return (
-    <div className="h-full overflow-y-auto p-6 pb-12">
+    <div className="h-auto overflow-y-auto pb-8 pt-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Proyectos</h1>
+        <h1 className="text-2xl text-light-textSecondary font-bold">Proyectos</h1>
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          className="bg-light-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition"
           onClick={() => setIsModalOpen(true)}
         >
           Crear Proyecto
         </button>
       </div>
-
-      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-
+      {errorMessage && <Message text={errorMessage} type="error" />}
       <div className="flex flex-col gap-6">
         {projects.length > 0 ? (
           projects.map((project: Proyect) => (
@@ -117,7 +116,7 @@ const ProyectScreen: React.FC = () => {
             />
           ))
         ) : (
-          <p>No hay proyectos disponibles.</p>
+          <NoDataMessage/>
         )}
       </div>
 

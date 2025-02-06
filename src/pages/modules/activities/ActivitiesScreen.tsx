@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
-import { LIST_ACTIVITIES, UPDATE_ACTIVITY_STATUS, GET_ACTIVITY } from '../../../services/activities/activitiesServices';
+import {
+  LIST_ACTIVITIES,
+  UPDATE_ACTIVITY_STATUS,
+  GET_ACTIVITY,
+} from '../../../services/activities/activitiesServices';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
 import ModalStatus from '../../../components/acivities/ModalStatus';
@@ -19,8 +23,14 @@ const ActivitiesScreen: React.FC = () => {
   const { handleError, errorMessage, clearError } = useErrorHandler();
   const [isLoadingReport, setIsLoadingReport] = useState<Record<string, boolean>>({});
   const [updateActivityStatus] = useMutation(UPDATE_ACTIVITY_STATUS);
-  const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } = location.state || {};
-  const { data, loading, error: errorListProyect, refetch } = useQuery(LIST_ACTIVITIES(periodProyectId, periodId), {
+  const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } =
+    location.state || {};
+  const {
+    data,
+    loading,
+    error: errorListProyect,
+    refetch,
+  } = useQuery(LIST_ACTIVITIES(periodProyectId, periodId), {
     variables: { periodProyectId, periodId },
   });
 
@@ -53,7 +63,7 @@ const ActivitiesScreen: React.FC = () => {
         reportActivitiesPdf(activityData, nameProyect, period);
       }
     } catch (err) {
-      handleError({ error: err})
+      handleError({ error: err });
     } finally {
       setIsLoadingReport((prev) => ({ ...prev, [id]: false }));
     }
@@ -74,8 +84,8 @@ const ActivitiesScreen: React.FC = () => {
         nameProyect,
       },
     });
-  }
-  
+  };
+
   const handleCreateActivity = () => {
     navigate('/proyecto/periodo/actividad/crear-actividad', {
       state: {
@@ -103,15 +113,15 @@ const ActivitiesScreen: React.FC = () => {
 
   const handleSaveStatus = async () => {
     try {
-      if(selectedActivity) {
+      if (selectedActivity) {
         await updateActivityStatus({
-          variables: { id: selectedActivity.id , status: selectedActivity.status },
+          variables: { id: selectedActivity.id, status: selectedActivity.status },
         });
         setIsModalOpen(false);
         setSelectedActivity(null);
       }
     } catch (error) {
-      handleError({ error: 'Error al actualizar el estado'})
+      handleError({ error: 'Error al actualizar el estado' });
     }
   };
 
@@ -121,29 +131,33 @@ const ActivitiesScreen: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">
-        Actividades: {nameProyect} - {periodYear}-{periodSemester}
-      </h1>
-
-      <div className="flex justify-end gap-4 mb-8">
-        <button onClick={handleGeneratePdfAnual} className="bg-purple-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-purple-700 transition">
-          Generar Informe
-        </button>
-        
-        <button
-          onClick={handleCreateActivity}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
-        >
-          Crear Actividad
-        </button>
-        <button
-          onClick={handleViewCalendar}
-          className="bg-green-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition"
-        >
-          Ver Calendario
-        </button>
+    <div className="h-auto overflow-y-auto pb-8 pt-4">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl text-light-textSecondary text-start">
+          Actividades: {nameProyect} - {periodYear}-{periodSemester}
+        </h1>
+        <div className="flex gap-4">
+          <button
+            onClick={handleGeneratePdfAnual}
+            className="bg-light-primaryContent text-white px-4 py-3 rounded-lg text-lg font-semibold hover:bg-blue-400 transition"
+          >
+            Generar Informe
+          </button>
+          <button
+            onClick={handleViewCalendar}
+            className="bg-light-accent text-white px-4 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition"
+          >
+            Ver Calendario
+          </button>
+          <button
+            onClick={handleCreateActivity}
+            className="bg-light-primary text-white px-4 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition"
+          >
+            Crear Actividad
+          </button>
+        </div>
       </div>
+
       {errorMessage && <Message text={errorMessage} type="error" />}
       <ActivityList
         activities={activities}

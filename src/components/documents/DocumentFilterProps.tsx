@@ -9,7 +9,7 @@ type DocumentFilterProps = {
     periodSemester: string;
     documentType: string;
     searchTerm: string;
-    projectName: string; // Asegúrate de que el nombre coincida
+    projectName: string;
   };
   onFilterChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 };
@@ -25,10 +25,13 @@ const allowedTypes = [
 const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange }) => {
   const { data: periodData, loading: periodLoading } = useQuery(GET_PERIODS);
   const { data: projectData, loading: projectLoading } = useQuery(GET_PROJECTS);
+
   if (periodLoading || projectLoading) {
     return <div>Loading...</div>;
   }
-  const years = periodData.listPeriods.items.map((item: { year: string }) => item.year);
+
+  // Extraemos los años y semestres y eliminamos duplicados usando Set
+  const years = Array.from(new Set(periodData.listPeriods.items.map((item: { year: string }) => item.year))).map(String);
   const semesters = periodData.listPeriods.items.map((item: { semester: string }) => item.semester);
   const projects = projectData.listProyects.items.map((item: { name: string }) => item.name);
 
@@ -40,7 +43,7 @@ const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange
         onChange={onFilterChange}
         className="border p-2 rounded"
       >
-        {years.map((year: any) => (
+        {years.map((year: string) => (
           <option key={year} value={year}>
             {year}
           </option>
@@ -53,7 +56,7 @@ const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange
         onChange={onFilterChange}
         className="border p-2 rounded"
       >
-        {semesters.map((semester: any) => (
+        {semesters.map((semester: string) => (
           <option key={semester} value={semester}>
             {semester === '1' ? 'Semestre 1' : 'Semestre 2'}
           </option>
@@ -67,7 +70,7 @@ const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange
         className="border p-2 rounded"
       >
         <option value="">Todos los tipos</option>
-        {allowedTypes.map((type) => (
+        {allowedTypes.map((type: string) => (
           <option key={type} value={type}>
             {type}
           </option>
@@ -81,7 +84,7 @@ const DocumentFilter: React.FC<DocumentFilterProps> = ({ filters, onFilterChange
         className="border p-2 rounded"
       >
         <option value="">Todos los proyectos</option>
-        {projects.map((project: any) => (
+        {projects.map((project: string) => (
           <option key={project} value={project}>
             {project}
           </option>
