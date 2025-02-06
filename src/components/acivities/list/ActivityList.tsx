@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ActivityCard from './ActivityCard';
 import { ListActivities } from '../../../interface/activities/activities.interface';
 import NoDataMessage from '../../common/NoContent/NoDataMessage';
+import ModalStatus from '../ModalStatus';
 
 interface ActivityListProps {
   activities: ListActivities[];
   generatePdfActivities: (id: string) => void;
   handleViewActivities: (id: string) => void;
-  handleChangeStatus: (activity: ListActivities) => void;
   isLoadingReport: Record<string, boolean>;
 }
 
@@ -15,13 +15,22 @@ const ActivityList: React.FC<ActivityListProps> = ({
   activities,
   generatePdfActivities,
   handleViewActivities,
-  handleChangeStatus,
   isLoadingReport,
 }) => {
+  const [selectedActivity, setSelectedActivity] = useState<ListActivities | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSelectActivity = (activity: ListActivities) => {
+    setSelectedActivity(activity);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   if (activities.length === 0) {
-    return (
-      <NoDataMessage/>
-    );
+    return <NoDataMessage />;
   }
 
   return (
@@ -32,10 +41,20 @@ const ActivityList: React.FC<ActivityListProps> = ({
           activity={activity}
           generatePdfActivities={generatePdfActivities}
           handleViewActivities={handleViewActivities}
-          handleChangeStatus={handleChangeStatus}
+          handleChangeStatus={() => handleSelectActivity(activity)}
           isLoadingReport={isLoadingReport}
         />
       ))}
+
+      {isModalOpen && selectedActivity && (
+        <ModalStatus
+          key={selectedActivity.id}
+          currentStatus={selectedActivity.status}
+          handleCloseModal={handleCloseModal}
+          currentId={selectedActivity.id}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </div>
   );
 };

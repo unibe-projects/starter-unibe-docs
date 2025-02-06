@@ -1,28 +1,22 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import {
   LIST_ACTIVITIES,
-  UPDATE_ACTIVITY_STATUS,
   GET_ACTIVITY,
 } from '../../../services/activities/activitiesServices';
 import LoadingSpinner from '../../../components/loadings/spinner/LoadingSpinner';
 import ErrorMessage from '../../../error/messages/ErrorMessageRefresh';
-import ModalStatus from '../../../components/acivities/ModalStatus';
 import { reportActivitiesPdf } from '../../../utils/reports/activity-reports/reportActivitiesPdf';
 import ActivityList from '../../../components/acivities/list/ActivityList';
-import { ListActivities } from '../../../interface/activities/activities.interface';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import Message from '../../../error/messages/Message';
 
 const ActivitiesScreen: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [selectedActivity, setSelectedActivity] = useState<ListActivities | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { handleError, errorMessage, clearError } = useErrorHandler();
   const [isLoadingReport, setIsLoadingReport] = useState<Record<string, boolean>>({});
-  const [updateActivityStatus] = useMutation(UPDATE_ACTIVITY_STATUS);
   const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } =
     location.state || {};
   const {
@@ -69,10 +63,6 @@ const ActivitiesScreen: React.FC = () => {
     }
   };
 
-  const handleChangeStatus = (activity: ListActivities) => {
-    setSelectedActivity(activity);
-    setIsModalOpen(true);
-  };
 
   const handleViewCalendar = () => {
     navigate('/proyecto/periodo/actividad/calendar', {
@@ -111,25 +101,6 @@ const ActivitiesScreen: React.FC = () => {
     });
   };
 
-  const handleSaveStatus = async () => {
-    try {
-      if (selectedActivity) {
-        await updateActivityStatus({
-          variables: { id: selectedActivity.id, status: selectedActivity.status },
-        });
-        setIsModalOpen(false);
-        setSelectedActivity(null);
-      }
-    } catch (error) {
-      handleError({ error: 'Error al actualizar el estado' });
-    }
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedActivity(null);
-  };
-
   return (
     <div className="h-auto overflow-y-auto pb-8 pt-4">
       <div className="flex justify-between items-center mb-8">
@@ -163,17 +134,8 @@ const ActivitiesScreen: React.FC = () => {
         activities={activities}
         generatePdfActivities={generatePdfActivities}
         handleViewActivities={handleViewActivities}
-        handleChangeStatus={handleChangeStatus}
         isLoadingReport={isLoadingReport}
       />
-      {isModalOpen && selectedActivity && (
-        <ModalStatus
-          selectedActivity={selectedActivity}
-          handleSaveStatus={handleSaveStatus}
-          setSelectedActivity={setSelectedActivity}
-          handleCloseModal={handleCloseModal}
-        />
-      )}
     </div>
   );
 };
