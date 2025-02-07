@@ -1,18 +1,23 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomeScreen from '../pages/modules/home/HomeScreen';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import LoginScreen from '../pages/auth/login/LoginScreen';
+import PasswordRequiredScreen from '../pages/auth/login/PasswordRequiredScreen';
+import NotFoundScreen from '../error/404/NotFoundScreen';
+import ForgotPasswordScreen from '../pages/auth/login/ForgotPasswordScreen';
+import ResetPasswordScreen from '../pages/auth/login/ResetPasswordScreen';
+import CompleteRecordScreen from '../pages/auth/login/CompleteRecordScreen';
 
 const MainRoutes: React.FC = () => {
   return (
-    <Router>
-      <div>
-        <main>
-          <Routes>
-            <Route path="/" element={<HomeScreen />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/login" element={<LoginScreen />} />
+      <Route path="/password-required" element={<PasswordRequiredScreen />} />
+      <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+      <Route path="/reset-password" element={<ResetPasswordScreen />} />
+      <Route path="/complete-record" element={<CompleteRecordScreen />} />
+      <Route path="*" element={<NotFoundScreen />} />
+    </Routes>
   );
 };
 

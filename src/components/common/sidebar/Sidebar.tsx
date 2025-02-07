@@ -1,44 +1,74 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaHome, FaUser } from 'react-icons/fa';
+import { FaHome, FaUser, FaProjectDiagram, FaFileAlt } from 'react-icons/fa';
 import ProfileImage from '../../../assets/sidebar/ProfileImage.webp';
+import { useAuth } from '../../../hooks/auth/useUser';
 
 const Sidebar = () => {
+  const activeClass = 'bg-light-primary text-white font-semibold';
+  const inactiveClass = 'hover:bg-blue-100 text-gray-600';
+  const { user } = useAuth();
+  const name = user?.['custom:name'];
+  const role = user?.['custom:role'];
+
   return (
-    <div className="flex flex-col w-64 bg-light shadow-lg px-4 py-8 relative">
-      <div className="absolute top-0 right-0 h-full w-1 bg-gray-300" />
-
+    <div className="flex flex-col w-64 bg-light shadow-lg rounded-lg px-6 py-8 relative border-r-2 border-gray-200">
       <div className="absolute top-0 right-0 h-full w-1 bg-gradient-to-b from-gray-800 to-transparent" />
-
       <div className="flex items-center justify-center mb-6">
         <img
           src={ProfileImage}
           alt="Perfil"
-          className="h-16 w-16 rounded-full border-2 border-gray-300"
+          className="h-20 w-20 rounded-full border-4 border-blue-500"
         />
       </div>
-      <div className="flex items-center justify-center mb-6">
-        <h2 className="text-small font-bold text-light-textSecondary">Steveen Ordoñez</h2>
+      <div className="flex flex-col items-center justify-center mb-4">
+        <h2 className="text-xl font-semibold text-light-textSecondary">{name}</h2>
+        <h2 className="text-sm font-medium text-light-textSecondary">{role}</h2>
       </div>
 
-      {/* Navegación */}
       <nav className="flex flex-col gap-6">
         <NavLink
-          to="/"
+          to="/home"
           className={({ isActive }) =>
-            `flex items-center gap-4 text-light-accent p-2 rounded-lg transition-colors ${isActive ? 'bg-blue-200 text-blue-700 font-bold' : 'hover:bg-blue-100'}`
+            `flex items-center gap-5 text-lg p-3 rounded-lg transition-colors ${
+              isActive ? activeClass : inactiveClass
+            }`
           }
         >
-          <FaHome className="text-xl" />
-          <span>Home</span>
+          <FaHome className="text-2xl" />
+          <span>Inicio</span>
+        </NavLink>
+
+        <NavLink
+          to="/settings/change-password"
+          className={({ isActive }) =>
+            `flex items-center gap-5 text-lg p-3 rounded-lg transition-colors ${
+              isActive ? activeClass : inactiveClass
+            }`
+          }
+        >
+          <FaUser className="text-2xl" />
+          <span>Perfil</span>
+        </NavLink>
+        <NavLink
+          to="/proyecto"
+          className={({ isActive }) =>
+            `flex items-center gap-5 text-lg p-3 rounded-lg transition-colors ${
+              isActive ? activeClass : inactiveClass
+            }`
+          }
+        >
+          <FaProjectDiagram className="text-2xl" />
+          <span>Proyecto</span>
         </NavLink>
         <NavLink
           to="/documentos"
           className={({ isActive }) =>
-            `flex items-center gap-4 text-light-accent p-2 rounded-lg transition-colors ${isActive ? 'bg-blue-200 text-blue-700 font-bold' : 'hover:bg-blue-100'}`
+            `flex items-center gap-5 text-lg p-3 rounded-lg transition-colors ${
+              isActive ? activeClass : inactiveClass
+            }`
           }
         >
-          <FaUser className="text-xl" />
+          <FaFileAlt className="text-2xl" />
           <span>Documentos</span>
         </NavLink>
       </nav>

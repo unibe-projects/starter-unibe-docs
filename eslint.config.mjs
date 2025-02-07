@@ -23,13 +23,25 @@ export default [{
         'config/*',
         'eslint.config.mjs',
         'commitlint.config.js',
+        'public/pdf.worker.min.js',
+        'src/pages/modules/activities/pdf/activities.ts'
     ],
     rules: {
-        'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+        'no-unused-vars': ['error',  {
+            varsIgnorePattern: '^(?!$)',
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+            vars: 'all',
+            varsIgnorePattern: '^[A-Z]',
+            args: 'none', 
+            ignoreRestSiblings: true, 
+        }],
         'quotes': ['error', 'single', { avoidEscape: true }],
         'semi': ['error', 'always'],
         'indent': ['error', 2],
-        'no-console': 'warn',
+        'no-console': ['error', {
+            allow: ['error', 'warn'],
+        }],
         'eqeqeq': ['error', 'always'],
         'curly': ['error', 'all'],
         'comma-dangle': ['error', 'always-multiline'],
