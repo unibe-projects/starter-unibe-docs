@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ActivitiesStatusEnum } from '../../enums/activities/ActivitiesStatusEnum';
 import { translateActivityStatus } from '../../utils/translateActivityStatus';
-import { UPDATE_ACTIVITY_STATUS } from '../../services/activities/activitiesServices';
+import { GET_COMPLETED_ACTIVITIES, UPDATE_ACTIVITY_STATUS } from '../../services/activities/activitiesServices';
 import { useMutation } from '@apollo/client';
 import useErrorHandler from '../../hooks/errors/useErrorHandler';
 import Message from '../../error/messages/Message';
@@ -12,6 +12,8 @@ type ModalStatusProps = {
   currentStatus: ActivitiesStatusEnum;
   handleCloseModal: () => void;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  periodProyectId: string;
+  periodId: string;
 };
 
 const ModalStatus: React.FC<ModalStatusProps> = ({
@@ -19,6 +21,8 @@ const ModalStatus: React.FC<ModalStatusProps> = ({
   currentId,
   handleCloseModal,
   setIsModalOpen,
+  periodId,
+  periodProyectId,
 }) => {
   const statuses = [
     ActivitiesStatusEnum.COMPLETED,
@@ -30,7 +34,17 @@ const ModalStatus: React.FC<ModalStatusProps> = ({
   const [selectedStatus, setSelectedStatus] = useState<ActivitiesStatusEnum | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [updateActivityStatus] = useMutation(UPDATE_ACTIVITY_STATUS);
+  const [updateActivityStatus] = useMutation(UPDATE_ACTIVITY_STATUS, {
+    refetchQueries: [
+      {
+        query: GET_COMPLETED_ACTIVITIES,
+        variables: { activityPeriodId: periodId, activityProyectId: periodProyectId },
+      },
+    ],
+    awaitRefetchQueries: true,
+  });
+  
+
   const { handleError, errorMessage, clearError } = useErrorHandler();
 
   useEffect(() => {

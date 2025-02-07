@@ -135,6 +135,8 @@ const ActivitiesScreen: React.FC = () => {
         generatePdfActivities={generatePdfActivities}
         handleViewActivities={handleViewActivities}
         isLoadingReport={isLoadingReport}
+        periodProyectId={periodProyectId}
+        periodId={periodId}
       />
     </div>
   );

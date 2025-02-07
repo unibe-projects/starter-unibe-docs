@@ -14,21 +14,30 @@ const getBase64Image = async (url: string): Promise<string> => {
 };
 
 export const anexos = async (doc: jsPDF, documents: any[], startY: number) => {
-  let yPosition = startY + 10;
-  const imageDocuments = documents.filter((doc: any) => doc.documents.type === 'Fotos');
-  if (imageDocuments.length === 0) return yPosition;
+  const SECTION_TITLE_SIZE = 16;
+  const MARGIN_LEFT = 15;
+  const IMAGE_WIDTH = 180;
+  const IMAGE_HEIGHT = 150;
+  const PAGE_MARGIN_TOP = 20;
+  const LINE_SPACING = 10;
+  const IMAGE_SPACING = 10;
+  const ZERO = 0;
+  
+  let yPosition = startY + LINE_SPACING;
 
-  doc.setFontSize(16);
-  doc.text('Anexos', 15, yPosition);
-  yPosition += 10;
+  const imageDocuments = documents.filter((doc: any) => doc.documents.type === 'Fotos');
+  if (imageDocuments.length === ZERO) return yPosition;
+
+  // Agregar título de la sección
+  doc.setFontSize(SECTION_TITLE_SIZE);
+  doc.text('Anexos', MARGIN_LEFT, yPosition);
+  yPosition += LINE_SPACING;
 
   const getUrlStorages = async (path: string) => {
     try {
       const response = await getUrl({
         path,
-        options: {
-          validateObjectExistence: true,
-        },
+        options: { validateObjectExistence: true },
       });
       return response.url.toString();
     } catch (err) {
@@ -40,15 +49,19 @@ export const anexos = async (doc: jsPDF, documents: any[], startY: number) => {
   for (const document of imageDocuments) {
     const filePath = document.documents.path;
     const resourceUrl = await getUrlStorages(filePath);
+
     if (resourceUrl) {
       try {
         const base64Image = await getBase64Image(resourceUrl);
-        if (yPosition + 160 > doc.internal.pageSize.height) {
+
+        // Verificar si hay suficiente espacio en la página antes de agregar la imagen
+        if (yPosition + IMAGE_HEIGHT > doc.internal.pageSize.height) {
           doc.addPage();
-          yPosition = 20;
+          yPosition = PAGE_MARGIN_TOP;
         }
-        doc.addImage(base64Image, 'JPEG', 15, yPosition, 180, 150);
-        yPosition += 160;
+
+        doc.addImage(base64Image, 'JPEG', MARGIN_LEFT, yPosition, IMAGE_WIDTH, IMAGE_HEIGHT);
+        yPosition += IMAGE_HEIGHT + IMAGE_SPACING;
       } catch (err) {
         console.error('Error al cargar la imagen:', err);
       }

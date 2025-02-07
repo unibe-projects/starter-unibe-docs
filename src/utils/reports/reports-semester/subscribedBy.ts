@@ -1,14 +1,26 @@
 import { jsPDF } from 'jspdf';
 import { ReportData } from '../../../interface/activities/reporter-semester.interfae';
 
-export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string, value: ReportData) => {
-  const MARGIN_LEFT = 20;
-  const CELL_WIDTH = 60;
-  const ROW_HEIGHT = 10;
-  const SIGNATURE_MAX_WIDTH = 60;
-  const SIGNATURE_MAX_HEIGHT = 30;
+const MARGIN_LEFT = 20;
+const CELL_WIDTH = 60;
+const ROW_HEIGHT = 10;
+const SIGNATURE_MAX_WIDTH = 60;
+const SIGNATURE_MAX_HEIGHT = 30;
+const SIGNATURE_MARGIN = 10;
+const TEXT_FONT_SIZE = 10;
+const FONT_STYLE_BOLD = 'bold';
+const FONT_STYLE_NORMAL = 'normal';
+const ZERO = 0;
+const FIVE = 5;
+const TWO = 2;
+const TWO_HUNDRED_AND_FIFTY_FIVE = 255;
+const THREE = 3;
+const ONE = 1;
+const TWO_POINT_FIVE = 2.5;
 
-  doc.setFont('Helvetica', 'bold');
+export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string, value: ReportData) => {
+  
+  doc.setFont('Helvetica', FONT_STYLE_BOLD);
   doc.text('SUSCRITO POR', MARGIN_LEFT + CELL_WIDTH, startY);
   startY += ROW_HEIGHT;
 
@@ -16,10 +28,10 @@ export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string,
     return doc.splitTextToSize(text, maxWidth);
   };
 
-  const formattedText = splitTextIntoLines(`Elaboración ${value.charge} UNIB.E.`, CELL_WIDTH - 5);
-  const textHeight = formattedText.length * 5;
+  const formattedText = splitTextIntoLines(`Elaboración ${value.charge} UNIB.E.`, CELL_WIDTH - SIGNATURE_MARGIN);
+  const textHeight = formattedText.length * FIVE;
   
-  const signatureHeight = signatureImage ? SIGNATURE_MAX_HEIGHT : 10;
+  const signatureHeight = signatureImage ? SIGNATURE_MAX_HEIGHT : ROW_HEIGHT;
 
   const table = {
     headers: ['Nombre', 'Datos', 'Firma'],
@@ -34,29 +46,29 @@ export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string,
 
   const drawCell = (x: number, y: number, width: number, height: number, text: string | string[], style: any = {}) => {
     doc.rect(x, y, width, height);
-    doc.setFont('Helvetica', style.fontStyle || 'normal');
-    doc.setFontSize(style.fontSize || 10);
-    doc.setTextColor(style.textColor || 0);
+    doc.setFont('Helvetica', style.fontStyle || FONT_STYLE_NORMAL);
+    doc.setFontSize(style.fontSize || TEXT_FONT_SIZE);
+    doc.setTextColor(style.textColor || ZERO);
     
     if (style.fill) {
-      doc.setFillColor(0, 0, 0);
+      doc.setFillColor(ZERO, ZERO, ZERO);
       doc.rect(x, y, width, height, 'F');
-      doc.setTextColor(255);
+      doc.setTextColor(TWO_HUNDRED_AND_FIFTY_FIVE);
     }
 
-    let textX = x + width / 2;
-    let textY = y + height / 2;
+    let textX = x + width / TWO;
+    let textY = y + height / TWO;
 
     if (style.align === 'left') {
-      textX = x + 5;
+      textX = x + SIGNATURE_MARGIN;
     }
 
     if (Array.isArray(text)) {
       text.forEach((line, i) => {
-        doc.text(line, textX, textY - (text.length * 2.5) + i * 5, { align: style.align || 'center', baseline: 'middle' });
+        doc.text(line, textX, textY - (text.length * TWO_POINT_FIVE) + i * FIVE, { align: style.align || 'center', baseline: 'middle' });
       });
     } else {
-      doc.text(text, textX, textY + 3, { align: style.align || 'center', baseline: 'middle' });
+      doc.text(text, textX, textY + THREE, { align: style.align || 'center', baseline: 'middle' });
     }
   };
 
@@ -68,15 +80,15 @@ export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string,
       table.cellWidth,
       ROW_HEIGHT,
       header,
-      { align: 'center', fontStyle: 'bold', fill: true }
+      { align: 'center', fontStyle: FONT_STYLE_BOLD, fill: true }
     );
   });
 
   table.startY += ROW_HEIGHT;
   table.rows.forEach((row, rowIndex) => {
     row.forEach((cell, index) => {
-      const style = index === 1
-        ? { align: 'left', fontStyle: rowIndex === 0 ? 'bold' : 'normal' }
+      const style = index === ONE
+        ? { align: 'left', fontStyle: rowIndex === TWO ? FONT_STYLE_BOLD : FONT_STYLE_NORMAL }
         : {};
       drawCell(
         table.startX + index * table.cellWidth,
@@ -89,17 +101,17 @@ export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string,
     });
   });
 
-  const signatureX = table.startX + 2 * table.cellWidth;
+  const signatureX = table.startX + TWO * table.cellWidth;
   const signatureY = table.startY;
 
-  const availableWidth = CELL_WIDTH - 10;
-  const availableHeight = table.rowHeight - 5;
+  const availableWidth = CELL_WIDTH - SIGNATURE_MARGIN;
+  const availableHeight = table.rowHeight - SIGNATURE_MARGIN;
 
   const finalSignatureWidth = Math.min(SIGNATURE_MAX_WIDTH, availableWidth);
   const finalSignatureHeight = Math.min(SIGNATURE_MAX_HEIGHT, availableHeight);
 
-  const centeredSignatureX = signatureX + (CELL_WIDTH - finalSignatureWidth) / 2;
-  const centeredSignatureY = signatureY + (table.rowHeight - finalSignatureHeight) / 2;
+  const centeredSignatureX = signatureX + (CELL_WIDTH - finalSignatureWidth) / TWO;
+  const centeredSignatureY = signatureY + (table.rowHeight - finalSignatureHeight) / TWO;
 
   if (signatureImage) {
     doc.addImage(signatureImage, 'PNG', centeredSignatureX, centeredSignatureY, finalSignatureWidth, finalSignatureHeight);

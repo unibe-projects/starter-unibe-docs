@@ -9,6 +9,8 @@ interface ActivityListProps {
   generatePdfActivities: (id: string) => void;
   handleViewActivities: (id: string) => void;
   isLoadingReport: Record<string, boolean>;
+  periodProyectId: string;
+  periodId: string;
 }
 
 const ActivityList: React.FC<ActivityListProps> = ({
@@ -16,6 +18,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
   generatePdfActivities,
   handleViewActivities,
   isLoadingReport,
+  periodId,
+  periodProyectId,
 }) => {
   const [selectedActivity, setSelectedActivity] = useState<ListActivities | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,7 +34,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   };
 
   if (activities.length === 0) {
-    return <NoDataMessage message='No hay actividades disponibles en este período.'/>;
+    return <NoDataMessage message="No hay actividades disponibles en este período." />;
   }
 
   return (
@@ -53,6 +57,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
           handleCloseModal={handleCloseModal}
           currentId={selectedActivity.id}
           setIsModalOpen={setIsModalOpen}
+          periodProyectId={periodProyectId}
+          periodId={periodId}
         />
       )}
     </div>
