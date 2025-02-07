@@ -11,6 +11,8 @@ const Header: React.FC = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { handleSignOut } = useAuth();
   const { user } = useAuth();
+  const name = user?.['custom:name'];
+  const role = user?.['custom:role'];
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -86,11 +88,14 @@ const Header: React.FC = () => {
       )}
 
       <div className="flex items-center space-x-4">
-        <h1 className="text-light-textSecondary text-small font-bold">{user?.name}</h1>
+        <div className="flex flex-col">
+          <h1 className="text-light-textSecondary text-sm font-bold">{name}</h1>
+          <span className="text-light-textSecondary text-xs text-center font-medium">{role}</span>
+        </div>
         <img
           src={ProfileImage}
           alt="Logo Derecha"
-          className="h-10 w-10 cursor-pointer  rounded-full border-2 border-gray-300"
+          className="h-10 w-10 cursor-pointer rounded-full border-2 border-gray-300"
           onClick={toggleMenu}
         />
       </div>

@@ -120,13 +120,15 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
 
   const handleCreateUser = async ({ username, password, email, role }: SignUpParameters) => {
     try {
+      console.log('username', username, 'password', password, 'email', email, 'role', role)
       await signUp({
-        username,
+        username: email,
         password,
         options: {
           userAttributes: {
             email,
             'custom:role': role,
+            'custom:name': username,
           },
           autoSignIn: false,
         },
@@ -150,6 +152,8 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
       throw new Error(errorToString(error));
     }
   };
+
+  
 
   const providerValue = useMemo(
     () => ({

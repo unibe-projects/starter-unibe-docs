@@ -9,6 +9,7 @@ import Message from '../../../error/messages/Message';
 import PasswordInput from '../../../components/common/form/PasswordInput';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import LoadingButton from '../../../components/loadings/buttons/LoadingButton';
+import InformationUser from '../../../components/users/informationUser';
 
 type FormValues = {
   [key: string]: string;
@@ -18,7 +19,7 @@ const SettingsUpdatePasswordScreen = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(false);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-  const { handleChangePassword, user } = useAuth();
+  const { handleChangePassword } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { handleError, handleSuccess, errorMessage, successMessage, clearError, clearSuccess } =
     useErrorHandler();
@@ -47,10 +48,10 @@ const SettingsUpdatePasswordScreen = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row h-screen p-4 pt-4">
       <SidebarSettings />
 
-      <div className="flex-1 p-4">
+      <div className="flex-1 ">
         <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0">
           <PasswordPolicy />
 
@@ -61,17 +62,7 @@ const SettingsUpdatePasswordScreen = () => {
               </div>
 
               {/* Mostrar correo del usuario */}
-              <div className="mb-4 p-4 bg-blue-100 border border-blue-300 rounded-md">
-                <p className="text-gray-700">
-                  <span className="font-semibold">Usuario Actual:</span> {user?.name || 'N/A'}
-                </p>
-              </div>
-
-              <div className="mb-4 p-4 bg-blue-100 border border-blue-300 rounded-md">
-                <p className="text-gray-700">
-                  <span className="font-semibold">Email Actual:</span> {user?.email || 'N/A'}
-                </p>
-              </div>
+              <InformationUser/>
 
               {errorMessage && <Message text={errorMessage} type="error" />}
               {successMessage && <Message text={successMessage} type="success" />}

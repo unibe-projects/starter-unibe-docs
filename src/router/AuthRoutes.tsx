@@ -16,6 +16,7 @@ import Breadcrumbs from '../components/common/header/Breadcrumbs';
 import ActivitiesViewScreen from '../pages/modules/activities/ActivitiesViewScreen';
 import DocumentsScreen from '../pages/modules/documents/DocumentsScreen';
 import AnnualReportScreen from '../pages/modules/activities/AnnualReportScreen';
+import CreateUserScreen from '../pages/modules/settings/CresteUserScreen';
 interface RouteConfig {
   path: string;
   element: JSX.Element;
@@ -25,6 +26,7 @@ const roleRoutes: Record<string, RouteConfig[]> = {
     { path: '/home', element: <HomeScreen /> },
     { path: '/documentos', element: <DocumentsScreen /> },
     { path: '/settings/change-password', element: <SettingsUpdatePasswordScreen /> },
+    { path: '/settings/crear-usuarios', element: <CreateUserScreen /> },
     { path: '/proyecto/periodo/actividad/calendar', element: <CalendarScreen /> },
     { path: '/proyecto', element: <ProyectScreen /> },
     { path: '/proyecto/periodo', element: <PeriodScreen /> },

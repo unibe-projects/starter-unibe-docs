@@ -7,6 +7,8 @@ const Sidebar = () => {
   const activeClass = 'bg-light-primary text-white font-semibold';
   const inactiveClass = 'hover:bg-blue-100 text-gray-600';
   const { user } = useAuth();
+  const name = user?.['custom:name'];
+  const role = user?.['custom:role'];
 
   return (
     <div className="flex flex-col w-64 bg-light shadow-lg rounded-lg px-6 py-8 relative border-r-2 border-gray-200">
@@ -18,9 +20,11 @@ const Sidebar = () => {
           className="h-20 w-20 rounded-full border-4 border-blue-500"
         />
       </div>
-      <div className="flex items-center justify-center mb-4">
-        <h2 className="text-xl font-semibold text-light-textSecondary">{user?.name}</h2>
+      <div className="flex flex-col items-center justify-center mb-4">
+        <h2 className="text-xl font-semibold text-light-textSecondary">{name}</h2>
+        <h2 className="text-sm font-medium text-light-textSecondary">{role}</h2>
       </div>
+
       <nav className="flex flex-col gap-6">
         <NavLink
           to="/home"
