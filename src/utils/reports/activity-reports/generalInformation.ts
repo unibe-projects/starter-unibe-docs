@@ -12,6 +12,7 @@ const TEXT_PADDING = 5;
 const LINE_OFFSET = 0.2;
 const ROW_LINE_OFFSET = 7;
 const RECT_PADDING = 12;
+const UNO_PUNTO_UNO= 1.1
 
 export const generalInformation = (
   doc: jsPDF,
@@ -49,7 +50,7 @@ export const generalInformation = (
       MARGIN_LEFT + LABEL_WIDTH,
       yPosition - LINE_OFFSET,
       MARGIN_LEFT + LABEL_WIDTH,
-      yPosition + ROW_HEIGHT - 1.1
+      yPosition + ROW_HEIGHT - UNO_PUNTO_UNO
     );
     
     doc.line(MARGIN_LEFT, yPosition + ROW_LINE_OFFSET, MARGIN_LEFT + TABLE_WIDTH, yPosition + ROW_LINE_OFFSET);

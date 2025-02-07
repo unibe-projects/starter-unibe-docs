@@ -33,13 +33,10 @@ export const reporterSemester = async (values: ReportData) => {
 
     doc.addPage();
     startY = generalHalfYearlyData(doc, values, `${values.periodYear} - ${values.periodSemester}`, startY, values.nameProyect);
-
     startY = checkNewPage(startY, INITIAL_SPACE);
     startY = projectSections(doc, values, startY);
-
     startY = checkNewPage(startY, PAGE_HEIGHT_MARGIN);
     startY = TableActivity(doc, values.completedActivities, startY);
-
     startY = checkNewPage(startY, PAGE_HEIGHT_MARGIN);
     startY = finalSections(doc, values, startY);
 
@@ -52,9 +49,9 @@ export const reporterSemester = async (values: ReportData) => {
 
     startY = checkNewPage(startY, SIGNATURE_SPACE);
     startY = subscribedBy(doc, startY, signatureBase64, values);
-
+    
     startY = checkNewPage(startY, SIGNATURE_SPACE);
-    startY = await anexos(doc, allDocuments, startY);
+    await anexos(doc, allDocuments, startY);
 
     doc.save("informe_actividades.pdf");
   } catch (error) {

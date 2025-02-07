@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf";
 import logoUnibe from "../../../assets/logo/logo.png";
-
+const TWO = 2;
+const THREE = 3;
 const MARGIN_LEFT = 20;
 const MARGIN_TOP = 10;
 const HEADER_HEIGHT = 20;
@@ -14,8 +15,8 @@ const COLUMN_WIDTH3 = 40;
 const TOTAL_WIDTH = COLUMN_WIDTH1 + COLUMN_WIDTH2 + COLUMN_WIDTH3;
 const TEXT_OFFSET_X = 10;
 const TEXT_OFFSET_Y = 6;
-const HEADER_SECTION_HEIGHT = HEADER_HEIGHT / 2;
-const SUB_SECTION_HEIGHT = HEADER_HEIGHT / 3;
+const HEADER_SECTION_HEIGHT = HEADER_HEIGHT / TWO;
+const SUB_SECTION_HEIGHT = HEADER_HEIGHT / THREE;
 const TEXT_MARGIN = 5;
 const PAGE_NUMBER = "1 DE 2";
 const VERSION = "001";
