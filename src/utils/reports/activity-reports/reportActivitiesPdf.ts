@@ -1,11 +1,18 @@
-import { jsPDF } from 'jspdf';
-import { headerSheet } from './headerSheet';
-import { generalObjective } from './generalObjective';
-import { ActivitiTask } from './activityTask';
-import { additionalItems } from './additionalItems';
-import { generalInformation } from './generalInformation';
-import { documentsImage } from './documentsImage';
-import { ActivityResponse, DocumentWrapper } from '../../../interface/activities/activities.interface';
+import { jsPDF } from "jspdf";
+import { headerSheet } from "./headerSheet";
+import { generalObjective } from "./generalObjective";
+import { ActivitiTask } from "./activityTask";
+import { additionalItems } from "./additionalItems";
+import { generalInformation } from "./generalInformation";
+import { documentsImage } from "./documentsImage";
+import { ActivityResponse, DocumentWrapper } from "../../../interface/activities/activities.interface";
+
+const INITIAL_START_Y = 40;
+const TITLE_MARGIN_Y = 10;
+const SUBTITLE_MARGIN_Y = 15;
+const SECTION_SPACING = 25;
+const TEXT_CENTER_OFFSET = 2;
+const FILE_NAME = "informe_actividades.pdf";
 
 export const reportActivitiesPdf = async (
   activity: ActivityResponse,
@@ -15,19 +22,21 @@ export const reportActivitiesPdf = async (
   try {
     const doc = new jsPDF();
     headerSheet(doc);
-    let startY = 40;
+    
+    let startY = INITIAL_START_Y;
     const documents: DocumentWrapper[] = activity.getActivity.Documents?.items ?? [];
 
     const pageWidth = doc.internal.pageSize.width;
-    const text1 = activity.getActivity.name ?? '';
-    const text2 = 'BIENESTAR UNIVERSITARIO';
+    const activityName = activity.getActivity.name ?? "";
+    const organizationName = "BIENESTAR UNIVERSITARIO";
 
-    const text1Width = doc.getTextWidth(text1);
-    const text2Width = doc.getTextWidth(text2);
+    const activityNameWidth = doc.getTextWidth(activityName);
+    const organizationNameWidth = doc.getTextWidth(organizationName);
 
-    doc.text(text1, (pageWidth - text1Width) / 2, startY + 10);
-    doc.text(text2, (pageWidth - text2Width) / 2, startY + 15);
-    startY += 25;
+    doc.text(activityName, (pageWidth - activityNameWidth) / TEXT_CENTER_OFFSET, startY + TITLE_MARGIN_Y);
+    doc.text(organizationName, (pageWidth - organizationNameWidth) / TEXT_CENTER_OFFSET, startY + SUBTITLE_MARGIN_Y);
+    
+    startY += SECTION_SPACING;
 
     startY = generalInformation(doc, activity, period, startY, nameProyect);
     startY = generalObjective(doc, activity, startY);
@@ -35,8 +44,8 @@ export const reportActivitiesPdf = async (
     startY = additionalItems(doc, activity, startY);
     startY = await documentsImage(doc, documents, startY);
 
-    doc.save('informe_actividades.pdf');
+    doc.save(FILE_NAME);
   } catch (error) {
-    console.error('❌ Error al generar el PDF:', error);
+    console.error("❌ Error al generar el PDF:", error);
   }
 };

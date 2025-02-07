@@ -6,6 +6,7 @@ const LABEL_FONT_SIZE = 10;
 const CONTENT_FONT_SIZE = 10;
 const TITLE_SPACING = 5;
 const SECTION_SPACING = 10;
+const EXTRA_SPACING = 15;
 
 export const additionalItems = (doc: jsPDF, activity: ActivityResponse, startY: number) => {
    // participantes
@@ -31,5 +32,5 @@ export const additionalItems = (doc: jsPDF, activity: ActivityResponse, startY: 
    doc.setFontSize(CONTENT_FONT_SIZE);
    doc.setFont('Helvetica', 'normal');
    doc.text(`Presupuesto Utilizado: ${budgetUsed}`, MARGIN_LEFT, startY);
-   return startY + 15;
+   return startY + EXTRA_SPACING;
 };

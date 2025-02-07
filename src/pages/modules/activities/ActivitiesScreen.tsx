@@ -15,7 +15,7 @@ import Message from '../../../error/messages/Message';
 const ActivitiesScreen: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { handleError, errorMessage, clearError } = useErrorHandler();
+  const { handleError, errorMessage } = useErrorHandler();
   const [isLoadingReport, setIsLoadingReport] = useState<Record<string, boolean>>({});
   const { periodProyectId, periodId, periodYear, periodSemester, nameProyect } =
     location.state || {};

@@ -120,7 +120,6 @@ export const AuthProvider: React.FC<AuthProviderInterface> = ({ children }) => {
 
   const handleCreateUser = async ({ username, password, email, role }: SignUpParameters) => {
     try {
-      console.log('username', username, 'password', password, 'email', email, 'role', role)
       await signUp({
         username: email,
         password,
