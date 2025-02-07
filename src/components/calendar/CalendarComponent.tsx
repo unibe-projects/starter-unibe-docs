@@ -1,107 +1,60 @@
 import React, { useMemo } from 'react';
 import { Calendar } from 'react-big-calendar';
-import { Event } from '../../interface/calendar/calendare.interface';
 import localizer from '../../utils/calendar/calendarLocalizer';
-import { useQuery } from '@apollo/client';
-import { LIST_WORKING_HOURS } from '../../services/calendar/calendarService';
-import LoadingSpinner from '../loadings/spinner/LoadingSpinner';
-import ErrorMessage from '../../error/messages/ErrorMessageRefresh';
+import { getStatusColor } from '../../utils/getStatusColor';
+import { ActivitiesStatusEnum } from '../../enums/activities/ActivitiesStatusEnum';
+import { translateActivityStatus } from '../../utils/translateActivityStatus';
 
-interface CalendarComponentProps {
-  onSelectSlot?: ({ start }: { start: Date }) => void;
-  disabledDates: Date[];
-  enabledDates: Date[];
-  onDateSelected?: (workingHours: { start: Date; end: Date }[]) => void;
+
+interface Event {
+  title: string;
+  start: Date;
+  end: Date;
+  allDay?: boolean;
+  status: ActivitiesStatusEnum;
+  color?: string;
 }
 
-const CalendarComponent: React.FC<CalendarComponentProps> = ({
-  onSelectSlot,
-  disabledDates: propDisabledDates,
-  enabledDates: propEnabledDates,
-  onDateSelected,
-}) => {
-  const { data, loading, error, refetch } = useQuery(LIST_WORKING_HOURS, {
-    fetchPolicy: 'network-only',
-  });
+interface CalendarComponentProps {
+  data: any;
+}
 
+
+const CalendarComponent: React.FC<CalendarComponentProps> = ({ data }) => {
   const events: Event[] = useMemo(() => {
-    if (!data || !data.listWorkingHours) {
+    if (!data || !data.listActivities) {
       return [];
     }
 
-    return data.listWorkingHours.items
-      .filter((item: any) => item.day_id.is_working_day)
-      .map((item: any) => ({
-        title: `Disponible: ${item.start_time} - ${item.end_time}`,
-        start: new Date(item.day_id.date + 'T' + item.start_time),
-        end: new Date(item.day_id.date + 'T' + item.end_time),
-      }));
+    return data.listActivities.items.map((item: any) => {
+      const { activity_date, start_time, hora_fin, name, status } = item;
+
+      const start = new Date(`${activity_date}T${start_time}`);
+      const end = new Date(`${activity_date}T${hora_fin}`);
+      const color = getStatusColor(status);
+
+      return {
+        title: `${name || 'Sin título'} (${translateActivityStatus(status)})`,
+        start,
+        end,
+        allDay: false,
+        status,
+        color,
+      };
+    });
   }, [data]);
 
-  const enabledDates = useMemo(() => {
-    const datesFromEvents = events.map((event) => event.start);
-    return [...propEnabledDates, ...datesFromEvents];
-  }, [events, propEnabledDates]);
-
-  const disabledDates = useMemo(() => {
-    const datesFromData =
-      data?.listWorkingHours.items
-        .filter((item: any) => !item.day_id.is_working_day)
-        .map((item: any) => new Date(item.day_id.date)) || [];
-    return [...propDisabledDates, ...datesFromData];
-  }, [data, propDisabledDates]);
-
-  const checkDateStatus = (date: Date) => {
-    if (disabledDates.some((d) => d.toDateString() === date.toDateString())) {
-      return 'disabled';
-    }
-    if (enabledDates.some((d) => d.toDateString() === date.toDateString())) {
-      return 'enabled';
-    }
-    return 'normal';
-  };
-
-  const getDateClass = (date: Date) => {
-    const status = checkDateStatus(date);
-    switch (status) {
-    case 'disabled':
-      return 'bg-red-100';
-    case 'enabled':
-      return 'bg-green-100';
-    default:
-      return '';
-    }
-  };
-
-  const handleRetryFetch = () => {
-    refetch();
-  };
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-  if (error) {
-    return <ErrorMessage message="Hubo un error al cargar los datos." onRetry={handleRetryFetch} />;
-  }
-
-  const handleSelectSlot = (slotInfo: { start: Date }) => {
-    if (onSelectSlot) {
-      onSelectSlot(slotInfo);
-    }
-
-    const selectedDate = slotInfo.start.toDateString();
-    const workingHoursForSelectedDay = events.filter((event) => {
-      return event.start.toDateString() === selectedDate;
-    });
-
-    if (onDateSelected) {
-      onDateSelected(
-        workingHoursForSelectedDay.map((event) => ({
-          start: event.start,
-          end: event.end,
-        })),
-      );
-    }
+  const eventStyleGetter = (event: Event) => {
+    return {
+      style: {
+        backgroundColor: event.color,
+        borderRadius: '5px',
+        opacity: 0.8,
+        color: 'white',
+        border: '0px',
+        display: 'block',
+      },
+    };
   };
 
   return (
@@ -111,11 +64,10 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({
         events={events}
         startAccessor="start"
         endAccessor="end"
+        titleAccessor="title"
         selectable
-        onSelectSlot={handleSelectSlot}
-        dayPropGetter={(date: any) => ({
-          className: getDateClass(date),
-        })}
+        style={{ height: '100%' }}
+        eventPropGetter={eventStyleGetter}
       />
     </div>
   );

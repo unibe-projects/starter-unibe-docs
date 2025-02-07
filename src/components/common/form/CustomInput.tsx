@@ -1,14 +1,14 @@
 import React from 'react';
 import { Field, ErrorMessage } from 'formik';
 
-interface PasswordInputProps {
+interface CustomInputProps {
   name: string;
   placeholder: string;
   type: string;
   values?: string;
 }
 
-const CustomInput: React.FC<PasswordInputProps> = ({ name, placeholder, type, values }) => {
+const CustomInput: React.FC<CustomInputProps> = ({ name, placeholder, type, values }) => {
   return (
     <div className="relative">
       <Field

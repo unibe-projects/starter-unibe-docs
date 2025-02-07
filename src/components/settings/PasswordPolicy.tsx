@@ -1,6 +1,6 @@
 const PasswordPolicy: React.FC = () => {
   return (
-    <div className="w-full lg:w-1/4 p-6 bg-gray-200 rounded-lg">
+    <div className="w-full lg:w-1/4 p-6 bg-gray-200 rounded-lg p-1">
       <h2 className="text-xl font-bold text-gray-800 mb-4">Política de Contraseñas</h2>
       <p className="text-gray-700">
         Para cambiar tu contraseña, asegúrate de que cumpla con los siguientes requisitos:
