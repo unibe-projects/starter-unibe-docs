@@ -48,15 +48,15 @@ const SettingsUpdatePasswordScreen = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen p-4 pt-4">
+    <div className="flex flex-col lg:flex-row h-screen pt-4">
       <SidebarSettings />
 
       <div className="flex-1 ">
         <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0">
           <PasswordPolicy />
 
-          <div className="flex-1 flex justify-start items-center p-4">
-            <div className="w-full max-w-1xl">
+          <div className="flex-1 flex justify-start  p-4">
+            <div className="w-full">
               <div className="mb-6 text-start">
                 <h1 className="text-2xl font-bold text-gray-800">Actualiza Contraseña</h1>
               </div>
