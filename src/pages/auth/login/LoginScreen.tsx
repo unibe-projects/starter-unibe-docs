@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
-import UnibeBackgraund from '../../../assets/auth/UnibeBackgraund.jpg';
-import UnibeLogo from '../../../assets/header/LogoUnibe.png';
+import unibeBackgraund from '../../../assets/auth/UnibeBackgraund.jpg';
+import unibeLogo from '../../../assets/header/LogoUnibe.png';
 import { useAuth } from '../../../hooks/auth/useUser';
 import useErrorHandler from '../../../hooks/errors/useErrorHandler';
 import { validationSchemaLogin } from './validationSchemaLogin';
@@ -56,11 +56,11 @@ const LoginScreen = () => {
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${UnibeBackgraund})` }}
+      style={{ backgroundImage: `url(${unibeBackgraund})` }}
     >
       <div className="w-full max-w-3xl p-12 space-y-6 bg-white bg-opacity-90 rounded-lg shadow-lg mx-4 sm:mx-10">
         <div className="flex justify-center mb-6">
-          <img src={UnibeLogo} alt="Logo" className="h-32 w-32" />
+          <img src={unibeLogo} alt="Logo" className="h-40 w-64" />
         </div>
         <h2 className="text-lg font-semibold text-center text-gray-700">Iniciar Sesión</h2>
 

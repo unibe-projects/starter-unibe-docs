@@ -58,9 +58,9 @@ const Header: React.FC = () => {
   }, [isMenuOpen]);
 
   return (
-    <header className="flex items-center justify-between px-8 py-4 h-24 w-full bg-light-primary">
-      <div className="flex items-center space-x-4">
-        <img src={LogoUnibe} alt="Logo Unibe" className="h-24 w-24 cursor-pointer" />
+    <header className="flex items-center justify-between px-8 py-4 h-24 w-full bg-light-primary p-10">
+      <div className="flex items-center space-x-4 ">
+        <img src={LogoUnibe} alt="Logo Unibe" className="h-xs w-40 p-2 cursor-pointer bg-white" />
         <h1 className="text-light-textSecondary text-2xl font-bold">
           Universidad Iberoamericana Unibe
         </h1>
