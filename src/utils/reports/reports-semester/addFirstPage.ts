@@ -1,5 +1,5 @@
-import { jsPDF } from "jspdf";
-import formatImage from "../../../assets/format/formato_pdf.jpg";
+import { jsPDF } from 'jspdf';
+import formatImage from '../../../assets/format/formato_pdf.jpg';
 
 export const addFirstPage = (doc: jsPDF) => {
   const pageWidth = doc.internal.pageSize.width;
@@ -11,12 +11,12 @@ export const addFirstPage = (doc: jsPDF) => {
   const LINE_SPACING = 0.5;
   const ZERO = 0;
   const TWO = 2;
-  
+
   const currentYear = new Date().getFullYear();
   const title = `BIENESTAR UNIVERSITARIO\nINFORME DE PROYECTO\n${currentYear}`;
 
   // Agregar imagen de fondo
-  doc.addImage(formatImage, "JPEG", ZERO, ZERO, pageWidth, pageHeight);
+  doc.addImage(formatImage, 'JPEG', ZERO, ZERO, pageWidth, pageHeight);
 
   // Configuración de texto
   doc.setFontSize(FONT_SIZE);
@@ -31,5 +31,5 @@ export const addFirstPage = (doc: jsPDF) => {
   const textY = pageHeight / TWO - textHeight / TWO;
 
   // Dibujar texto
-  doc.text(textLines, textX, textY, { align: "center" });
+  doc.text(textLines, textX, textY, { align: 'center' });
 };

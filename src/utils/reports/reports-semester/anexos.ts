@@ -22,11 +22,13 @@ export const anexos = async (doc: jsPDF, documents: any[], startY: number) => {
   const LINE_SPACING = 10;
   const IMAGE_SPACING = 10;
   const ZERO = 0;
-  
+
   let yPosition = startY + LINE_SPACING;
 
   const imageDocuments = documents.filter((doc: any) => doc.documents.type === 'Fotos');
-  if (imageDocuments.length === ZERO) return yPosition;
+  if (imageDocuments.length === ZERO) {
+    return yPosition;
+  }
 
   // Agregar título de la sección
   doc.setFontSize(SECTION_TITLE_SIZE);

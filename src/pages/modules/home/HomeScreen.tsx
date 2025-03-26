@@ -75,11 +75,11 @@ const HomeScreen = () => {
 
       return acc;
     },
-    {}
+    {},
   );
 
   const allPeriods = Object.values(groupedByProject).flatMap((project) =>
-    Object.keys(project).filter((key) => key !== 'totalActivities')
+    Object.keys(project).filter((key) => key !== 'totalActivities'),
   );
   const uniquePeriods = Array.from(new Set(allPeriods));
 

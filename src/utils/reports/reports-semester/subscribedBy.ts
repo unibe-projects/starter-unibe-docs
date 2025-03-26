@@ -18,8 +18,12 @@ const THREE = 3;
 const ONE = 1;
 const TWO_POINT_FIVE = 2.5;
 
-export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string, value: ReportData) => {
-  
+export const subscribedBy = (
+  doc: jsPDF,
+  startY: number,
+  signatureImage: string,
+  value: ReportData,
+) => {
   doc.setFont('Helvetica', FONT_STYLE_BOLD);
   doc.text('SUSCRITO POR', MARGIN_LEFT + CELL_WIDTH, startY);
   startY += ROW_HEIGHT;
@@ -28,28 +32,36 @@ export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string,
     return doc.splitTextToSize(text, maxWidth);
   };
 
-  const formattedText = splitTextIntoLines(`Elaboración ${value.charge} UNIB.E.`, CELL_WIDTH - SIGNATURE_MARGIN);
+  const formattedText = splitTextIntoLines(
+    `Elaboración ${value.charge} UNIB.E.`,
+    CELL_WIDTH - SIGNATURE_MARGIN,
+  );
   const textHeight = formattedText.length * FIVE;
-  
+
   const signatureHeight = signatureImage ? SIGNATURE_MAX_HEIGHT : ROW_HEIGHT;
 
   const table = {
     headers: ['Nombre', 'Datos', 'Firma'],
-    rows: [
-      [value.project_manager, formattedText, signatureImage ? '[Firma]' : '']
-    ],
+    rows: [[value.project_manager, formattedText, signatureImage ? '[Firma]' : '']],
     startX: MARGIN_LEFT,
     startY: startY,
     cellWidth: CELL_WIDTH,
-    rowHeight: Math.max(ROW_HEIGHT, textHeight, signatureHeight)
+    rowHeight: Math.max(ROW_HEIGHT, textHeight, signatureHeight),
   };
 
-  const drawCell = (x: number, y: number, width: number, height: number, text: string | string[], style: any = {}) => {
+  const drawCell = (
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    text: string | string[],
+    style: any = {},
+  ) => {
     doc.rect(x, y, width, height);
     doc.setFont('Helvetica', style.fontStyle || FONT_STYLE_NORMAL);
     doc.setFontSize(style.fontSize || TEXT_FONT_SIZE);
     doc.setTextColor(style.textColor || ZERO);
-    
+
     if (style.fill) {
       doc.setFillColor(ZERO, ZERO, ZERO);
       doc.rect(x, y, width, height, 'F');
@@ -57,7 +69,7 @@ export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string,
     }
 
     let textX = x + width / TWO;
-    let textY = y + height / TWO;
+    const textY = y + height / TWO;
 
     if (style.align === 'left') {
       textX = x + SIGNATURE_MARGIN;
@@ -65,7 +77,10 @@ export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string,
 
     if (Array.isArray(text)) {
       text.forEach((line, i) => {
-        doc.text(line, textX, textY - (text.length * TWO_POINT_FIVE) + i * FIVE, { align: style.align || 'center', baseline: 'middle' });
+        doc.text(line, textX, textY - text.length * TWO_POINT_FIVE + i * FIVE, {
+          align: style.align || 'center',
+          baseline: 'middle',
+        });
       });
     } else {
       doc.text(text, textX, textY + THREE, { align: style.align || 'center', baseline: 'middle' });
@@ -80,23 +95,24 @@ export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string,
       table.cellWidth,
       ROW_HEIGHT,
       header,
-      { align: 'center', fontStyle: FONT_STYLE_BOLD, fill: true }
+      { align: 'center', fontStyle: FONT_STYLE_BOLD, fill: true },
     );
   });
 
   table.startY += ROW_HEIGHT;
   table.rows.forEach((row, rowIndex) => {
     row.forEach((cell, index) => {
-      const style = index === ONE
-        ? { align: 'left', fontStyle: rowIndex === TWO ? FONT_STYLE_BOLD : FONT_STYLE_NORMAL }
-        : {};
+      const style =
+        index === ONE
+          ? { align: 'left', fontStyle: rowIndex === TWO ? FONT_STYLE_BOLD : FONT_STYLE_NORMAL }
+          : {};
       drawCell(
         table.startX + index * table.cellWidth,
         table.startY,
         table.cellWidth,
         table.rowHeight,
         cell,
-        style
+        style,
       );
     });
   });
@@ -114,7 +130,14 @@ export const subscribedBy = (doc: jsPDF, startY: number, signatureImage: string,
   const centeredSignatureY = signatureY + (table.rowHeight - finalSignatureHeight) / TWO;
 
   if (signatureImage) {
-    doc.addImage(signatureImage, 'PNG', centeredSignatureX, centeredSignatureY, finalSignatureWidth, finalSignatureHeight);
+    doc.addImage(
+      signatureImage,
+      'PNG',
+      centeredSignatureX,
+      centeredSignatureY,
+      finalSignatureWidth,
+      finalSignatureHeight,
+    );
   }
 
   return table.startY + table.rowHeight;

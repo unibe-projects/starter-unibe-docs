@@ -1,4 +1,4 @@
-import { ActivitiesStatusEnum } from "../../enums/activities/ActivitiesStatusEnum";
+import { ActivitiesStatusEnum } from '../../enums/activities/ActivitiesStatusEnum';
 
 export interface Task {
   name: string;
@@ -71,14 +71,12 @@ export interface Proyect {
   name: string;
 }
 
-
 export interface ListActivities {
   id: string;
   project_manager: string;
   name: string;
   status: ActivitiesStatusEnum;
 }
-
 
 export interface ActivityTaskWrapper {
   activityTasks: Task;
@@ -90,7 +88,7 @@ interface ActivityTasksConnection {
   __typename: string;
 }
 
-interface DocumentItem  {
+interface DocumentItem {
   name: string;
   path: string;
   type: string;

@@ -20,7 +20,7 @@ export const generalHalfYearlyData = (
   activity: ReportData,
   period: string,
   startY: number,
-  nameProyect: string
+  nameProyect: string,
 ) => {
   doc.setFontSize(LABEL_FONT_SIZE);
   doc.setFont('Helvetica', 'bold');
@@ -41,7 +41,7 @@ export const generalHalfYearlyData = (
 
   fields.forEach((field, index) => {
     const yPosition = startY + index * ROW_HEIGHT;
-    
+
     // Etiqueta
     doc.setFont('Helvetica', 'bold');
     doc.text(field.label, MARGIN_LEFT + CELL_PADDING, yPosition + CELL_PADDING);
@@ -51,10 +51,20 @@ export const generalHalfYearlyData = (
     doc.text(field.value, MARGIN_LEFT + CELL_PADDING + LABEL_WIDTH, yPosition + CELL_PADDING);
 
     // Línea divisoria entre etiquetas y valores
-    doc.line(MARGIN_LEFT + LABEL_WIDTH, yPosition - LINE_OFFSET, MARGIN_LEFT + LABEL_WIDTH, yPosition + ROW_HEIGHT - LAST_LINE_OFFSET);
+    doc.line(
+      MARGIN_LEFT + LABEL_WIDTH,
+      yPosition - LINE_OFFSET,
+      MARGIN_LEFT + LABEL_WIDTH,
+      yPosition + ROW_HEIGHT - LAST_LINE_OFFSET,
+    );
 
     // Línea horizontal inferior
-    doc.line(MARGIN_LEFT, yPosition + ROW_HEIGHT - ONE, MARGIN_LEFT + TABLE_WIDTH, yPosition + ROW_HEIGHT - ONE);
+    doc.line(
+      MARGIN_LEFT,
+      yPosition + ROW_HEIGHT - ONE,
+      MARGIN_LEFT + TABLE_WIDTH,
+      yPosition + ROW_HEIGHT - ONE,
+    );
   });
 
   return startY + fields.length * ROW_HEIGHT + TABLE_MARGIN_BOTTOM;

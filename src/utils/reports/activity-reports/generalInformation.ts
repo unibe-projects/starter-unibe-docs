@@ -12,14 +12,14 @@ const TEXT_PADDING = 5;
 const LINE_OFFSET = 0.2;
 const ROW_LINE_OFFSET = 7;
 const RECT_PADDING = 12;
-const UNO_PUNTO_UNO= 1.1
+const UNO_PUNTO_UNO = 1.1;
 
 export const generalInformation = (
   doc: jsPDF,
   activity: ActivityResponse,
   period: string,
   startY: number,
-  nameProyect: string
+  nameProyect: string,
 ) => {
   doc.setFontSize(LABEL_FONT_SIZE);
   doc.setFont('Helvetica', 'bold');
@@ -36,24 +36,29 @@ export const generalInformation = (
   ];
 
   doc.rect(MARGIN_LEFT, startY, TABLE_WIDTH, TABLE_HEIGHT);
-  
+
   fields.forEach((field, index) => {
     const yPosition = startY + index * ROW_HEIGHT;
-    
+
     doc.setFont('Helvetica', 'bold');
     doc.text(field.label, MARGIN_LEFT + TEXT_PADDING, yPosition + TEXT_PADDING);
-    
+
     doc.setFont('Helvetica', 'normal');
     doc.text(field.value, MARGIN_LEFT + TEXT_PADDING + LABEL_WIDTH, yPosition + TEXT_PADDING);
-    
+
     doc.line(
       MARGIN_LEFT + LABEL_WIDTH,
       yPosition - LINE_OFFSET,
       MARGIN_LEFT + LABEL_WIDTH,
-      yPosition + ROW_HEIGHT - UNO_PUNTO_UNO
+      yPosition + ROW_HEIGHT - UNO_PUNTO_UNO,
     );
-    
-    doc.line(MARGIN_LEFT, yPosition + ROW_LINE_OFFSET, MARGIN_LEFT + TABLE_WIDTH, yPosition + ROW_LINE_OFFSET);
+
+    doc.line(
+      MARGIN_LEFT,
+      yPosition + ROW_LINE_OFFSET,
+      MARGIN_LEFT + TABLE_WIDTH,
+      yPosition + ROW_LINE_OFFSET,
+    );
   });
 
   return startY + fields.length * ROW_HEIGHT + RECT_PADDING;

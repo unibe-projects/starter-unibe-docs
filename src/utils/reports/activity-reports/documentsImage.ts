@@ -25,7 +25,9 @@ const getBase64Image = async (url: string): Promise<string> => {
 export const documentsImage = async (doc: jsPDF, documents: DocumentWrapper[], startY: number) => {
   let yPosition = startY + SECTION_SPACING;
   const imageDocuments = documents.filter((doc: any) => doc.documents.type === 'Fotos');
-  if (imageDocuments.length === 0) return yPosition;
+  if (imageDocuments.length === 0) {
+    return yPosition;
+  }
 
   doc.setFontSize(SECTION_TITLE_SIZE);
   doc.text('Anexos', MARGIN_LEFT, yPosition);

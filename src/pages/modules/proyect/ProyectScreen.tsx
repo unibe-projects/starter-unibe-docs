@@ -33,8 +33,8 @@ const ProyectScreen: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Proyect | null>(null);
   const { handleError, errorMessage, clearError } = useErrorHandler();
-   const { user } = useAuth();
-    const role = user?.['custom:role'];
+  const { user } = useAuth();
+  const role = user?.['custom:role'];
 
   const handleNavigate = (periodProyectId: string, nameProyect: string) => {
     navigate('/proyecto/periodo', {
@@ -56,7 +56,12 @@ const ProyectScreen: React.FC = () => {
     }
   };
 
-  const handleUpdateProyect = async (id: string, name: string, description: string, path: string) => {
+  const handleUpdateProyect = async (
+    id: string,
+    name: string,
+    description: string,
+    path: string,
+  ) => {
     try {
       await updateProyect({ variables: { id, name, description, path } });
       refetch();
@@ -99,13 +104,13 @@ const ProyectScreen: React.FC = () => {
     <div className="h-auto overflow-y-auto pb-8 pt-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl text-light-textSecondary font-bold">Proyectos</h1>
-        {role === 'ADMIN' &&(
-           <button
-           className="bg-light-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-           onClick={() => setIsModalOpen(true)}
-         >
-           Crear Proyecto
-         </button>
+        {role === 'ADMIN' && (
+          <button
+            className="bg-light-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Crear Proyecto
+          </button>
         )}
       </div>
       {errorMessage && <Message text={errorMessage} type="error" />}
@@ -121,7 +126,7 @@ const ProyectScreen: React.FC = () => {
             />
           ))
         ) : (
-          <NoDataMessage message='No hay proyectos disponibles.'/>
+          <NoDataMessage message="No hay proyectos disponibles." />
         )}
       </div>
 

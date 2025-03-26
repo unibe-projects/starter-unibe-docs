@@ -14,8 +14,8 @@ type Props = {
 };
 
 const UserForm = ({ onSubmit, isLoading }: Props) => {
-    const [showPassword, setShowPassword] = useState<boolean>(false);
-    
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4">Crear Usuario</h1>
@@ -39,11 +39,11 @@ const UserForm = ({ onSubmit, isLoading }: Props) => {
             />
             <CustomInput name="email" type="email" placeholder="Correo electrónico" />
             <PasswordInput
-                name="password"
-                placeholder="Contraseña"
-                showPassword={showPassword}
-                togglePassword={() => setShowPassword(!showPassword)}
-              />
+              name="password"
+              placeholder="Contraseña"
+              showPassword={showPassword}
+              togglePassword={() => setShowPassword(!showPassword)}
+            />
             <div>
               <label htmlFor="role" className="block text-sm font-medium text-gray-700">
                 Rol del Usuario
@@ -56,7 +56,9 @@ const UserForm = ({ onSubmit, isLoading }: Props) => {
                 className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
                 {Object.values(RoleEnum).map((role) => (
-                  <option key={role} value={role}>{role}</option>
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
                 ))}
               </select>
             </div>

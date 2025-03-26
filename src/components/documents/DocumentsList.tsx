@@ -15,7 +15,7 @@ const DocumentsList: React.FC<DocumentsListProps> = ({ documents }) => {
       ...documentItem,
       period: doc.Period,
       proyect: doc.Proyect,
-    }))
+    })),
   );
   const indexOfLastDocument = currentPage * documentsPerPage;
   const indexOfFirstDocument = indexOfLastDocument - documentsPerPage;

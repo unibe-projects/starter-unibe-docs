@@ -26,7 +26,6 @@ export const validationSchemaActivities = Yup.object({
     .min(1, 'Debe agregar al menos una tarea.'),
 });
 
-
 export const validationSchemaReportHalfYearly = Yup.object({
   executing_institution: Yup.string().required('Este campo es obligatorio'),
   project_manager: Yup.string().required('Este campo es obligatorio'),
@@ -38,5 +37,5 @@ export const validationSchemaReportHalfYearly = Yup.object({
   states_advances: Yup.string().required('Este campo es obligatorio'),
   problems_risks: Yup.string().required('Este campo es obligatorio'),
   upcoming_tasks: Yup.string().required('Este campo es obligatorio'),
-  signature: Yup.mixed().required('La firma es obligatoria') // Validación para la firma
+  signature: Yup.mixed().required('La firma es obligatoria'), // Validación para la firma
 });

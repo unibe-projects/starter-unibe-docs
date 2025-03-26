@@ -25,7 +25,7 @@ const PeriodScreen: React.FC = () => {
     refetch,
   } = useQuery(LIST_PERIODS, {
     variables: { periodProyectId },
-    skip: !periodProyectId
+    skip: !periodProyectId,
   });
 
   const [createPeriod] = useMutation(CREATE_PERIOD);
@@ -47,7 +47,7 @@ const PeriodScreen: React.FC = () => {
   const handleCreatePeriod = async (year: string, semester: string, description: string) => {
     try {
       const existingPeriod = data?.listPeriods?.items?.find(
-        (p: { year: string; semester: string }) => p.year === year && p.semester === semester
+        (p: { year: string; semester: string }) => p.year === year && p.semester === semester,
       );
 
       if (existingPeriod) {

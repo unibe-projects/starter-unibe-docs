@@ -22,7 +22,9 @@ const CreateUserScreen = () => {
         username: values.username,
         role: values.role,
       });
-      handleSuccess('Usuario creado correctamente, se le enviara un codigo para que pueda verificar su cuenta')
+      handleSuccess(
+        'Usuario creado correctamente, se le enviara un codigo para que pueda verificar su cuenta',
+      );
       clearError();
       clearSuccess();
     } catch (error) {
@@ -46,12 +48,9 @@ const CreateUserScreen = () => {
               </div>
               {errorMessage && <Message text={errorMessage} type="error" />}
               {successMessage && <Message text={successMessage} type="success" />}
-             <div className='pt-2'>
-             <UserForm
-                onSubmit={handleCreatePatience}
-                isLoading={isLoading}
-              />
-             </div>
+              <div className="pt-2">
+                <UserForm onSubmit={handleCreatePatience} isLoading={isLoading} />
+              </div>
             </div>
           </div>
         </div>

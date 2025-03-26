@@ -1,5 +1,8 @@
 import { jsPDF } from 'jspdf';
-import { ActivityResponse, ActivityTaskWrapper } from '../../../interface/activities/activities.interface';
+import {
+  ActivityResponse,
+  ActivityTaskWrapper,
+} from '../../../interface/activities/activities.interface';
 
 const MARGIN_LEFT = 20;
 const LABEL_FONT_SIZE = 10;
@@ -9,11 +12,7 @@ const INDEX = 1;
 const LINE_SPACING = 10;
 const EXTRA_SPACING = 15;
 
-export const ActivitiTask = (
-  doc: jsPDF,
-  activity: ActivityResponse,
-  startY: number
-): number => {
+export const ActivitiTask = (doc: jsPDF, activity: ActivityResponse, startY: number): number => {
   doc.setFontSize(LABEL_FONT_SIZE);
   doc.setFont('Helvetica', 'bold');
   doc.text('3. Actividades Realizadas', MARGIN_LEFT, startY);

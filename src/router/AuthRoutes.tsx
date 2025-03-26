@@ -59,8 +59,7 @@ const AuthRoutes: React.FC = () => {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <PageWrapper>
-        <main className="flex-1 overflow-auto pb-12 pt-4 min-h-[calc(100vh-100px)]">
-
+          <main className="flex-1 overflow-auto pb-12 pt-4 min-h-[calc(100vh-100px)]">
             <Breadcrumbs />
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
